@@ -6,7 +6,7 @@ public class Board {
     Piece[][] table;
 
     private Board() {
-        table = new Piece[8][8];
+        table = new Piece[9][9];
     }
 
     public static synchronized Board getInstance() {
@@ -22,7 +22,7 @@ public class Board {
 
     public Coordinate getCoordinates(int x, int y) {
         if (coordinates == null) {
-            coordinates = new Coordinate[8][8];
+            coordinates = new Coordinate[9][9];
         }
         if (coordinates[x][y] != null) {
             return coordinates[x][y];
