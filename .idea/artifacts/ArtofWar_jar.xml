@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ArtofWar:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ArtofWar_jar</output-path>
+    <root id="archive" name="ArtofWar.jar">
+      <element id="module-output" name="ArtofWar" />
+    </root>
+  </artifact>
+</component>
