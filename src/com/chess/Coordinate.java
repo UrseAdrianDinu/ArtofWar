@@ -37,4 +37,12 @@ public class Coordinate {
     public char getCharX() {
         return x;
     }
+
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

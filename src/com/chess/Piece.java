@@ -8,8 +8,6 @@ public abstract class Piece {
     Coordinate coordinate;
     int color;
 
-    public abstract String getType();
-
     public abstract void generateMoves();
 
     public abstract String toString();

@@ -37,23 +37,30 @@ public class XboardConnection {
         switch (words[0]) {
             case "xboard":
                 connected = true;
+                System.out.println();
                 break;
             case "protover":
                 System.out.println("feature myname=\"Art of War\" sigterm=0 sigint=0 san=0");
+                System.out.flush();
                 break;
             case "new":
                 Board b = Board.newGame();
                 b.initBoard();
                 break;
             case "go":
+                System.out.println("move e7e6");
+                System.out.flush();
                 break;
             case "quit":
                 System.exit(0);
                 break;
             case "move":
-                System.out.println("move e2e4");
+                System.out.println("move e7e6");
+                System.out.flush();
+                break;
             default:
                 System.out.println("error");
+                System.out.flush();
                 break;
 
         }

@@ -13,9 +13,6 @@ public class King extends Piece {
         color = teamColor;
     }
 
-    public String getType() {
-        return "King";
-    }
 
     public void generateMoves() {
         freeMoves = new ArrayList<>();
@@ -99,6 +96,8 @@ public class King extends Piece {
 
     @Override
     public String toString() {
-        return "King ";
+        if (color == 0)
+            return "WKing ";
+        return "BKing ";
     }
 }
