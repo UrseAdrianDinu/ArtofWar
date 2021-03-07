@@ -11,4 +11,6 @@ public abstract class Piece {
     public abstract String getType();
 
     public abstract void generateMoves();
+
+    public abstract String toString();
 }

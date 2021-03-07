@@ -1,5 +1,7 @@
 package com.chess;
 
+import java.util.Arrays;
+
 public class Board {
     private static Board instance;
     Coordinate[][] coordinates;
@@ -48,5 +50,25 @@ public class Board {
             table[2][i] = new Pawn(i, 2, TeamColor.WHITE);
             table[7][i] = new Pawn(i, 7, TeamColor.BLACK);
         }
+    }
+
+    public Piece getPiecebylocation(Coordinate coordinate) {
+        return table[coordinate.getIntX()][coordinate.getY()];
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        int i, j;
+        for (i = 1; i <= 8; i++) {
+            for (j = 1; j <= 8; j++) {
+                if (table[i][j] == null)
+                    s += "null ";
+                else
+                    s +=  table[i][j];
+            }
+            s += "\n";
+        }
+        return s;
     }
 }

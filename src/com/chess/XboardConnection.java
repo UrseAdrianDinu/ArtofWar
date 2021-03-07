@@ -50,6 +50,8 @@ public class XboardConnection {
             case "quit":
                 System.exit(0);
                 break;
+            case "move":
+                System.out.println("move e2e4");
             default:
                 System.out.println("error");
                 break;

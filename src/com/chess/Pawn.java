@@ -46,4 +46,8 @@ public class Pawn extends Piece {
                 captureMoves.add(board.getCoordinates(x - 1, y - 1));
         }
     }
+
+    public String toString() {
+        return "Pawn ";
+    }
 }

@@ -2,7 +2,7 @@ package com.chess;
 
 import java.util.ArrayList;
 
-public class King extends Piece{
+public class King extends Piece {
     public King(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;
@@ -13,12 +13,10 @@ public class King extends Piece{
         color = teamColor;
     }
 
-    @Override
     public String getType() {
-        return "com.company.proiect.King";
+        return "King";
     }
 
-    @Override
     public void generateMoves() {
         freeMoves = new ArrayList<>();
         captureMoves = new ArrayList<>();
@@ -97,5 +95,10 @@ public class King extends Piece{
                 freeMoves.add(board.getCoordinates(x - 1, y + 1));
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "King ";
     }
 }
