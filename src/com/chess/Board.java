@@ -8,6 +8,8 @@ public class Board {
     Coordinate[][] coordinates;
     Piece[][] table;
     HashMap<Character, Integer> dictionar;
+    Coordinate pionwhite = new Coordinate(1, 3);
+    Coordinate pionblack;
 
     private Board() {
         table = new Piece[9][9];
@@ -107,6 +109,28 @@ public class Board {
         p.coordinate.setY(yf);
         //System.out.println(p + " coord " + p.coordinate);
         //System.out.println(xi + " " + yi + " -> " + xf + " " + yf);
+    }
+
+    public void movePawn(int color) {
+        if (color == TeamColor.WHITE) {
+            Piece p = Board.getInstance().getPiecebylocation(pionwhite);
+            if (p != null) {
+                //System.out.println(p + " " + p.coordinate.getCharX() + " " + p.coordinate.getY());
+                if (getPiecebylocation(new Coordinate(p.coordinate.getIntX(), p.coordinate.getY() + 1)) == null) {
+                    int yf = p.coordinate.getY() + 1;
+                    //System.out.println("----move " + p.coordinate.getCharX() + p.coordinate.getY() + p.coordinate.getCharX() + yf + "----");
+                    executeMove("move " + p.coordinate.getCharX() + p.coordinate.getY() + p.coordinate.getCharX() + yf);
+                    pionwhite.setY(yf);
+                } else {
+                    System.out.println("resign");
+                    System.out.flush();
+                }
+            }
+        } else {
+            Piece p = Board.getInstance().getPiecebylocation(new Coordinate(1, 7));
+            System.out.println(p + " " + p.coordinate.getCharX() + " " + p.coordinate.getY());
+        }
+
     }
 
     @Override

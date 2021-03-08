@@ -44,6 +44,7 @@ public class Pawn extends Piece {
         }
     }
 
+
     public String toString() {
         if (color == 0)
             return "WPawn ";

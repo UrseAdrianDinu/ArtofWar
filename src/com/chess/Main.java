@@ -3,13 +3,21 @@ package com.chess;
 public class Main {
 
     public static void main(String[] args) {
-        XboardConnection.getInstance().readInput();
+        Game.getInstance().readInput();
 //        Board b = Board.getInstance();
 //        b.initBoard();
+//        b.executeMove("move a2a3");
+//        b.movePawn(TeamColor.WHITE);
 //        System.out.println(b);
-//        b.executeMove("move e2e4");
+//        Piece p= b.getPiecebylocation(new Coordinate(1,3));
+//        System.out.println(p);
+//        b.movePawn(TeamColor.WHITE);
 //        System.out.println(b);
-//        b.executeMove("move g1f5");
+//        b.movePawn(TeamColor.WHITE);
 //        System.out.println(b);
+//        b.movePawn(TeamColor.WHITE);
+//        System.out.println(b);
+//        b.movePawn(TeamColor.WHITE);
+
     }
 }
