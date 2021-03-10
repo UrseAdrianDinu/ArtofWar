@@ -21,6 +21,10 @@ public class Blacks {
         blacks.add(piece);
     }
 
+    public void removeBlackPiece(Piece piece){
+        blacks.remove(piece);
+    }
+
     public Piece getPawn(){
         for(Piece piece : blacks){
             if (piece.getType().compareTo("Pawn") == 0){

@@ -113,6 +113,12 @@ public class Board {
     }
 
     public void pawnToQueen(Piece pawnPiece) {
+        if (pawnPiece.color == TeamColor.WHITE){
+            Whites.getInstance().removeWhitePiece(pawnPiece);
+        }
+        else {
+            Blacks.getInstance().removeBlackPiece(pawnPiece);
+        }
         table[9 - pawnPiece.coordinate.getY()][pawnPiece.coordinate.getIntX()] = new Queen(pawnPiece.coordinate, pawnPiece.color);
         System.out.println(getPiecebylocation(getCoordinates(pawnPiece.coordinate.getIntX(), pawnPiece.coordinate.getY())).toString());
     }

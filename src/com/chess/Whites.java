@@ -21,9 +21,22 @@ public class Whites {
         whites.add(piece);
     }
 
+    public void removeWhitePiece(Piece piece){
+        whites.remove(piece);
+    }
+
     public Piece getPawn(){
         for(Piece piece : whites){
             if (piece.getType().compareTo("Pawn") == 0){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public Piece getQueen(){
+        for(Piece piece : whites){
+            if (piece.getType().compareTo("Queen") == 0){
                 return piece;
             }
         }
