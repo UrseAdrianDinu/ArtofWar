@@ -23,11 +23,10 @@ public class Game {
     }
 
     public void readInput() {
-
         Scanner sc = new Scanner(System.in);
         while (true) {
             String command = sc.nextLine();
-            System.out.println(command);
+            //quitSystem.out.println(command);
             if (command == null) return;
             processCommand(command);
         }
@@ -35,6 +34,14 @@ public class Game {
 
     public void processCommand(String command) {
         String[] words = command.split(" ");
+
+        if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
+                Character.isDigit(words[0].charAt(3))) {
+
+            Board.getInstance().executeMove(words[0]);
+            turn = enginecolor;
+            Brain.getInstance().doPawnMove();
+        }
 
         switch (words[0]) {
             case "xboard":
@@ -54,9 +61,8 @@ public class Game {
                 break;
 
             case "go":
-                System.out.println("move a2a3");
-                //Board.getInstance().executeMove("move a2a3");
-                System.out.flush();
+                /*System.out.println("move a7a6");
+                System.out.flush();*/
                 break;
 
             case "quit":
@@ -68,16 +74,16 @@ public class Game {
                 break;
 
             case "black":
+                System.out.println("move a7a6");
+                System.out.flush();
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
                 break;
-
 
             case "white":
                 enginecolor = TeamColor.WHITE;
                 usercolor = TeamColor.BLACK;
                 break;
-
 
             case "resign":
                 if (enginecolor == TeamColor.BLACK) {

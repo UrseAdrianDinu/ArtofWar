@@ -7,23 +7,9 @@ public class Board {
     private static Board instance;
     Coordinate[][] coordinates;
     Piece[][] table;
-    HashMap<Character, Integer> dictionar;
-    Coordinate pionwhite = new Coordinate(1, 3);
-    Coordinate pionblack;
 
     private Board() {
         table = new Piece[9][9];
-    }
-
-    void initdictionar() {
-        dictionar.put('a', 1);
-        dictionar.put('b', 2);
-        dictionar.put('c', 3);
-        dictionar.put('d', 4);
-        dictionar.put('e', 5);
-        dictionar.put('f', 6);
-        dictionar.put('g', 7);
-        dictionar.put('h', 8);
     }
 
     public static synchronized Board getInstance() {
@@ -50,10 +36,10 @@ public class Board {
     }
 
     public int isEmpty(Coordinate coordinate, int color) {
-        if (table[coordinate.getIntX()][coordinate.getY()] == null) {
+        if (getPiecebylocation(coordinate) == null) {
             return Move.FREE;
         }
-        if (table[coordinate.getIntX()][coordinate.getY()].color == color) {
+        if (getPiecebylocation(coordinate).color == color) {
             return Move.BLOCK;
         }
         return Move.CAPTURE;
@@ -86,7 +72,6 @@ public class Board {
         table[1][7] = new Knight(new Coordinate(7, 8), TeamColor.BLACK);
         table[8][2] = new Knight(new Coordinate(2, 1), TeamColor.WHITE);
         table[8][7] = new Knight(new Coordinate(7, 1), TeamColor.WHITE);
-
     }
 
     public Piece getPiecebylocation(Coordinate coordinate) {
@@ -94,44 +79,43 @@ public class Board {
     }
 
     public void executeMove(String s) {
-        String[] words = s.split(" ");
-        Board b = Board.getInstance();
-        //System.out.println(words[1]);
-        char xi = words[1].charAt(0);
-        int yi = words[1].charAt(1) - 48;
-        char xf = words[1].charAt(2);
-        int yf = words[1].charAt(3) - 48;
-        Piece p = b.getPiecebylocation(new Coordinate(xi, yi));
-        //System.out.println(p + " coord " + p.coordinate);
-        b.table[9 - yf][xf - 96] = p;
-        b.table[9 - yi][xi - 96] = null;
-        p.coordinate.setX(xf - 96);
-        p.coordinate.setY(yf);
-        //System.out.println(p + " coord " + p.coordinate);
-        //System.out.println(xi + " " + yi + " -> " + xf + " " + yf);
+        char xi = s.charAt(0);
+        int yi = s.charAt(1) - 48;
+        char xf = s.charAt(2);
+        int yf = s.charAt(3) - 48;
+
+        Coordinate c = Board.getInstance().getCoordinates(xf - 96, yf);
+        Piece p = Board.getInstance().getPiecebylocation(getCoordinates(xi - 96, yi));
+        p.movePiece(c);
     }
 
-    public void movePawn(int color) {
-        if (color == TeamColor.WHITE) {
-            Piece p = Board.getInstance().getPiecebylocation(pionwhite);
-            if (p != null) {
-                //System.out.println(p + " " + p.coordinate.getCharX() + " " + p.coordinate.getY());
-                if (getPiecebylocation(new Coordinate(p.coordinate.getIntX(), p.coordinate.getY() + 1)) == null) {
-                    int yf = p.coordinate.getY() + 1;
-                    //System.out.println("----move " + p.coordinate.getCharX() + p.coordinate.getY() + p.coordinate.getCharX() + yf + "----");
-                    executeMove("move " + p.coordinate.getCharX() + p.coordinate.getY() + p.coordinate.getCharX() + yf);
-                    pionwhite.setY(yf);
-                } else {
-                    System.out.println("resign");
-                    System.out.flush();
+    /*public void movePawn2(int color) {
+        if (color == TeamColor.BLACK) {
+            piece.generateMoves();
+            if (piece.captureMoves != null) {
+                if (!piece.captureMoves.isEmpty()) {
+                    Coordinate c = piece.captureMoves.get(0);
+                    Coordinate cc = piece.coordinate;
+                    System.out.println("move " + cc.getCharX() + cc.getY() + c.getCharX() + c.getY());
+                    executeMove("move " + piece.coordinate.getCharX() + piece.coordinate.getY() + c.getCharX() + c.getY());
+                    return;
                 }
             }
-        } else {
-            Piece p = Board.getInstance().getPiecebylocation(new Coordinate(1, 7));
-            System.out.println(p + " " + p.coordinate.getCharX() + " " + p.coordinate.getY());
+            if (piece.freeMoves != null) {
+                if (!piece.freeMoves.isEmpty()) {
+                    Coordinate cf = piece.freeMoves.get(0);
+                    Coordinate cc = piece.coordinate;
+                    System.out.println("move " + cc.getCharX() + cc.getY() + cf.getCharX() + cf.getY());
+                    executeMove("move " + piece.coordinate.getCharX() + piece.coordinate.getY() + cf.getCharX() + cf.getY());
+                    return;
+                }
+            }
+            System.out.println(piece.toString() + " " + piece.freeMoves + " " + piece.captureMoves);
+            System.out.println("resign");
+            System.out.flush();
         }
 
-    }
+    }*/
 
     @Override
     public String toString() {
