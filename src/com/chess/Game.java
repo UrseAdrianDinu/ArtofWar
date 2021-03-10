@@ -7,6 +7,7 @@ public class Game {
     int turn;
     int enginecolor;
     int usercolor;
+    boolean force;
 
     private static Game instance = null;
 
@@ -38,8 +39,12 @@ public class Game {
                 Character.isDigit(words[0].charAt(3))) {
 
             Board.getInstance().executeMove(words[0]);
-            turn = enginecolor;
-            Brain.getInstance().doPawnMove();
+            if (!force) {
+                turn = enginecolor;
+                Brain.getInstance().setPiece();
+                Brain.getInstance().doPawnMove();
+                turn = usercolor;
+            }
         }
 
         switch (words[0]) {
@@ -57,11 +62,17 @@ public class Game {
                 turn = TeamColor.WHITE;
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
+                force = false;
                 break;
 
             case "go":
                 /*System.out.println("move a7a6");
                 System.out.flush();*/
+                turn = enginecolor;
+                Brain.getInstance().doPawnMove();
+                turn = usercolor;
+
+                force = false;
                 break;
 
             case "quit":
@@ -73,13 +84,22 @@ public class Game {
                 break;
 
             case "black":
-                System.out.println("move a7a6");
-                System.out.flush();
+                //System.out.println("move a7a6");
+                //System.out.flush();
+                Brain.getInstance().setColor(TeamColor.BLACK);
+                Brain.getInstance().setPiece();
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
                 break;
 
+            case "force":
+                force = true;
+                break;
+
             case "white":
+                Board.getInstance().invertColors();
+                Brain.getInstance().setColor(TeamColor.WHITE);
+                Brain.getInstance().setPiece();
                 enginecolor = TeamColor.WHITE;
                 usercolor = TeamColor.BLACK;
                 break;
@@ -92,16 +112,6 @@ public class Game {
                     System.out.println("White wins");
                     System.out.flush();
                 }
-
-            default:
-//                if (enginecolor == TeamColor.BLACK) {
-//                    System.out.println("move a2a3");
-//                    System.out.flush();
-//                } else {
-//                    Board.getInstance().movePawn(TeamColor.WHITE);
-//                }
-                break;
-
         }
     }
 
