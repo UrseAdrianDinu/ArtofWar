@@ -1,8 +1,5 @@
 package com.chess;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
 public class Board {
     private static Board instance;
     Coordinate[][] coordinates;
@@ -78,6 +75,11 @@ public class Board {
         return table[9 - coordinate.getY()][coordinate.getIntX()];
     }
 
+    public void pawnToQueen(Piece pawnPiece) {
+        table[9 - pawnPiece.coordinate.getY()][pawnPiece.coordinate.getIntX()] = new Queen(pawnPiece.coordinate, pawnPiece.color);
+        System.out.println(getPiecebylocation(getCoordinates(pawnPiece.coordinate.getIntX(), pawnPiece.coordinate.getY())).toString());
+    }
+
     public void executeMove(String s) {
         char xi = s.charAt(0);
         int yi = s.charAt(1) - 48;
@@ -87,35 +89,20 @@ public class Board {
         Coordinate c = Board.getInstance().getCoordinates(xf - 96, yf);
         Piece p = Board.getInstance().getPiecebylocation(getCoordinates(xi - 96, yi));
         p.movePiece(c);
-    }
+        if (p.getType().compareTo("Pawn") == 0) {
+            //Tinem cont ca tabla este intoarsa.
 
-    /*public void movePawn2(int color) {
-        if (color == TeamColor.BLACK) {
-            piece.generateMoves();
-            if (piece.captureMoves != null) {
-                if (!piece.captureMoves.isEmpty()) {
-                    Coordinate c = piece.captureMoves.get(0);
-                    Coordinate cc = piece.coordinate;
-                    System.out.println("move " + cc.getCharX() + cc.getY() + c.getCharX() + c.getY());
-                    executeMove("move " + piece.coordinate.getCharX() + piece.coordinate.getY() + c.getCharX() + c.getY());
-                    return;
-                }
+            if (p.color == TeamColor.WHITE && p.coordinate.getY() == 8) {
+                System.out.println("mama");
+                pawnToQueen(p);
             }
-            if (piece.freeMoves != null) {
-                if (!piece.freeMoves.isEmpty()) {
-                    Coordinate cf = piece.freeMoves.get(0);
-                    Coordinate cc = piece.coordinate;
-                    System.out.println("move " + cc.getCharX() + cc.getY() + cf.getCharX() + cf.getY());
-                    executeMove("move " + piece.coordinate.getCharX() + piece.coordinate.getY() + cf.getCharX() + cf.getY());
-                    return;
-                }
+            if (p.color == TeamColor.BLACK && p.coordinate.getY() == 1) {
+                pawnToQueen(p);
+                System.out.println("tata");
             }
-            System.out.println(piece.toString() + " " + piece.freeMoves + " " + piece.captureMoves);
-            System.out.println("resign");
-            System.out.flush();
         }
-
-    }*/
+        System.out.println(this.toString());
+    }
 
     @Override
     public String toString() {

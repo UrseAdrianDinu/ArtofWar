@@ -13,6 +13,11 @@ public class Bishop extends Piece {
     }
 
     @Override
+    public String getType() {
+        return "Bishop";
+    }
+
+    @Override
     public String toString() {
         if (color == 0)
             return "WBishop ";

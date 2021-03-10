@@ -11,6 +11,11 @@ public class Knight extends Piece {
 
     }
 
+    @Override
+    public String getType() {
+        return "Knight";
+    }
+
     public String toString() {
         if (color == 0)
             return "WKnight ";

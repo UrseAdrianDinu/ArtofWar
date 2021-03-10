@@ -10,6 +10,8 @@ public abstract class Piece {
 
     public abstract void generateMoves();
 
+    public abstract String getType();
+
     public abstract String toString();
 
     public void movePiece(Coordinate destination){

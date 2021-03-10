@@ -14,7 +14,6 @@ public class Pawn extends Piece {
         this.color = color;
     }
 
-
     public void generateMoves() {
         freeMoves = new ArrayList<>();
         captureMoves = new ArrayList<>();
@@ -44,10 +43,16 @@ public class Pawn extends Piece {
         }
     }
 
+    @Override
+    public String getType() {
+        return "Pawn";
+    }
 
     public String toString() {
         if (color == 0)
             return "WPawn ";
         return "BPawn ";
     }
+
+
 }

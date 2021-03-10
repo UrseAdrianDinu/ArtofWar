@@ -14,6 +14,11 @@ public class Queen extends Piece {
     }
 
     @Override
+    public String getType() {
+        return "Queen";
+    }
+
+    @Override
     public String toString() {
         if (color == 0)
             return "WQueen ";

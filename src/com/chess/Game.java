@@ -3,11 +3,10 @@ package com.chess;
 import java.util.Scanner;
 
 public class Game {
-
+    boolean connected = false;
     int turn;
     int enginecolor;
     int usercolor;
-    boolean connected = false;
 
     private static Game instance = null;
 

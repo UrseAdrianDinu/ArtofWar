@@ -95,6 +95,11 @@ public class King extends Piece {
     }
 
     @Override
+    public String getType() {
+        return "King";
+    }
+
+    @Override
     public String toString() {
         if (color == 0)
             return "WKing ";

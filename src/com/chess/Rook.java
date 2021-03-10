@@ -11,6 +11,11 @@ public class Rook extends Piece {
 
     }
 
+    @Override
+    public String getType() {
+        return "Rook";
+    }
+
     public String toString() {
         if (color == 0)
             return "WRook ";
