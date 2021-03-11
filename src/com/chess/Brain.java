@@ -36,7 +36,6 @@ public class Brain {
                         c.getCharX() + c.getY());
                 System.out.flush();
 
-                //piece.movePiece(c);
                 Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                         c.getCharX() + c.getY());
                 return;
@@ -54,7 +53,6 @@ public class Brain {
                 return;
             }
         }
-        //System.out.println(piece.toString() + " " + piece.freeMoves + " " + piece.captureMoves);
         System.out.println("resign");
         System.out.flush();
     }

@@ -112,36 +112,21 @@ public class Board {
         return table[9 - coordinate.getY()][coordinate.getIntX()];
     }
 
-    public void pawnToQueen(Piece pawnPiece) {
-        if (pawnPiece.color == TeamColor.WHITE){
-            Whites.getInstance().removeWhitePiece(pawnPiece);
-        }
-        else {
-            Blacks.getInstance().removeBlackPiece(pawnPiece);
-        }
-        table[9 - pawnPiece.coordinate.getY()][pawnPiece.coordinate.getIntX()] = new Queen(pawnPiece.coordinate, pawnPiece.color);
-        System.out.println(getPiecebylocation(getCoordinates(pawnPiece.coordinate.getIntX(), pawnPiece.coordinate.getY())).toString());
-    }
-
     public void executeMove(String s) {
         char xi = s.charAt(0);
         int yi = s.charAt(1) - 48;
         char xf = s.charAt(2);
         int yf = s.charAt(3) - 48;
 
-        Coordinate c = Board.getInstance().getCoordinates(xf - 96, yf);
-        Piece p = Board.getInstance().getPiecebylocation(getCoordinates(xi - 96, yi));
+        Coordinate c = getCoordinates(xf - 96, yf);
+        Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
         p.movePiece(c);
         if (p.getType().compareTo("Pawn") == 0) {
-            //Tinem cont ca tabla este intoarsa.
-
             if (p.color == TeamColor.WHITE && p.coordinate.getY() == 8) {
-                System.out.println("mama");
-                pawnToQueen(p);
+                ((Pawn) p).pawnToQueen();
             }
             if (p.color == TeamColor.BLACK && p.coordinate.getY() == 1) {
-                pawnToQueen(p);
-                System.out.println("tata");
+                ((Pawn) p).pawnToQueen();
             }
         }
         System.out.println(this.toString());

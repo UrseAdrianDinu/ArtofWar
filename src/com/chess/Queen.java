@@ -2,7 +2,6 @@ package com.chess;
 
 public class Queen extends Piece {
 
-
     public Queen(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;

@@ -43,6 +43,18 @@ public class Pawn extends Piece {
         }
     }
 
+    public void pawnToQueen() {
+        Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Queen(coordinate, color);
+        if ( color == TeamColor.WHITE) {
+            Whites.getInstance().removeWhitePiece(this);
+            Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        } else {
+            Blacks.getInstance().removeBlackPiece(this);
+            Blacks.getInstance().addBlackPiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        }
+        System.out.println(Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(coordinate.getIntX(), coordinate.getY())).toString());
+    }
+
     @Override
     public String getType() {
         return "Pawn";
