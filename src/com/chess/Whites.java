@@ -15,7 +15,7 @@ public class Whites {
         if (instance == null)
             instance = new Whites();
         return instance;
-    }
+    }   //dada
 
     public void addWhitePiece(Piece piece){
         whites.add(piece);

@@ -53,6 +53,7 @@ public class Brain {
                 return;
             }
         }
+        //mama
         System.out.println("resign");
         System.out.flush();
     }

@@ -6,7 +6,7 @@ public class Rook extends Piece {
         this.coordinate = coordinate;
         this.color = color;
     }
-
+    //dasda
     public void generateMoves() {
 
     }

@@ -1,7 +1,7 @@
 package com.chess;
 
 import java.util.ArrayList;
-
+    //mama
 public abstract class Piece {
     ArrayList<Coordinate> freeMoves;
     ArrayList<Coordinate> captureMoves;

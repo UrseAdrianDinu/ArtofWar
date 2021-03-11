@@ -14,6 +14,7 @@ public class Board {
             instance = new Board();
         return instance;
     }
+    //dniuu
 
     public static synchronized Board newGame() {
         instance = null;

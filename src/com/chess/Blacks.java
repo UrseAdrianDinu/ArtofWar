@@ -16,7 +16,7 @@ public class Blacks {
             instance = new Blacks();
         return instance;
     }
-
+    //dasdas
     public void addBlackPiece(Piece piece){
         blacks.add(piece);
     }

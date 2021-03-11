@@ -6,7 +6,7 @@ public class Queen extends Piece {
         this.coordinate = coordinate;
         color = teamColor;
     }
-
+    //dada
     @Override
     public void generateMoves() {
 

@@ -13,6 +13,7 @@ public class Pawn extends Piece {
         coordinate = new Coordinate(x, y);
         this.color = color;
     }
+    //pawn
 
     public void generateMoves() {
         freeMoves = new ArrayList<>();

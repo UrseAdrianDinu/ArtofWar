@@ -2,6 +2,7 @@ package com.chess;
 
 public class Main {
 
+    //main
     public static void main(String[] args) {
         Game.getInstance().readInput();
         //Board b = Board.getInstance();
