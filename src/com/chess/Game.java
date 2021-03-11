@@ -55,7 +55,7 @@ public class Game {
                 System.out.println("feature myname=\"Art of War\" sigterm=0 sigint=0 san=0");
                 System.out.flush();
                 break;
-
+                //dinu
             case "new":
                 Board b = Board.newGame();
                 b.initBoard();
