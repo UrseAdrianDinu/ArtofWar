@@ -15,6 +15,7 @@ public class Knight extends Piece {
     public String getType() {
         return "Knight";
     }
+    //Amasda
 
     public String toString() {
         if (color == 0)
