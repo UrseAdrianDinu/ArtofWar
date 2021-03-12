@@ -7,7 +7,7 @@ public class Whites {
     private ArrayList<Piece> whites;
     private static Whites instance;
 
-    private Whites(){
+    private Whites() {
         whites = new ArrayList<>();
     }
 
@@ -17,30 +17,33 @@ public class Whites {
         return instance;
     }   //dada
 
-    public void addWhitePiece(Piece piece){
+    public void addWhitePiece(Piece piece) {
         whites.add(piece);
     }
 
-    public void removeWhitePiece(Piece piece){
+    public void removeWhitePiece(Piece piece) {
         whites.remove(piece);
     }
 
-    public Piece getPawn(){
+    public Piece getPawn() {
         Piece p = null;
-        for(Piece piece : whites){
-            if (piece.getType().compareTo("Pawn") == 0 && ( piece.freeMoves != null || piece.captureMoves != null)){
-                return piece;
-            }
-            if (piece.getType().compareTo("Pawn") == 0){
+        System.out.println("A intrat");
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("Pawn") == 0) {
+                piece.generateMoves();
+                if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
+                    System.out.println("" + piece.freeMoves + " " + piece.captureMoves);
+                    return piece;
+                }
                 p = piece;
             }
         }
         return p;
     }
 
-    public Piece getQueen(){
-        for(Piece piece : whites){
-            if (piece.getType().compareTo("Queen") == 0){
+    public Piece getQueen() {
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("Queen") == 0) {
                 return piece;
             }
         }

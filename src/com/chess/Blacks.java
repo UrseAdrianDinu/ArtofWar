@@ -7,7 +7,7 @@ public class Blacks {
     private ArrayList<Piece> blacks;
     private static Blacks instance;
 
-    private Blacks(){
+    private Blacks() {
         blacks = new ArrayList<>();
     }
 
@@ -16,21 +16,28 @@ public class Blacks {
             instance = new Blacks();
         return instance;
     }
-    //dasdas
-    public void addBlackPiece(Piece piece){
+
+    public void addBlackPiece(Piece piece) {
         blacks.add(piece);
     }
 
-    public void removeBlackPiece(Piece piece){
+    public void removeBlackPiece(Piece piece) {
         blacks.remove(piece);
     }
 
-    public Piece getPawn(){
-        for(Piece piece : blacks){
-            if (piece.getType().compareTo("Pawn") == 0){
-                return piece;
+    public Piece getPawn() {
+        Piece p = null;
+        System.out.println("A intrat");
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("Pawn") == 0) {
+                piece.generateMoves();
+                if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
+                    System.out.println("" + piece.freeMoves + " " + piece.captureMoves);
+                    return piece;
+                }
+                p = piece;
             }
         }
-        return null;
+        return p;
     }
 }
