@@ -26,12 +26,16 @@ public class Whites {
     }
 
     public Piece getPawn(){
+        Piece p = null;
         for(Piece piece : whites){
-            if (piece.getType().compareTo("Pawn") == 0){
+            if (piece.getType().compareTo("Pawn") == 0 && ( piece.freeMoves != null || piece.captureMoves != null)){
                 return piece;
             }
+            if (piece.getType().compareTo("Pawn") == 0){
+                p = piece;
+            }
         }
-        return null;
+        return p;
     }
 
     public Piece getQueen(){
