@@ -1,7 +1,5 @@
 package com.chess;
 
-import java.util.ArrayList;
-
 public class Board {
     private static Board instance;
     Coordinate[][] coordinates;
@@ -16,7 +14,7 @@ public class Board {
             instance = new Board();
         return instance;
     }
-    //dniuu
+
 
     public static synchronized Board newGame() {
         instance = null;
@@ -91,11 +89,14 @@ public class Board {
         Blacks.getInstance().addBlackPiece(table[1][7]);
         Whites.getInstance().addWhitePiece(table[8][2]);
         Whites.getInstance().addWhitePiece(table[8][7]);
+
     }
+
 
     public Piece getPiecebylocation(Coordinate coordinate) {
         return table[9 - coordinate.getY()][coordinate.getIntX()];
     }
+
 
     public void executeMove(String s) {
         char xi = s.charAt(0);
@@ -105,7 +106,9 @@ public class Board {
 
         Coordinate c = getCoordinates(xf - 96, yf);
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
+        System.out.println(c + "----" + p);
         p.movePiece(c);
+
         if (p.getType().compareTo("Pawn") == 0) {
             if (p.color == TeamColor.WHITE && p.coordinate.getY() == 8) {
                 ((Pawn) p).pawnToQueen();
@@ -126,7 +129,7 @@ public class Board {
                 if (table[i][j] == null)
                     s += " null ";
                 else
-                    s += "" + table[i][j].coordinate.getIntX() + table[i][j].coordinate.getY() + "-" + table[i][j];
+                    s += table[i][j];
             }
             s += "\n";
         }

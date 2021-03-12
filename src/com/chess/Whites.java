@@ -3,8 +3,10 @@ package com.chess;
 import java.util.ArrayList;
 
 public class Whites {
-    private int number;
-    private ArrayList<Piece> whites;
+    int numberofpieces;
+    int numberofpawns;
+
+    ArrayList<Piece> whites;
     private static Whites instance;
 
     private Whites() {
@@ -15,19 +17,28 @@ public class Whites {
         if (instance == null)
             instance = new Whites();
         return instance;
-    }   //dada
+    }
+
+    public static synchronized void newGame() {
+        instance = null;
+    }
 
     public void addWhitePiece(Piece piece) {
         whites.add(piece);
+        numberofpieces++;
+        if(piece.getType()=="Pawn")
+            numberofpawns++;
     }
 
     public void removeWhitePiece(Piece piece) {
         whites.remove(piece);
+        numberofpieces--;
+        if(piece.getType()=="Pawn")
+            numberofpawns--;
     }
 
     public Piece getPawn() {
         Piece p = null;
-        System.out.println("A intrat");
         for (Piece piece : whites) {
             if (piece.getType().compareTo("Pawn") == 0) {
                 piece.generateMoves();
@@ -49,4 +60,5 @@ public class Whites {
         }
         return null;
     }
+
 }

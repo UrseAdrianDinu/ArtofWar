@@ -42,11 +42,16 @@ public class Game {
             if (!force) {
                 turn = enginecolor;
                 Brain.getInstance().setPiece();
-                Brain.getInstance().doPawnMove();
+                if (Brain.getInstance().piece != null)
+                    Brain.getInstance().doPawnMove();
+                else {
+                    System.out.println("resign");
+                    System.out.flush();
+                }
+
                 turn = usercolor;
             }
         }
-        //game
 
         switch (words[0]) {
             case "xboard":
@@ -58,22 +63,30 @@ public class Game {
                 break;
 
             case "new":
+                Blacks.getInstance().blacks = null;
+                Whites.getInstance().whites = null;
+                Blacks.newGame();
+                Whites.newGame();
+                Blacks.getInstance().numberofpieces = 0;
+                Blacks.getInstance().numberofpawns = 0;
+                Whites.getInstance().numberofpieces = 0;
+                Whites.getInstance().numberofpawns = 0;
                 Board b = Board.newGame();
                 b.initBoard();
                 turn = TeamColor.WHITE;
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
                 force = false;
+                System.out.println(b);
                 break;
 
             case "go":
-                System.out.println(Board.getInstance().toString());
                 /*System.out.println("move a7a6");
                 System.out.flush();*/
+                System.out.println(enginecolor + "go ----------" + usercolor);
                 turn = enginecolor;
                 Brain.getInstance().doPawnMove();
                 turn = usercolor;
-
                 force = false;
                 break;
 
@@ -86,12 +99,12 @@ public class Game {
                 break;
 
             case "black":
-                //System.out.println("move a7a6");
-                //System.out.flush();
+
                 Brain.getInstance().setColor(TeamColor.BLACK);
                 Brain.getInstance().setPiece();
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
+                System.out.println(enginecolor + "----------" + usercolor);
                 break;
 
             case "force":
@@ -99,11 +112,11 @@ public class Game {
                 break;
 
             case "white":
-                //Board.getInstance().invertColors();
                 Brain.getInstance().setColor(TeamColor.WHITE);
                 Brain.getInstance().setPiece();
                 enginecolor = TeamColor.WHITE;
                 usercolor = TeamColor.BLACK;
+                System.out.println(enginecolor + "----------" + usercolor);
                 break;
 
             case "resign":

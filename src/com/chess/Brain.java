@@ -20,6 +20,7 @@ public class Brain {
     }
 
     public void setPiece() {
+
         if (color == TeamColor.BLACK) {
             piece = Blacks.getInstance().getPawn();
         } else {
@@ -28,31 +29,37 @@ public class Brain {
     }
 
     public void doPawnMove() {
-        //piece.generateMoves();
+        piece.generateMoves();
+
         if (piece.captureMoves.size() != 0) {
-            Coordinate c = piece.captureMoves.get(0);
-            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                    c.getCharX() + c.getY());
-            System.out.flush();
 
-            Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                    c.getCharX() + c.getY());
-            return;
+            if (!piece.captureMoves.isEmpty()) {
+                Coordinate c = piece.captureMoves.get(0);
+                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                        c.getCharX() + c.getY());
+                System.out.println(piece);
+                System.out.flush();
+
+                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                        c.getCharX() + c.getY());
+                return;
+            }
         }
+
         if (piece.freeMoves.size() != 0) {
-            Coordinate c = piece.freeMoves.get(0);
-            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                    c.getCharX() + c.getY());
-            System.out.flush();
+            if (!piece.freeMoves.isEmpty()) {
+                Coordinate c = piece.freeMoves.get(0);
+                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                        c.getCharX() + c.getY());
+                System.out.println(piece);
+                System.out.flush();
 
-            //System.out.println("move a2a3");
-            //System.out.flush();
-
-            Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                    c.getCharX() + c.getY());
-            return;
+                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                        c.getCharX() + c.getY());
+                return;
+            }
         }
-        //mama
+
         System.out.println("resign");
         System.out.flush();
     }

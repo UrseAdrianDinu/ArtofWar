@@ -1,7 +1,8 @@
 package com.chess;
 
 import java.util.ArrayList;
-    //mama
+
+
 public abstract class Piece {
     ArrayList<Coordinate> freeMoves;
     ArrayList<Coordinate> captureMoves;
@@ -14,7 +15,7 @@ public abstract class Piece {
 
     public abstract String toString();
 
-    public void movePiece(Coordinate destination){
+    public void movePiece(Coordinate destination) {
         //change the table
         Board b = Board.getInstance();
         Piece p = b.table[9 - destination.getY()][destination.getIntX()];
@@ -26,9 +27,9 @@ public abstract class Piece {
                 Blacks.getInstance().removeBlackPiece(p);
             }
         }
-        Board.getInstance().table[9 - destination.getY()][destination.getIntX()] = this;
-        Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = null;
 
+        b.table[9 - destination.getY()][destination.getIntX()] = this;
+        b.table[9 - coordinate.getY()][coordinate.getIntX()] = null;
         //change the Piece coordinate
         coordinate = destination;
     }
