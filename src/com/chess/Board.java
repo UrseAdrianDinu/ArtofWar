@@ -1,8 +1,10 @@
 package com.chess;
 
+import java.util.ArrayList;
+
 public class Board {
     private static Board instance;
-    Coordinate[][] coordinates;
+    ArrayList<Coordinate> coordinates;
     Piece[][] table;
 
     private Board() {
@@ -23,14 +25,17 @@ public class Board {
 
     public Coordinate getCoordinates(int x, int y) {
         if (coordinates == null) {
-            coordinates = new Coordinate[9][9];
+            coordinates = new ArrayList<>();
         }
-        if (coordinates[x][y] != null) {
-            return coordinates[x][y];
+        for (Coordinate coordinate : coordinates) {
+            if (coordinate.getIntX() == x && coordinate.getY() == y) {
+                return coordinate;
+            }
         }
-        coordinates[x][y] = new Coordinate(x, y);
 
-        return coordinates[x][y];
+        Coordinate c = new Coordinate(x, y);
+        coordinates.add(c);
+        return c;
     }
 
     public int isEmpty(Coordinate coordinate, int color) {
@@ -92,11 +97,16 @@ public class Board {
     }
 
     void invertColors() {
+        System.out.println("MAMAMAMAMA");
         Piece[][] table2 = new Piece[9][9];
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 table2[i][j] = table[9 - i][9 - j];
-                //table2[i][j].coordinate = getCoordinates(9-i, 9-j);
+                if (table2[i][j] != null) {
+                    int x = table2[i][j].coordinate.getIntX();
+                    int y = table2[i][j].coordinate.getY();
+                    table2[i][j].coordinate = getCoordinates(9- x, 9 - y);
+                }
                 /*if (table[9 - i][9 - j] != null) {
                     System.out.println("BEFORE: " + table2[i][j] + " " + table[9 - i][9 - j].coordinate.toString());
                     //table2[i][j].coordinate = getCoordinates(9 - table2[i][j].coordinate.getIntX(), 9 - table2[i][j].coordinate.getY());
@@ -142,7 +152,7 @@ public class Board {
                 if (table[i][j] == null)
                     s += " null ";
                 else
-                    s += table[i][j];
+                    s += "" + table[i][j].coordinate.getIntX() + table[i][j].coordinate.getY() + "-" + table[i][j];
             }
             s += "\n";
         }

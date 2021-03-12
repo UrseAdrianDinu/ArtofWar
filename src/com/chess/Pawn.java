@@ -21,32 +21,60 @@ public class Pawn extends Piece {
         int x = coordinate.getIntX();
         int y = coordinate.getY();
         Board board = Board.getInstance();
+        System.out.println("" + this + "- " + coordinate);
         if (color == TeamColor.WHITE) {
-            int type = board.isEmpty(board.getCoordinates(x, y + 1), color);
-            if (y + 1 <= 8 && type == Move.FREE)
-                freeMoves.add(board.getCoordinates(x, y + 1));
-            type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
-            if (x + 1 <= 8 && y + 1 <= 8 && type == Move.CAPTURE)
-                captureMoves.add(board.getCoordinates(x + 1, y + 1));
-            type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
-            if (x - 1 >= 0 && y + 1 <= 8 && type == Move.CAPTURE)
-                captureMoves.add(board.getCoordinates(x - 1, y + 1));
+
+            if (y + 1 <= 8) {
+                int type = board.isEmpty(board.getCoordinates(x, y + 1), color);
+                if (type == Move.FREE) {
+                    freeMoves.add(board.getCoordinates(x, y + 1));
+                }
+            }
+
+            if (x + 1 <= 8 && y + 1 <= 8) {
+                int type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
+                if (type == Move.CAPTURE) {
+                    captureMoves.add(board.getCoordinates(x + 1, y + 1));
+                }
+            }
+
+            if (x - 1 >= 0 && y + 1 <= 8) {
+                int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
+                if (type == Move.CAPTURE) {
+                    captureMoves.add(board.getCoordinates(x - 1, y + 1));
+                }
+            }
         } else {
-            int type = board.isEmpty(board.getCoordinates(x, y - 1), color);
-            if (y - 1 >= 0 && type == Move.FREE)
-                freeMoves.add(board.getCoordinates(x, y - 1));
-            type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
-            if (x + 1 <= 8 && y - 1 >= 0 && type == Move.CAPTURE)
-                captureMoves.add(board.getCoordinates(x + 1, y - 1));
-            type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
-            if (x - 1 >= 0 && y - 1 >= 0 && type == Move.CAPTURE)
-                captureMoves.add(board.getCoordinates(x - 1, y - 1));
+
+            if (y - 1 >= 0) {
+                int type = board.isEmpty(board.getCoordinates(x, y - 1), color);
+                if (type == Move.FREE) {
+                    freeMoves.add(board.getCoordinates(x, y - 1));
+                }
+            }
+
+
+            if (x + 1 <= 8 && y - 1 >= 0) {
+                int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
+                if (type == Move.CAPTURE) {
+                    captureMoves.add(board.getCoordinates(x + 1, y - 1));
+                }
+            }
+
+
+            if (x - 1 >= 0 && y - 1 >= 0) {
+                int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
+                if (type == Move.CAPTURE) {
+                    captureMoves.add(board.getCoordinates(x - 1, y - 1));
+
+                }
+            }
         }
     }
 
     public void pawnToQueen() {
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Queen(coordinate, color);
-        if ( color == TeamColor.WHITE) {
+        if (color == TeamColor.WHITE) {
             Whites.getInstance().removeWhitePiece(this);
             Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
         } else {

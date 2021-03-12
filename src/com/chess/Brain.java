@@ -48,6 +48,9 @@ public class Brain {
                         c.getCharX() + c.getY());
                 System.out.flush();
 
+                //System.out.println("move a2a3");
+                //System.out.flush();
+
                 Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                         c.getCharX() + c.getY());
                 return;

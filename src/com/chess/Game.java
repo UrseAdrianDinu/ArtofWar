@@ -67,6 +67,7 @@ public class Game {
                 break;
 
             case "go":
+                System.out.println(Board.getInstance().toString());
                 /*System.out.println("move a7a6");
                 System.out.flush();*/
                 turn = enginecolor;
@@ -98,7 +99,7 @@ public class Game {
                 break;
 
             case "white":
-                Board.getInstance().invertColors();
+                //Board.getInstance().invertColors();
                 Brain.getInstance().setColor(TeamColor.WHITE);
                 Brain.getInstance().setPiece();
                 enginecolor = TeamColor.WHITE;

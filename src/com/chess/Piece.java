@@ -16,6 +16,16 @@ public abstract class Piece {
 
     public void movePiece(Coordinate destination){
         //change the table
+        Board b = Board.getInstance();
+        Piece p = b.table[9 - destination.getY()][destination.getIntX()];
+        if(p!= null){
+            if (p.color == TeamColor.WHITE){
+                Whites.getInstance().removeWhitePiece(p);
+            }
+            else {
+                Blacks.getInstance().removeBlackPiece(p);
+            }
+        }
         Board.getInstance().table[9 - destination.getY()][destination.getIntX()] = this;
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = null;
 
