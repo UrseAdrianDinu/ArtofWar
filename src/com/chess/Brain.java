@@ -29,6 +29,7 @@ public class Brain {
     }
 
     public void doPawnMove() {
+
         piece.generateMoves();
 
         if (piece.captureMoves.size() != 0) {

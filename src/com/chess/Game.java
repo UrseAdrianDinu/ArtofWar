@@ -19,7 +19,6 @@ public class Game {
         if (instance == null)
             instance = new Game();
         return instance;
-
     }
 
     public void readInput() {
@@ -39,6 +38,7 @@ public class Game {
                 Character.isDigit(words[0].charAt(3))) {
 
             Board.getInstance().executeMove(words[0]);
+
             if (!force) {
                 turn = enginecolor;
                 Brain.getInstance().setPiece();
@@ -48,7 +48,6 @@ public class Game {
                     System.out.println("resign");
                     System.out.flush();
                 }
-
                 turn = usercolor;
             }
         }
@@ -57,6 +56,7 @@ public class Game {
             case "xboard":
                 connected = true;
                 break;
+
             case "protover":
                 System.out.println("feature myname=\"Art of War\" sigterm=0 sigint=0 san=0");
                 System.out.flush();
@@ -75,19 +75,21 @@ public class Game {
                 b.initBoard();
                 turn = TeamColor.WHITE;
                 enginecolor = TeamColor.BLACK;
+                Brain.getInstance().setColor(enginecolor);
                 usercolor = TeamColor.WHITE;
                 force = false;
+                System.out.println(enginecolor + "----------" + usercolor);
                 System.out.println(b);
                 break;
 
             case "go":
-                /*System.out.println("move a7a6");
-                System.out.flush();*/
+
+                force = false;
                 System.out.println(enginecolor + "go ----------" + usercolor);
                 turn = enginecolor;
+                Brain.getInstance().setColor(enginecolor);
                 Brain.getInstance().doPawnMove();
                 turn = usercolor;
-                force = false;
                 break;
 
             case "quit":
@@ -99,7 +101,6 @@ public class Game {
                 break;
 
             case "black":
-
                 Brain.getInstance().setColor(TeamColor.BLACK);
                 Brain.getInstance().setPiece();
                 enginecolor = TeamColor.BLACK;
@@ -109,6 +110,7 @@ public class Game {
 
             case "force":
                 force = true;
+
                 break;
 
             case "white":
