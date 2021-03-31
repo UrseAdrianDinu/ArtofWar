@@ -1,12 +1,14 @@
 package com.chess;
-
+/*
+    Clasa specifica piesei "Tura"
+ */
 public class Rook extends Piece {
-
+    //Initializare coordonata si culoare
     public Rook(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
     }
-    //dasda
+
     public void generateMoves() {
 
     }

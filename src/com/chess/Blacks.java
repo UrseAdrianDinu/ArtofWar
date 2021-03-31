@@ -2,10 +2,22 @@ package com.chess;
 
 import java.util.ArrayList;
 
+/*
+    Clasa Blacks retine informatii despre
+    piesele negre
+
+    Parametrii clasei:
+        numberofpieces: numarul de piese negre
+        numberofpawns: numarul de pioni negri
+        blacks: vector cu piesele negre
+
+ */
 public class Blacks {
     int numberofpieces;
     int numberofpawns;
     ArrayList<Piece> blacks;
+
+    //Singleton Pattern
     private static Blacks instance;
 
     private Blacks() {
@@ -18,10 +30,11 @@ public class Blacks {
         return instance;
     }
 
+    //Metoda ce adauga o piesa neagra in vector
     public void addBlackPiece(Piece piece) {
         blacks.add(piece);
         numberofpieces++;
-        if(piece.getType()=="Pawn")
+        if (piece.getType() == "Pawn")
             numberofpawns++;
     }
 
@@ -29,26 +42,36 @@ public class Blacks {
         instance = null;
     }
 
+    //Metoda ce elimina o piesa neagra din vector
     public void removeBlackPiece(Piece piece) {
         blacks.remove(piece);
         numberofpieces--;
-        if(piece.getType()=="Pawn")
+        if (piece.getType() == "Pawn")
             numberofpawns--;
     }
 
+    //Metoda care intoarce un pion negru care
+    //are mutari posibile
     public Piece getPawn() {
         Piece p = null;
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Pawn") == 0) {
                 piece.generateMoves();
                 if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
-                    System.out.println("" + piece.freeMoves + " " + piece.captureMoves);
                     return piece;
                 }
                 p = piece;
             }
         }
         return p;
+    }
+    public Piece getQueen() {
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("Queen") == 0) {
+                return piece;
+            }
+        }
+        return null;
     }
 
 }

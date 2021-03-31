@@ -1,7 +1,12 @@
 package com.chess;
 
+/*
+    Clasa specifica piesei "Cal"
+ */
+
 public class Knight extends Piece {
 
+    //Initializare coordonata si culoare
     public Knight(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
@@ -15,7 +20,7 @@ public class Knight extends Piece {
     public String getType() {
         return "Knight";
     }
-    //Amasda
+
 
     public String toString() {
         if (color == 0)

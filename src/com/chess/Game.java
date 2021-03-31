@@ -2,13 +2,25 @@ package com.chess;
 
 import java.util.Scanner;
 
+/*
+    Clasa Game citeste de la standard input comenzi, pe
+    care le va interpreta si va updata tabla de joc
+    si starea jocului.
+    Parametrii clasei:
+        -connected: flag care arata daca jocul s-a conectat la interfata xboard
+        -turn: arata cine urmeaza sa faca o miscare
+        -enginecolor/usercolor: parametrii pentru culorile echipelor
+        -force: indicator pentru force mode
+ */
 public class Game {
+
     boolean connected = false;
     int turn;
     int enginecolor;
     int usercolor;
     boolean force;
 
+    //Singleton Pattern
     private static Game instance = null;
 
     private Game() {
@@ -21,37 +33,33 @@ public class Game {
         return instance;
     }
 
+    //Metoda care citeste comenzi si le proceseaza
     public void readInput() {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String command = sc.nextLine();
-            //quitSystem.out.println(command);
             if (command == null) return;
             processCommand(command);
         }
     }
 
+    //Metoda care proceseaza o comanda
     public void processCommand(String command) {
         String[] words = command.split(" ");
-
+        //Verifica daca a primit o mutare de la xboard
         if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
                 Character.isDigit(words[0].charAt(3))) {
-
             Board.getInstance().executeMove(words[0]);
-
             if (!force) {
                 turn = enginecolor;
-                Brain.getInstance().setPiece();
-                if (Brain.getInstance().piece != null)
-                    Brain.getInstance().doPawnMove();
-                else {
-                    System.out.println("resign");
-                    System.out.flush();
-                }
+
+                Brain.getInstance().doPawnMove();
+
                 turn = usercolor;
             }
         }
 
+        //Am procesat comenzile din cerinta
         switch (words[0]) {
             case "xboard":
                 connected = true;
@@ -71,23 +79,20 @@ public class Game {
                 Blacks.getInstance().numberofpawns = 0;
                 Whites.getInstance().numberofpieces = 0;
                 Whites.getInstance().numberofpawns = 0;
+
                 Board b = Board.newGame();
                 b.initBoard();
                 turn = TeamColor.WHITE;
                 enginecolor = TeamColor.BLACK;
-                Brain.getInstance().setColor(enginecolor);
+
                 usercolor = TeamColor.WHITE;
                 force = false;
-                System.out.println(enginecolor + "----------" + usercolor);
-                System.out.println(b);
                 break;
 
             case "go":
 
                 force = false;
-                System.out.println(enginecolor + "go ----------" + usercolor);
                 turn = enginecolor;
-                Brain.getInstance().setColor(enginecolor);
                 Brain.getInstance().doPawnMove();
                 turn = usercolor;
                 break;
@@ -97,15 +102,13 @@ public class Game {
                 break;
 
             case "move":
-                Board.getInstance().executeMove(command);
+                Board.getInstance().executeMove(words[0]);
                 break;
 
             case "black":
-                Brain.getInstance().setColor(TeamColor.BLACK);
-                Brain.getInstance().setPiece();
+
                 enginecolor = TeamColor.BLACK;
                 usercolor = TeamColor.WHITE;
-                System.out.println(enginecolor + "----------" + usercolor);
                 break;
 
             case "force":
@@ -114,11 +117,9 @@ public class Game {
                 break;
 
             case "white":
-                Brain.getInstance().setColor(TeamColor.WHITE);
-                Brain.getInstance().setPiece();
+
                 enginecolor = TeamColor.WHITE;
                 usercolor = TeamColor.BLACK;
-                System.out.println(enginecolor + "----------" + usercolor);
                 break;
 
             case "resign":
@@ -131,5 +132,4 @@ public class Game {
                 }
         }
     }
-
 }

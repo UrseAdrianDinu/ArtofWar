@@ -1,5 +1,7 @@
 package com.chess;
-
+/*
+    Clasa pentru reprezentare unei coordonate
+ */
 public class Coordinate {
     private char x;
     private int y;
@@ -31,7 +33,7 @@ public class Coordinate {
     }
 
     public int getIntX() {
-        return (int) (x - 96);
+        return  (x - 96);
     }
 
     public char getCharX() {

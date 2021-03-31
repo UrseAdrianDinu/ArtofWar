@@ -1,7 +1,10 @@
 package com.chess;
-
+/*
+    Clasa specifica piesei "Nebun"
+ */
 public class Bishop extends Piece {
 
+    //Initializare coordonata si culoare
     public Bishop(Coordinate coordinate, int color) {
         this.color = color;
         this.coordinate = coordinate;

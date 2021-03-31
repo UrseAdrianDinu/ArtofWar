@@ -1,12 +1,15 @@
 package com.chess;
-
+/*
+    Clasa specifica piesei "Regina"
+ */
 public class Queen extends Piece {
 
+    //Initializare coordonata si culoare
     public Queen(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;
     }
-    //dada
+
     @Override
     public void generateMoves() {
 
