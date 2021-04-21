@@ -1,0 +1,181 @@
+Echipa: Art of War
+Membrii: Urse Adrian Dinu
+         Matei Vlad Cristian
+         Dina Stefania Gabriela
+         Lazar Elena
+
+===== Instructini de compilare ====
+
+Makefile-ul contine urmatoarele reguli:
+    build: creeaza fisierul .jar corespunzator proiectului
+    run: ruleaza fisierul jar creat
+    xboard: porneste xboard folosind engine-ul nostru
+    clean: sterge fisierele .class si fisirul .jar
+Pentru testare:
+    1. make build
+    2. xboard -fcp "make run" -debug
+       sau
+       make xboard
+    3. make clean
+
+==== Detalii despre structura proiectului ====
+
+    Proiectul contine urmatoarele clase:
+
+    Clasa Board
+        == Folosita pentru reprezentare tablei de joc ==
+
+        :: clasa este de tip Singleton pentru a putea fi accesata si din exteriorul ei.
+        :: aceasta contine doua campuri, coordinates si table.
+        :: coordinates este o matrice de coordonate ( ne ajuta pentru a reduce numarul de instantieri
+        multiple ale obiectelor de tip Coordinate , astfel nu vor exista obiecte duplicate
+        pentru aceeasi coordonata ).
+        :: table este o matrice de piese folosita pentru reprezentarea tablei de joc.
+
+        FUNCTII:
+            :: newGame()
+                = resteaza tabla de joc printr-o noua instantiere.
+
+            :: getCoordinates(...)
+                = aceasta functie returneaza un obiecte de tip Coordinate din matricea de coordonate
+                pentru un x si un y dat.
+                = in cazul in care nu exista in matrice un astfel de obiect pentru coordonatele date, atunci se
+                creeaza un obiect nou si se pune in matrice, returnandu-se apoi.
+
+            :: isEmpty(...)
+                = metoda care intoarce ce tip de mutare se poate face la coordonata data ca parametru
+                 in functie de culoarea sa.
+                = Move.CAPTURE, Move.FREE, Move.BLOCK sunt codificate {0,1,2}.
+
+            :: initBoard()
+                = initializeaza tabla de joc si pune piesele pe tabla.
+                = fiecare piesa este adaugata intr-un vector de piese din clasa corespunzatoare in functie de
+                culoare. (Blacks sau Whites)
+
+            :: getPiecebylocation(...)
+                = metoda care intoarce piesa de la coordonata data ca paramtru, realizand legatura
+                dintre cooroonta de pe tabla de joc si pozitia din matrice.
+
+            :: executeMove(...)
+                = metoda care executa o mutare pe baza unui string trimis de xboard (Ex. a2a3).
+                = identifica din comanda coordonata de inceput si cea de final.
+                = se selecteaza piesa de la coordonata de inceput si se muta pe tabla la coordonata de final.
+                = daca aceasta piesa a fost un pion si a ajuns pe ultima linie in directia sa de mers , atunci
+                pionul devine regina.
+
+    Clasa Piece
+         == Clasa abstracta pentru reprezentarea unei piese ==
+
+         :: clasa contine patru campuri: freeMoves, captureMoves, coordinate si color.
+         :: freeMoves:  vector pentru mutarile libere posibile
+         :: captureMoves: vector pentru mutarile de capturare posibile
+         :: coordinate: coordonata piesei
+         :: color: culoarea piesei
+
+         FUNCTII:
+            :: generateMoves()
+                = metoda abstracta care este implementata de fiecare piesa.
+                = aceasta genereaza mutarile posibile in functie de tipul piesei.
+                = updateaza cei doi vectori freeMoves si captureMoves.
+
+            :: getType()
+                = intoarce un string cu tipul piesei.
+
+            :: movePiece(...)
+                = metoda muta piesa curenta pe coordonata primita ca parametru.
+                = updateaza tabla de joc si campul coordinate din interiorul piesei.
+
+    Clasele Blacks si Whites
+         == Clasele retin informatii despre piesele negre/albe ==
+
+         :: clasele sunt de tip Singleton.
+         :: campurile claselor:
+            -> numberofpieces: numarul de piese negre/albe.
+            -> numberofpawns: numarul de pioni negre/albe.
+            -> blacks: vector cu piesele negre/albe.
+         :: vectorii blacks/whites contin toate piesele de culoare neagra/alba.
+
+         FUNCTII:
+            :: addBlackPiece(...)/addWhitePiece(...)
+                = metoda ce adauga o piesa neagra/alba in vector.
+
+            :: removeBlackPiece(...)/removeWhitePiece(...)
+                = metoda ce scoate o piesa neagra/alba din vector.
+
+            :: getPawn(...)
+                = metoda care intoarce un pion negru/alb care are mutari posibile.
+
+    Clasa Game
+         == Clasa Game citeste de la standard input comenzi, pe care le va interpreta
+          si va updata tabla de joc si starea jocului ==
+
+         :: clasa este de tip Singleton.
+         :: campurile clasei:
+            -> connected: flag care arata daca jocul s-a conectat la interfata xboard.
+            -> turn: arata cine urmeaza sa faca o miscare.
+            -> enginecolor/usercolor: parametrii pentru culorile echipelor.
+            -> force: indicator pentru force mode.
+
+         FUNCTII:
+            :: readInput()
+                = metoda care citeste comenzi si le proceseaza.
+
+            :: processComand(...)
+                = metoda care proceseaza o comanda.
+                = verificam daca a primit o mutare de la Xboard, in acest caz apelandu-se
+                metoda executeMove() pentru a updata jocul. De asemenea, in acest caz
+                si engine-ul va trimite o mutare catre Xboard, cautand un pion pe care
+                sa-l mute. In caz ca nu se gaseste un pion, engine-ul da resign.
+                = comenzi :
+                    -> "xboard" : schimba flag-ul connected in true.
+                    -> "protover" : trimite lista cu optiuni catre Xboard.
+                    -> "new" : initializeaza intreg jocul.
+                    -> "go" : forteaza engine-ul sa trimita o miscare pentru un pion.
+                    -> "quit" : inchide jocul.
+                    -> "move" : executa o miscare.
+                    -> "black" : se seteaza culoarea engine-ului pe Black.
+                    -> "white" : se seteaza culoarea engine-ului pe White.
+                    -> "force" : se seteaza jocul pe modul force.
+                    -> "resign" : in functie de culoarea engine-ului, acesta castiga.
+
+    Clasa Brain
+         == Clasa care implementeaza gandirea engine-ului, pentru moment,
+                ea decide mutarile pionilor ==
+
+         :: clasa este de tip Singleton.
+
+         FUUNCTII:
+            :: doPawnMove()
+                = metoda care trimite xboard-ului o mutare a unui pion in functie
+                de culoarea piesei.
+                = in cazul in care nu mai este nicio mutare posibila vom da resign.
+                = am prioritizat miscarile de capturare inaintea celor libere.
+
+    Clase de constante: TeamColor si Move.
+
+    Clasele reprezentative tipurilor de piese: Rook, Bishop, Knight, King, Queen, Pawn.
+        = dintre acestea, singurele clase implementate sunt: Pawn si King.
+
+        Clasa Pawn
+            = functia generateMoves() este o metoda care genereaza mutarile posible
+            pentru pion.
+            = la fiecare apel vectorii freeMoves/captureMoves se reinitializeaza.
+            = clasa contine si functia pawnToQueen() care transforma pionul curent
+            in regina.
+
+        Clasa King
+            = functia generateMoves() este o metoda care genereaza mutarile posible
+            pentru un rege.
+
+==== Detalii despre abordarea algoritmică a etapei ====
+    :: Aceasta etapa nu a presupus utilizarea algoritmilor studiati in cadrul cursului,
+    prin urmare nu s-au folosit algoritmi specifici.
+
+==== Surse de inspirație ====
+    :: https://www.gnu.org/software/xboard/
+    :: https://www.gnu.org/software/xboard/engine-intf.html
+
+==== Responsabilitatea fiecărui membru al echipei ====
+    :: Nu am impartit proiectul pe task-uri individuale, aproape intreg codul fiind scris impreuna.
+
+
