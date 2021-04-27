@@ -16,6 +16,7 @@ public abstract class Piece {
     ArrayList<Coordinate> captureMoves;
     Coordinate coordinate;
     int color;
+    int moves = 0;
 
     public abstract void generateMoves();
 
@@ -42,5 +43,6 @@ public abstract class Piece {
         b.table[9 - coordinate.getY()][coordinate.getIntX()] = null;
         //Updatam coordonata piesei
         coordinate = destination;
+        moves++;
     }
 }

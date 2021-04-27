@@ -16,6 +16,7 @@ public class Whites {
     int numberofpieces;
     int numberofpawns;
     ArrayList<Piece> whites;
+    Piece lastMoved;
     private static Whites instance;
 
     //Singleton Pattern
@@ -38,14 +39,15 @@ public class Whites {
     public void addWhitePiece(Piece piece) {
         whites.add(piece);
         numberofpieces++;
-        if(piece.getType()=="Pawn")
+        if (piece.getType() == "Pawn")
             numberofpawns++;
     }
+
     //Metoda ce elimina o piesa alba din vector
     public void removeWhitePiece(Piece piece) {
         whites.remove(piece);
         numberofpieces--;
-        if(piece.getType()=="Pawn")
+        if (piece.getType() == "Pawn")
             numberofpawns--;
     }
 
@@ -65,9 +67,40 @@ public class Whites {
         return p;
     }
 
+    public Piece getKnight() {
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("Knight") == 0) {
+                piece.generateMoves();
+                if ((piece.freeMoves.size()) != 0 || piece.captureMoves.size() != 0) {
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
     public Piece getQueen() {
         for (Piece piece : whites) {
             if (piece.getType().compareTo("Queen") == 0) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public Coordinate getKingLocation() {
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece.coordinate;
+            }
+        }
+        return null;
+    }
+
+    public Piece getPiece() {
+        for (Piece piece : whites) {
+            piece.generateMoves();
+            if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
                 return piece;
             }
         }

@@ -50,11 +50,25 @@ public class Game {
         if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
                 Character.isDigit(words[0].charAt(3))) {
             Board.getInstance().executeMove(words[0]);
+            Brain.getInstance().generateAllMoves();
+            System.out.println(Board.getInstance());
+            String s = "";
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
+                    if (Brain.getInstance().attackWhite[i][j] == 0) {
+                        s += " 0 ";
+                    } else {
+                        s += " " + Brain.getInstance().attackWhite[i][j] + " ";
+                    }
+                }
+                s += "\n";
+            }
+            System.out.println(s);
             if (!force) {
                 turn = enginecolor;
-
-                Brain.getInstance().doPawnMove();
-
+                System.out.println(Brain.getInstance().checkChess());
+                Brain.getInstance().doMove();
+                System.out.println(Board.getInstance());
                 turn = usercolor;
             }
         }
@@ -93,7 +107,7 @@ public class Game {
 
                 force = false;
                 turn = enginecolor;
-                Brain.getInstance().doPawnMove();
+                Brain.getInstance().doMove();
                 turn = usercolor;
                 break;
 

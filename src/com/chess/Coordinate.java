@@ -1,4 +1,7 @@
 package com.chess;
+
+import java.util.Objects;
+
 /*
     Clasa pentru reprezentare unei coordonate
  */
@@ -6,7 +9,7 @@ public class Coordinate {
     private char x;
     private int y;
 
-    public Coordinate(char x, int y){
+    public Coordinate(char x, int y) {
         this.setX(x);
         this.setY(y);
     }
@@ -33,7 +36,7 @@ public class Coordinate {
     }
 
     public int getIntX() {
-        return  (x - 96);
+        return (x - 96);
     }
 
     public char getCharX() {
@@ -46,5 +49,18 @@ public class Coordinate {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinate that = (Coordinate) o;
+        return x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

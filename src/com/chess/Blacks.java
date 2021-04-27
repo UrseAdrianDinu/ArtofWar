@@ -16,7 +16,7 @@ public class Blacks {
     int numberofpieces;
     int numberofpawns;
     ArrayList<Piece> blacks;
-
+    Piece lastMoved;
     //Singleton Pattern
     private static Blacks instance;
 
@@ -65,6 +65,38 @@ public class Blacks {
         }
         return p;
     }
+
+    public Piece getKnight() {
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("Knight") == 0) {
+                piece.generateMoves();
+                if ((piece.freeMoves.size()) != 0 || piece.captureMoves.size() != 0) {
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Piece getPiece() {
+        for (Piece piece : blacks) {
+            piece.generateMoves();
+            if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public Coordinate getKingLocation() {
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece.coordinate;
+            }
+        }
+        return null;
+    }
+
     public Piece getQueen() {
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Queen") == 0) {

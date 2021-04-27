@@ -28,79 +28,90 @@ public class King extends Piece {
         int y = coordinate.getY();
         int type; //type arata ce tip de mutare este
 
-        type = board.isEmpty(board.getCoordinates(x + 1, y), color);
-        //Verificam daca regele se poate muta pe casuta din dreapta
-        if (x + 1 <= 8 && type != Move.BLOCK) {
+        if (x + 1 <= 8) {
+            type = board.isEmpty(board.getCoordinates(x + 1, y), color);
+            //Verificam daca regele se poate muta pe casuta din dreapta
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 1, y));
             } else {
-                freeMoves.add(board.getCoordinates(x + 1, y));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x + 1, y));
             }
         }
+
         //Verificam daca regele se poate muta pe casuta din stanga
-        type = board.isEmpty(board.getCoordinates(x - 1, y), color);
-        if (x - 1 >= 1 && type != Move.BLOCK) {
+        if (x - 1 >= 1) {
+            type = board.isEmpty(board.getCoordinates(x - 1, y), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 1, y));
             } else {
-                freeMoves.add(board.getCoordinates(x - 1, y));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x - 1, y));
             }
         }
+
         //Verificam daca regele se poate muta pe casuta din fata lui
-        type = board.isEmpty(board.getCoordinates(x, y + 1), color);
-        if (y + 1 <= 8 && type != Move.BLOCK) {
+        if (y + 1 <= 8) {
+            type = board.isEmpty(board.getCoordinates(x, y + 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x, y + 1));
             } else {
-                freeMoves.add(board.getCoordinates(x, y + 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x, y + 1));
             }
         }
+
         //Verificam daca regele se poate muta pe casuta din spatele lui
-        type = board.isEmpty(board.getCoordinates(x, y - 1), color);
-        if (y - 1 >= 1 && type != Move.BLOCK) {
+        if (y - 1 >= 1) {
+            type = board.isEmpty(board.getCoordinates(x, y - 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x, y - 1));
             } else {
-                freeMoves.add(board.getCoordinates(x, y - 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x, y - 1));
             }
         }
 
         //Verificam daca regele se poate muta pe casuta dreapta-sus
-        type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
-        if (x + 1 <= 8 && y + 1 <= 8 && type != Move.BLOCK) {
+        if (x + 1 <= 8 && y + 1 <= 8) {
+            type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 1, y + 1));
             } else {
-                freeMoves.add(board.getCoordinates(x + 1, y + 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x + 1, y + 1));
             }
         }
 
         //Verificam daca regele se poate muta pe casuta dreapta-jos
-        type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
-        if (x + 1 <= 8 && y - 1 >= 1 && type != Move.BLOCK) {
+        if (x + 1 <= 8 && y - 1 >= 1) {
+            type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 1, y - 1));
             } else {
-                freeMoves.add(board.getCoordinates(x + 1, y - 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x + 1, y - 1));
             }
         }
 
         //Verificam daca regele se poate muta pe casuta stanga-jos
-        type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
-        if (x - 1 >= 1 && y - 1 >= 1 && type != Move.BLOCK) {
+        if (x - 1 >= 1 && y - 1 >= 1) {
+            type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 1, y - 1));
             } else {
-                freeMoves.add(board.getCoordinates(x - 1, y - 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x - 1, y - 1));
             }
         }
         //Verificam daca regele se poate muta pe casuta stanga-sus
-        type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
         if (x - 1 >= 1 && y + 1 <= 8) {
+            type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 1, y + 1));
             } else {
-                freeMoves.add(board.getCoordinates(x - 1, y + 1));
+                if (type != Move.BLOCK)
+                    freeMoves.add(board.getCoordinates(x - 1, y + 1));
             }
         }
     }
