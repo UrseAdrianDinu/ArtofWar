@@ -156,6 +156,63 @@ public class Pawn extends Piece {
         }
     }
 
+    public void pawnToKnight() {
+        //Se seteaza pe pozitia pionului o noua regina
+        Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Knight(coordinate, color);
+        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        if (color == TeamColor.WHITE) {
+            Whites.getInstance().removeWhitePiece(this);
+            Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        } else {
+            Blacks.getInstance().removeBlackPiece(this);
+            Blacks.getInstance().addBlackPiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        }
+    }
+
+    public void pawnToBishop() {
+        //Se seteaza pe pozitia pionului o noua regina
+        Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Bishop(coordinate, color);
+        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        if (color == TeamColor.WHITE) {
+            Whites.getInstance().removeWhitePiece(this);
+            Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        } else {
+            Blacks.getInstance().removeBlackPiece(this);
+            Blacks.getInstance().addBlackPiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        }
+    }
+
+    public void pawnToRook() {
+        //Se seteaza pe pozitia pionului o noua regina
+        Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Rook(coordinate, color);
+        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        if (color == TeamColor.WHITE) {
+            Whites.getInstance().removeWhitePiece(this);
+            Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        } else {
+            Blacks.getInstance().removeBlackPiece(this);
+            Blacks.getInstance().addBlackPiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        }
+    }
+
+    void pawnPromotion(char toWhat) {
+
+        switch (toWhat) {
+            case 'q' -> {
+                pawnToQueen();
+            }
+            case 'n' -> {
+                pawnToKnight();
+            }
+            case 'b' -> {
+                pawnToBishop();
+            }
+            case 'r' -> {
+                pawnToRook();
+            }
+        }
+    }
+
     char promotionGeneration() {
         Random rand = new Random();
         int randomNum = rand.nextInt((4)) + 1;

@@ -152,6 +152,7 @@ public class Board {
         }
 
         //Mutarea piesei de pe coordonata de inceput la coordonata de final
+
         p.movePiece(c);
         if (s.length() > 4) {
             char promote = s.charAt(4);
@@ -164,14 +165,7 @@ public class Board {
         }
         //Verificam daca un pion a ajuns pe ultima linie
         //In acest caz, el devine regina
-        if (p.getType().compareTo("Pawn") == 0) {
-            if (p.color == TeamColor.WHITE && p.coordinate.getY() == 8) {
-                ((Pawn) p).pawnToQueen();
-            }
-            if (p.color == TeamColor.BLACK && p.coordinate.getY() == 1) {
-                ((Pawn) p).pawnToQueen();
-            }
-        }
+
     }
 
     @Override

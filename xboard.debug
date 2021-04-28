@@ -1,0 +1,370 @@
+locale = LC_CTYPE=en_US.UTF-8;LC_NUMERIC=ro_RO.UTF-8;LC_TIME=ro_RO.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=ro_RO.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=ro_RO.UTF-8;LC_NAME=ro_RO.UTF-8;LC_ADDRESS=ro_RO.UTF-8;LC_TELEPHONE=ro_RO.UTF-8;LC_MEASUREMENT=ro_RO.UTF-8;LC_IDENTIFICATION=ro_RO.UTF-8
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+shuffleOpenings = 0
+shuffleOpenings = 0
+Version: xboard 4.9.1 + java ()
+Reset(1, 0) from gameMode 0
+recognized 'normal' (-1) as variant normal
+GameEnds(0, (null), 2)
+shuffleOpenings = 0
+StartChildProcess (dir=".") java -jar ArtOfWar.jar
+98 >first : xboard
+protover 2
+157 <first : feature myname="Art of War" sigterm=0 sigint=0 san=0
+157 >first : accepted myname
+157 >first : accepted sigterm
+157 >first : accepted sigint
+157 >first : accepted san
+10099 >first : new
+random
+10099 >first : level 40 5 0
+10099 >first : post
+10099 >first : hard
+nps: w=-1, b=-1
+nps: w=-1, b=-1
+11759 >first : time 30000
+11759 >first : otim 30000
+book hit = (NULL)
+11759 >first : b1c3
+11854 <first : BRook BKnight BBishop BQueen BKing BBishop BKnight BRook 
+11854 <first : BPawn BPawn BPawn BPawn BPawn BPawn BPawn BPawn 
+11854 <first :  null  null  null  null  null  null  null  null 
+11854 <first :  null  null  null  null  null  null  null  null 
+11854 <first :  null  null  null  null  null  null  null  null 
+11854 <first :  null  null WKnight  null  null  null  null  null 
+11854 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+11854 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+11854 <first : 
+11854 <first :  2  2  2  2  3  2  2  2 
+11854 <first :  2  2  2  2  2  2  2  2 
+11854 <first :  0  0  0  0  0  0  0  0 
+11854 <first :  0  4  0  4  0  0  0  0 
+11854 <first :  4  0  0  0  4  0  0  0 
+11854 <first :  4  4  1  4  4  4  4  4 
+11854 <first :  1  1  1  1  1  1  1  1 
+11854 <first :  1  4  1  1  3  1  1  1 
+11854 <first : 
+11854 <first :  1  1  1  1  3  1  1  1 
+11854 <first :  1  1  1  1  1  1  1  1 
+11854 <first :  4  4  4  4  4  4  4  4 
+11854 <first :  4  4  4  4  4  4  4  4 
+11854 <first :  0  0  0  0  0  0  0  0 
+11854 <first :  0  0  2  0  0  0  0  0 
+11854 <first :  2  2  2  2  2  2  2  2 
+11854 <first :  2  0  2  2  3  2  2  2 
+11854 <first : 
+11854 <first : move a7a5
+11927 <first : BRook BKnight BBishop BQueen BKing BBishop BKnight BRook 
+11927 <first :  null BPawn BPawn BPawn BPawn BPawn BPawn BPawn 
+11927 <first :  null  null  null  null  null  null  null  null 
+11927 <first : BPawn  null  null  null  null  null  null  null 
+11927 <first :  null  null  null  null  null  null  null  null 
+11927 <first :  null  null WKnight  null  null  null  null  null 
+11927 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+11927 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+11927 <first : 
+12511 >first : time 29990
+12511 >first : otim 29934
+book hit = (NULL)
+12511 >first : c3b5
+12603 <first : BRook BKnight BBishop BQueen BKing BBishop BKnight BRook 
+12603 <first :  null BPawn BPawn BPawn BPawn BPawn BPawn BPawn 
+12603 <first :  null  null  null  null  null  null  null  null 
+12603 <first : BPawn WKnight  null  null  null  null  null  null 
+12603 <first :  null  null  null  null  null  null  null  null 
+12603 <first :  null  null  null  null  null  null  null  null 
+12603 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+12603 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+12603 <first : 
+12603 <first :  2  2  2  2  3  2  2  2 
+12603 <first :  4  2  2  2  2  2  2  2 
+12603 <first :  0  0  0  4  0  0  0  0 
+12603 <first :  2  1  0  0  0  0  0  0 
+12603 <first :  0  0  0  4  0  0  0  0 
+12603 <first :  4  4  4  4  4  4  4  4 
+12603 <first :  1  1  1  1  1  1  1  1 
+12603 <first :  1  4  1  1  3  1  1  1 
+12603 <first : 
+12603 <first :  1  1  1  1  3  1  1  1 
+12603 <first :  4  1  1  1  1  1  1  1 
+12603 <first :  4  4  4  4  4  4  4  4 
+12603 <first :  1  2  4  4  4  4  4  4 
+12603 <first :  4  0  0  0  0  0  0  0 
+12603 <first :  0  0  0  0  0  0  0  0 
+12603 <first :  2  2  2  2  2  2  2  2 
+12603 <first :  2  0  2  2  3  2  2  2 
+12603 <first : 
+12603 <first : move a5a4
+12675 <first : BRook BKnight BBishop BQueen BKing BBishop BKnight BRook 
+12675 <first :  null BPawn BPawn BPawn BPawn BPawn BPawn BPawn 
+12675 <first :  null  null  null  null  null  null  null  null 
+12675 <first :  null WKnight  null  null  null  null  null  null 
+12675 <first : BPawn  null  null  null  null  null  null  null 
+12675 <first :  null  null  null  null  null  null  null  null 
+12675 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+12675 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+12675 <first : 
+14408 >first : time 29981
+14408 >first : otim 29753
+book hit = (NULL)
+14408 >first : b5c7
+14500 <first : BRook BKnight BBishop BQueen BKing BBishop BKnight BRook 
+14500 <first :  null BPawn WKnight BPawn BPawn BPawn BPawn BPawn 
+14500 <first :  null  null  null  null  null  null  null  null 
+14500 <first :  null  null  null  null  null  null  null  null 
+14500 <first : BPawn  null  null  null  null  null  null  null 
+14500 <first :  null  null  null  null  null  null  null  null 
+14500 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+14500 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+14500 <first : 
+14500 <first :  2  2  2  2  3  2  2  2 
+14500 <first :  0  2  1  2  2  2  2  2 
+14500 <first :  4  0  0  0  4  0  0  0 
+14500 <first :  0  4  0  4  0  0  0  0 
+14500 <first :  2  0  0  0  0  0  0  0 
+14500 <first :  4  4  4  4  4  4  4  4 
+14500 <first :  1  1  1  1  1  1  1  1 
+14500 <first :  1  4  1  1  3  1  1  1 
+14500 <first : 
+14500 <first :  1  1  1  1  3  1  1  1 
+14500 <first :  4  1  2  1  1  1  1  1 
+14500 <first :  4  4  4  4  4  4  4  4 
+14500 <first :  4  4  0  4  4  4  4  4 
+14500 <first :  1  0  0  0  0  0  0  0 
+14500 <first :  4  0  0  0  0  0  0  0 
+14500 <first :  2  2  2  2  2  2  2  2 
+14500 <first :  2  0  2  2  3  2  2  2 
+14500 <first : 
+14500 <first : move d8c7
+14573 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+14573 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+14573 <first :  null  null  null  null  null  null  null  null 
+14573 <first :  null  null  null  null  null  null  null  null 
+14573 <first : BPawn  null  null  null  null  null  null  null 
+14573 <first :  null  null  null  null  null  null  null  null 
+14573 <first : WPawn WPawn WPawn WPawn WPawn WPawn WPawn WPawn 
+14573 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+14573 <first : 
+79052 >first : time 29972
+79052 >first : otim 23298
+book hit = (NULL)
+79052 >first : e2e4
+79123 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+79123 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+79123 <first :  null  null  null  null  null  null  null  null 
+79123 <first :  null  null  null  null  null  null  null  null 
+79123 <first : BPawn  null  null  null WPawn  null  null  null 
+79123 <first :  null  null  null  null  null  null  null  null 
+79123 <first : WPawn WPawn WPawn WPawn  null WPawn WPawn WPawn 
+79123 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+79123 <first : 
+79123 <first :  2  2  2  0  3  2  2  2 
+79123 <first :  0  2  2  2  2  2  2  2 
+79123 <first :  4  0  0  0  0  0  0  0 
+79123 <first :  0  4  0  4  0  4  0  4 
+79123 <first :  2  0  4  0  1  0  4  0 
+79123 <first :  4  4  4  4  4  4  4  4 
+79123 <first :  1  1  1  1  4  1  1  1 
+79123 <first :  1  4  1  1  3  1  1  1 
+79123 <first : 
+79123 <first :  1  1  1  4  3  1  1  1 
+79123 <first :  4  1  1  1  1  1  1  1 
+79123 <first :  4  4  4  4  4  4  4  4 
+79123 <first :  4  4  4  4  4  4  4  4 
+79123 <first :  1  0  4  0  2  4  0  0 
+79123 <first :  4  0  4  0  0  0  4  0 
+79123 <first :  2  2  2  2  0  2  2  2 
+79123 <first :  2  0  2  2  3  2  2  2 
+79123 <first : 
+79123 <first : move a4a3
+79195 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+79195 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+79195 <first :  null  null  null  null  null  null  null  null 
+79195 <first :  null  null  null  null  null  null  null  null 
+79195 <first :  null  null  null  null WPawn  null  null  null 
+79195 <first : BPawn  null  null  null  null  null  null  null 
+79195 <first : WPawn WPawn WPawn WPawn  null WPawn WPawn WPawn 
+79195 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+79195 <first : 
+93642 >first : time 29965
+93642 >first : otim 21846
+book hit = (NULL)
+93642 >first : c2c4
+93714 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+93714 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+93714 <first :  null  null  null  null  null  null  null  null 
+93714 <first :  null  null  null  null  null  null  null  null 
+93714 <first :  null  null WPawn  null WPawn  null  null  null 
+93714 <first : BPawn  null  null  null  null  null  null  null 
+93714 <first : WPawn WPawn  null WPawn  null WPawn WPawn WPawn 
+93714 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+93714 <first : 
+93714 <first :  2  2  2  0  3  2  2  2 
+93714 <first :  0  2  2  2  2  2  2  2 
+93714 <first :  0  0  0  0  0  0  0  0 
+93714 <first :  0  4  0  4  0  4  0  4 
+93714 <first :  4  0  1  0  1  0  4  0 
+93714 <first :  2  4  4  4  4  4  4  4 
+93714 <first :  1  1  4  1  4  1  1  1 
+93714 <first :  1  4  1  1  3  1  1  1 
+93714 <first : 
+93714 <first :  1  1  1  4  3  1  1  1 
+93714 <first :  4  1  1  1  1  1  1  1 
+93714 <first :  4  4  4  4  4  4  4  4 
+93714 <first :  4  4  4  4  4  4  4  4 
+93714 <first :  4  0  2  0  2  4  0  0 
+93714 <first :  1  0  0  0  0  0  4  0 
+93714 <first :  2  2  0  2  0  2  2  2 
+93714 <first :  2  0  2  2  3  2  2  2 
+93714 <first : 
+93714 <first : move a3b2
+93786 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+93786 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+93786 <first :  null  null  null  null  null  null  null  null 
+93786 <first :  null  null  null  null  null  null  null  null 
+93786 <first :  null  null WPawn  null WPawn  null  null  null 
+93786 <first :  null  null  null  null  null  null  null  null 
+93786 <first : WPawn BPawn  null WPawn  null WPawn WPawn WPawn 
+93786 <first : WRook  null WBishop WQueen WKing WBishop WKnight WRook 
+93786 <first : 
+Impossible move a3b2, type = 0
+Impossible move a3b2, type = 0
+95304 >first : time 29957
+95304 >first : otim 21687
+book hit = (NULL)
+95304 >first : d1a4
+95396 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+95396 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+95396 <first :  null  null  null  null  null  null  null  null 
+95396 <first :  null  null  null  null  null  null  null  null 
+95396 <first : WQueen  null WPawn  null WPawn  null  null  null 
+95396 <first :  null  null  null  null  null  null  null  null 
+95396 <first : WPawn BPawn  null WPawn  null WPawn WPawn WPawn 
+95396 <first : WRook  null WBishop  null WKing WBishop WKnight WRook 
+95396 <first : 
+95396 <first :  2  2  2  0  3  2  2  2 
+95396 <first :  4  2  2  2  2  2  2  2 
+95396 <first :  4  0  4  0  0  0  0  0 
+95396 <first :  4  4  0  4  0  4  0  0 
+95396 <first :  1  4  1  0  1  0  0  0 
+95396 <first :  4  4  4  4  4  4  4  4 
+95396 <first :  1  2  4  1  4  1  1  1 
+95396 <first :  1  4  1  4  3  1  1  1 
+95396 <first : 
+95396 <first :  1  1  1  4  3  1  1  1 
+95396 <first :  4  1  1  1  1  1  1  1 
+95396 <first :  4  4  4  4  4  4  4  4 
+95396 <first :  4  4  4  4  4  4  4  4 
+95396 <first :  2  0  2  0  2  4  0  0 
+95396 <first :  0  0  0  0  0  0  4  0 
+95396 <first :  2  1  0  2  0  2  2  2 
+95396 <first :  2  4  2  0  3  2  2  2 
+95396 <first : 
+95396 <first : move b2c1r
+95469 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+95469 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+95469 <first :  null  null  null  null  null  null  null  null 
+95469 <first :  null  null  null  null  null  null  null  null 
+95469 <first : WQueen  null WPawn  null WPawn  null  null  null 
+95469 <first :  null  null  null  null  null  null  null  null 
+95469 <first : WPawn  null  null WPawn  null WPawn WPawn WPawn 
+95469 <first : WRook  null BRook  null WKing WBishop WKnight WRook 
+95469 <first : 
+98287 >first : time 29948
+98288 >first : otim 21398
+book hit = (NULL)
+98288 >first : a1c1
+98359 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+98359 <first :  null BPawn BQueen BPawn BPawn BPawn BPawn BPawn 
+98359 <first :  null  null  null  null  null  null  null  null 
+98359 <first :  null  null  null  null  null  null  null  null 
+98359 <first : WQueen  null WPawn  null WPawn  null  null  null 
+98359 <first :  null  null  null  null  null  null  null  null 
+98359 <first : WPawn  null  null WPawn  null WPawn WPawn WPawn 
+98359 <first :  null  null WRook  null WKing WBishop WKnight WRook 
+98359 <first : 
+98359 <first :  2  2  2  0  3  2  2  2 
+98359 <first :  4  2  2  2  2  2  2  2 
+98359 <first :  4  0  4  0  0  0  0  0 
+98359 <first :  4  4  0  4  0  4  0  0 
+98359 <first :  1  4  1  0  1  0  0  0 
+98359 <first :  4  4  4  4  4  4  4  4 
+98359 <first :  1  0  4  1  4  1  1  1 
+98359 <first :  4  4  1  4  3  1  1  1 
+98359 <first : 
+98359 <first :  1  1  1  4  3  1  1  1 
+98359 <first :  4  1  1  1  1  1  1  1 
+98359 <first :  4  4  4  4  4  4  4  4 
+98359 <first :  4  4  4  4  4  4  4  4 
+98359 <first :  2  0  2  0  2  4  0  0 
+98359 <first :  0  0  0  0  0  0  4  0 
+98359 <first :  2  0  0  2  0  2  2  2 
+98359 <first :  0  0  2  0  3  2  2  2 
+98359 <first : 
+98359 <first : move b7b5
+98434 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+98434 <first :  null  null BQueen BPawn BPawn BPawn BPawn BPawn 
+98434 <first :  null  null  null  null  null  null  null  null 
+98434 <first :  null BPawn  null  null  null  null  null  null 
+98434 <first : WQueen  null WPawn  null WPawn  null  null  null 
+98434 <first :  null  null  null  null  null  null  null  null 
+98434 <first : WPawn  null  null WPawn  null WPawn WPawn WPawn 
+98434 <first :  null  null WRook  null WKing WBishop WKnight WRook 
+98434 <first : 
+99939 >first : time 29941
+99939 >first : otim 21240
+book hit = (NULL)
+99939 >first : a4b5
+100010 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+100010 <first :  null  null BQueen BPawn BPawn BPawn BPawn BPawn 
+100010 <first :  null  null  null  null  null  null  null  null 
+100010 <first :  null WQueen  null  null  null  null  null  null 
+100010 <first :  null  null WPawn  null WPawn  null  null  null 
+100010 <first :  null  null  null  null  null  null  null  null 
+100010 <first : WPawn  null  null WPawn  null WPawn WPawn WPawn 
+100010 <first :  null  null WRook  null WKing WBishop WKnight WRook 
+100010 <first : 
+100010 <first :  2  2  2  0  3  2  2  2 
+100010 <first :  0  4  2  2  2  2  2  2 
+100010 <first :  4  4  4  0  0  0  0  0 
+100010 <first :  0  1  4  4  4  4  4  4 
+100010 <first :  4  4  1  0  1  0  0  0 
+100010 <first :  0  4  4  4  4  4  4  4 
+100010 <first :  1  4  4  1  4  1  1  1 
+100010 <first :  4  4  1  4  3  1  1  1 
+100010 <first : 
+100010 <first :  1  1  1  4  3  1  1  1 
+100010 <first :  4  4  1  1  1  1  1  1 
+100010 <first :  4  4  4  4  4  4  4  4 
+100010 <first :  4  2  4  4  4  4  4  4 
+100010 <first :  4  0  2  0  2  4  0  0 
+100010 <first :  4  0  0  0  0  0  4  0 
+100010 <first :  2  0  0  2  0  2  2  2 
+100010 <first :  0  0  2  0  3  2  2  2 
+100010 <first : 
+100010 <first : move d7d5
+100011 <first : BRook BKnight BBishop  null BKing BBishop BKnight BRook 
+100011 <first :  null  null BQueen  null BPawn BPawn BPawn BPawn 
+100011 <first :  null  null  null  null  null  null  null  null 
+100011 <first :  null WQueen  null BPawn  null  null  null  null 
+100011 <first :  null  null WPawn  null WPawn  null  null  null 
+100011 <first :  null  null  null  null  null  null  null  null 
+100011 <first : WPawn  null  null WPawn  null WPawn WPawn WPawn 
+100011 <first :  null  null WRook  null WKing WBishop WKnight WRook 
+100011 <first : 
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+Impossible move d7d5, type = 0
+GameEnds(29, xboard exit, 2)
+1581977 >first : result * {xboard exit}
+1581977 >first : force
+1581977 >first : quit
