@@ -116,7 +116,7 @@ public class Board {
     public Piece getPiecebylocation(Coordinate coordinate) {
         return table[9 - coordinate.getY()][coordinate.getIntX()];
     }
-    
+
     //Metoda care executa o mutare pe baza unui string
     //trimis de xboard (Ex. a2a3)
 
@@ -131,10 +131,8 @@ public class Board {
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
         if (p.color == TeamColor.WHITE) {
             Whites.getInstance().lastMoved = p;
-            System.out.println(Whites.getInstance().lastMoved);
         } else {
             Blacks.getInstance().lastMoved = p;
-            System.out.println(Blacks.getInstance().lastMoved);
         }
 
         if (p.color == Game.getInstance().usercolor) {
@@ -155,7 +153,15 @@ public class Board {
 
         //Mutarea piesei de pe coordonata de inceput la coordonata de final
         p.movePiece(c);
-
+        if (s.length() > 4) {
+            char promote = s.charAt(4);
+            if (p.color == TeamColor.WHITE) {
+                ((Pawn) p).pawnPromotion(promote);
+            }
+            if (p.color == TeamColor.BLACK) {
+                ((Pawn) p).pawnPromotion(promote);
+            }
+        }
         //Verificam daca un pion a ajuns pe ultima linie
         //In acest caz, el devine regina
         if (p.getType().compareTo("Pawn") == 0) {

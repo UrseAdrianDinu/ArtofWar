@@ -55,20 +55,37 @@ public class Game {
             String s = "";
             for (int i = 1; i <= 8; i++) {
                 for (int j = 1; j <= 8; j++) {
-                    if (Brain.getInstance().attackWhite[i][j] == 0) {
+                    if (Brain.getInstance().enemyattack[i][j] == 0) {
                         s += " 0 ";
                     } else {
-                        s += " " + Brain.getInstance().attackWhite[i][j] + " ";
+                        s += " " + Brain.getInstance().enemyattack[i][j] + " ";
                     }
                 }
                 s += "\n";
             }
             System.out.println(s);
+            String s1 = "";
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
+                    if (Brain.getInstance().defense[i][j] == 0) {
+                        s1 += " 0 ";
+                    } else {
+                        s1 += " " + Brain.getInstance().defense[i][j] + " ";
+                    }
+                }
+                s1 += "\n";
+            }
+            System.out.println(s1);
             if (!force) {
                 turn = enginecolor;
-                System.out.println(Brain.getInstance().checkChess());
-                Brain.getInstance().doMove();
-                System.out.println(Board.getInstance());
+                Piece chess = Brain.getInstance().checkChess();
+                if (chess != null) {
+                    Brain.getInstance().captureChessPiece(chess);
+                    System.out.println(Board.getInstance());
+                } else {
+                    Brain.getInstance().doMove();
+                    System.out.println(Board.getInstance());
+                }
                 turn = usercolor;
             }
         }

@@ -1,5 +1,7 @@
 package com.chess;
 
+import java.util.Random;
+
 /*
     Clasa care implementeaza gandirea engine-ului.
     Pentru moment, ea decide mutarile pionilor.
@@ -8,8 +10,8 @@ public class Brain {
 
     //Singleton Pattern
     private static Brain instance = null;
-    int[][] attackWhite;
-    int[][] attackBlack;
+    int[][] enemyattack;
+    int[][] defense;
 
     private Brain() {
 
@@ -22,58 +24,87 @@ public class Brain {
     }
 
     void generateAllMoves() {
-        attackBlack = new int[9][9];
-        attackWhite = new int[9][9];
-        for (Piece p : Whites.getInstance().whites) {
-            p.generateMoves();
-            addPiece(p);
-            if (p.getType().compareTo("Pawn") != 0) {
-                for (Coordinate c : p.freeMoves) {
-                    attackWhite[9 - c.getY()][c.getIntX()] = 4;
-                }
-            } else {
-                if (p.coordinate.getIntX() + 1 <= 8 && p.coordinate.getY() + 1 <= 8) {
-                    int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() + 1, p.coordinate.getY() + 1), p.color);
-                    if (type == Move.FREE)
-                        attackWhite[9 - p.coordinate.getY() - 1][p.coordinate.getIntX() + 1] = 4;
-                }
-                if (p.coordinate.getIntX() - 1 >= 1 && p.coordinate.getY() + 1 <= 8) {
-                    int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() - 1, p.coordinate.getY() + 1), p.color);
-                    if (type == Move.FREE)
-                        attackWhite[9 - p.coordinate.getY() - 1][p.coordinate.getIntX() - 1] = 4;
+        defense = new int[9][9];
+        enemyattack = new int[9][9];
+        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+            for (Piece p : Whites.getInstance().whites) {
+                p.generateMoves();
+                addPiece(p);
+                if (p.getType().compareTo("Pawn") != 0) {
+                    for (Coordinate c : p.freeMoves) {
+                        enemyattack[9 - c.getY()][c.getIntX()] = 4;
+                    }
+                } else {
+                    if (p.coordinate.getIntX() + 1 <= 8 && p.coordinate.getY() + 1 <= 8) {
+                        int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() + 1, p.coordinate.getY() + 1), p.color);
+                        if (type == Move.FREE)
+                            enemyattack[9 - p.coordinate.getY() - 1][p.coordinate.getIntX() + 1] = 4;
+                    }
+                    if (p.coordinate.getIntX() - 1 >= 1 && p.coordinate.getY() + 1 <= 8) {
+                        int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() - 1, p.coordinate.getY() + 1), p.color);
+                        if (type == Move.FREE)
+                            enemyattack[9 - p.coordinate.getY() - 1][p.coordinate.getIntX() - 1] = 4;
+                    }
                 }
             }
-        }
 
-        for (Piece p : Blacks.getInstance().blacks) {
-            p.generateMoves();
-            addPiece(p);
-            if (p.getType().compareTo("Pawn") != 0) {
+            for (Piece p : Blacks.getInstance().blacks) {
+                p.generateMoves();
+                addPiece(p);
                 for (Coordinate c : p.freeMoves) {
-                    attackBlack[9 - c.getY()][c.getIntX()] = 4;
+                    defense[9 - c.getY()][c.getIntX()] = 4;
                 }
-            } else {
-                if (p.coordinate.getIntX() + 1 <= 8 && p.coordinate.getY() - 1 >= 1) {
-                    int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() + 1, p.coordinate.getY() - 1), p.color);
-                    if (type == Move.FREE)
-                        attackBlack[9 - p.coordinate.getY() + 1][p.coordinate.getIntX() + 1] = 4;
-                }
-                if (p.coordinate.getIntX() - 1 >= 1 && p.coordinate.getY() - 1 >= 1) {
-                    int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() - 1, p.coordinate.getY() - 1), p.color);
-                    if (type == Move.FREE)
-                        attackBlack[9 - p.coordinate.getY() + 1][p.coordinate.getIntX() - 1] = 4;
+
+            }
+        } else {
+            for (Piece p : Blacks.getInstance().blacks) {
+                p.generateMoves();
+                addPiece(p);
+                if (p.getType().compareTo("Pawn") != 0) {
+                    for (Coordinate c : p.freeMoves) {
+                        enemyattack[9 - c.getY()][c.getIntX()] = 4;
+                    }
+                } else {
+                    if (p.coordinate.getIntX() + 1 <= 8 && p.coordinate.getY() - 1 >= 1) {
+                        int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() + 1, p.coordinate.getY() - 1), p.color);
+                        if (type == Move.FREE)
+                            enemyattack[9 - p.coordinate.getY() + 1][p.coordinate.getIntX() + 1] = 4;
+                    }
+                    if (p.coordinate.getIntX() - 1 >= 1 && p.coordinate.getY() - 1 >= 1) {
+                        int type = Board.getInstance().isEmpty(Board.getInstance().getCoordinates(p.coordinate.getIntX() - 1, p.coordinate.getY() - 1), p.color);
+                        if (type == Move.FREE)
+                            enemyattack[9 - p.coordinate.getY() + 1][p.coordinate.getIntX() - 1] = 4;
+                    }
                 }
             }
+
+            for (Piece p : Whites.getInstance().whites) {
+                p.generateMoves();
+                addPiece(p);
+                for (Coordinate c : p.freeMoves) {
+                    defense[9 - c.getY()][c.getIntX()] = 4;
+                }
+
+            }
         }
+        Piece p = checkChess();
     }
 
     public void addPiece(Piece p) {
-        if (p.color == TeamColor.BLACK) {
-            attackBlack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 1;
-            attackWhite[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 2;
+        if (p.color == Game.getInstance().enginecolor) {
+            defense[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 1;
+            enemyattack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 2;
+            if (p.getType().compareTo("King") == 0) {
+                defense[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 3;
+                enemyattack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 3;
+            }
         } else {
-            attackWhite[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 1;
-            attackBlack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 2;
+            enemyattack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 1;
+            defense[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 2;
+            if (p.getType().compareTo("King") == 0) {
+                defense[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 3;
+                enemyattack[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 3;
+            }
         }
     }
 
@@ -126,6 +157,30 @@ public class Brain {
         if (piece.captureMoves.size() != 0) {
             Coordinate c = piece.captureMoves.get(0);
             //Se scrie la standard output comanda "move + mutarea gasita"
+            if (piece.getType().compareTo("Pawn") == 0) {
+                if (piece.color == TeamColor.WHITE && c.getY() == 8) {
+                    Pawn pion = (Pawn) piece;
+                    char gen = pion.promotionGeneration();
+                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    System.out.flush();
+                    //Se updateaza tabla de joc
+                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    return;
+                }
+                if (piece.color == TeamColor.BLACK && c.getY() == 1) {
+                    Pawn pion = (Pawn) piece;
+                    char gen = pion.promotionGeneration();
+                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    System.out.flush();
+                    //Se updateaza tabla de joc
+                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    return;
+                }
+            }
             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                     c.getCharX() + c.getY());
             System.out.flush();
@@ -139,6 +194,31 @@ public class Brain {
         if (piece.freeMoves.size() != 0) {
             Coordinate c = piece.freeMoves.get(0);
             //Se scrie la standard output comanda "move + mutarea gasita"
+            if (piece.getType().compareTo("Pawn") == 0) {
+                if (piece.color == TeamColor.WHITE && c.getY() == 8) {
+                    Pawn pion = (Pawn) piece;
+                    char gen = pion.promotionGeneration();
+                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    System.out.flush();
+                    //Se updateaza tabla de joc
+                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    return;
+                }
+                if (piece.color == TeamColor.BLACK && c.getY() == 1) {
+                    Pawn pion = (Pawn) piece;
+                    char gen = pion.promotionGeneration();
+                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    System.out.flush();
+                    //Se updateaza tabla de joc
+                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            c.getCharX() + c.getY() + gen);
+                    return;
+                }
+
+            }
             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                     c.getCharX() + c.getY());
             System.out.flush();
@@ -152,26 +232,66 @@ public class Brain {
         System.out.flush();
     }
 
-    boolean checkChess() {
+    Piece checkChess() {
         Board b = Board.getInstance();
         Game game = Game.getInstance();
         if (game.enginecolor == TeamColor.BLACK) {
-            System.out.println(Blacks.getInstance().getKingLocation());
             for (Piece p : Whites.getInstance().whites) {
-                p.generateMoves();
                 if (p.captureMoves.contains(Blacks.getInstance().getKingLocation())) {
-                    return true;
+                    return p;
                 }
             }
         } else {
             for (Piece p : Blacks.getInstance().blacks) {
-                p.generateMoves();
                 if (p.captureMoves.contains(Whites.getInstance().getKingLocation())) {
-                    return true;
+                    return p;
                 }
             }
         }
-        return false;
+        return null;
+    }
+
+    void captureChessPiece(Piece p) {
+        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+            for (Piece piece : Blacks.getInstance().blacks) {
+                if (piece.captureMoves.contains(p.coordinate)) {
+                    if (piece.getType().compareTo("King") != 0) {
+                        if (piece.getType().compareTo("Pawn") != 0) {
+                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY());
+                            System.out.flush();
+                            //Se updateaza tabla de joc
+                            Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY());
+                            return;
+                        } else {
+                            if (piece.color == TeamColor.WHITE && p.coordinate.getY() == 8) {
+                                Pawn pion = (Pawn) piece;
+                                char gen = pion.promotionGeneration();
+                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+                                System.out.flush();
+                                //Se updateaza tabla de joc
+                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+                                return;
+                            }
+                            if (piece.color == TeamColor.BLACK && p.coordinate.getY() == 1) {
+                                Pawn pion = (Pawn) piece;
+                                char gen = pion.promotionGeneration();
+                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+                                System.out.flush();
+                                //Se updateaza tabla de joc
+                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

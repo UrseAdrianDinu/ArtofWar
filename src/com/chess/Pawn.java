@@ -1,6 +1,7 @@
 package com.chess;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
     Clasa specifica piesei "Pion"
@@ -36,8 +37,9 @@ public class Pawn extends Piece {
 
         if (color == TeamColor.WHITE) {
             if (y + 2 <= 8 && moves == 0) {
-                int type = board.isEmpty(board.getCoordinates(x, y + 2), color);
-                if (type == Move.FREE) {
+                int type1 = board.isEmpty(board.getCoordinates(x, y + 2), color);
+                int type2 = board.isEmpty(board.getCoordinates(x, y + 1), color);
+                if (type1 == Move.FREE && type2 == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, y + 2));
                 }
             }
@@ -86,8 +88,9 @@ public class Pawn extends Piece {
             }
         } else {
             if (y - 2 <= 8 && moves == 0) {
-                int type = board.isEmpty(board.getCoordinates(x, y - 2), color);
-                if (type == Move.FREE) {
+                int type1 = board.isEmpty(board.getCoordinates(x, y - 2), color);
+                int type2 = board.isEmpty(board.getCoordinates(x, y - 1), color);
+                if (type1 == Move.FREE && type2 == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, y - 2));
                 }
             }
@@ -150,6 +153,26 @@ public class Pawn extends Piece {
         } else {
             Blacks.getInstance().removeBlackPiece(this);
             Blacks.getInstance().addBlackPiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
+        }
+    }
+
+    char promotionGeneration() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt((4)) + 1;
+
+        switch (randomNum) {
+            case 2 -> {
+                return 'n';
+            }
+            case 3 -> {
+                return 'b';
+            }
+            case 4 -> {
+                return 'r';
+            }
+            default -> {
+                return 'q';
+            }
         }
     }
 
