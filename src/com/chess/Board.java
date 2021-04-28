@@ -105,6 +105,8 @@ public class Board {
         //Punerea regilor pe tabla
         table[1][5] = new King(new Coordinate(5, 8), TeamColor.BLACK);
         table[8][5] = new King(new Coordinate(5, 1), TeamColor.WHITE);
+        Brain.getInstance().blackKing = table[1][5];
+        Brain.getInstance().whiteKing = table[8][5];
         Blacks.getInstance().addBlackPiece(table[1][5]);
         Whites.getInstance().addWhitePiece(table[8][5]);
 

@@ -57,7 +57,7 @@ public class Whites {
         Piece p = null;
         for (Piece piece : whites) {
             if (piece.getType().compareTo("Pawn") == 0) {
-                piece.generateMoves();
+                //piece.generateMoves();
                 if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
                     return piece;
                 }
@@ -70,7 +70,7 @@ public class Whites {
     public Piece getKnight() {
         for (Piece piece : whites) {
             if (piece.getType().compareTo("Knight") == 0) {
-                piece.generateMoves();
+                //piece.generateMoves();
                 if ((piece.freeMoves.size()) != 0 || piece.captureMoves.size() != 0) {
                     return piece;
                 }
@@ -99,7 +99,7 @@ public class Whites {
 
     public Piece getPiece() {
         for (Piece piece : whites) {
-            piece.generateMoves();
+            //piece.generateMoves();
             if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
                 return piece;
             }

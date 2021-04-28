@@ -1,5 +1,6 @@
 package com.chess;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /*
@@ -12,6 +13,10 @@ public class Brain {
     private static Brain instance = null;
     int[][] enemyattack;
     int[][] defense;
+    ArrayList<Piece> invalidPieces = new ArrayList<>();
+    ArrayList<Integer> freeDirection = new ArrayList<>();
+    Piece blackKing;
+    Piece whiteKing;
 
     private Brain() {
 
@@ -26,9 +31,22 @@ public class Brain {
     void generateAllMoves() {
         defense = new int[9][9];
         enemyattack = new int[9][9];
+
+
+        int i = 0;
+        if ( invalidPieces.size() != 0 ) {
+            System.out.println("MIMI" + invalidPieces + invalidPieces.get(0).coordinate);
+        }
+        System.out.println();
+
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
             for (Piece p : Whites.getInstance().whites) {
-                p.generateMoves();
+               // if (!invalidPieces.contains(p)) {
+                    p.generateMoves();
+               //     System.out.println("OOOO " + p.coordinate);
+               // } else {
+               //     System.out.println("DINU " + p);
+               // }
                 addPiece(p);
                 if (p.getType().compareTo("Pawn") != 0) {
                     for (Coordinate c : p.freeMoves) {
@@ -49,7 +67,12 @@ public class Brain {
             }
 
             for (Piece p : Blacks.getInstance().blacks) {
-                p.generateMoves();
+               // if (!invalidPieces.contains(p)) {
+                    p.generateMoves();
+               //     System.out.println("OOOO " + p.coordinate);
+              //  } else {
+              //      System.out.println("DINU " + p + " - " + p.coordinate + "-" + p.freeMoves + " " + p.captureMoves);
+              //  }
                 addPiece(p);
                 for (Coordinate c : p.freeMoves) {
                     defense[9 - c.getY()][c.getIntX()] = 4;
@@ -58,7 +81,12 @@ public class Brain {
             }
         } else {
             for (Piece p : Blacks.getInstance().blacks) {
-                p.generateMoves();
+             //   if (!invalidPieces.contains(p)) {
+                    p.generateMoves();
+             //       System.out.println("OOOO " + p.coordinate);
+            //    } else {
+            //        System.out.println("DINU " + p);
+            //    }
                 addPiece(p);
                 if (p.getType().compareTo("Pawn") != 0) {
                     for (Coordinate c : p.freeMoves) {
@@ -79,7 +107,12 @@ public class Brain {
             }
 
             for (Piece p : Whites.getInstance().whites) {
-                p.generateMoves();
+             //   if (!invalidPieces.contains(p)) {
+                    p.generateMoves();
+             //       System.out.println("OOOO " + p.coordinate);
+             //   } else {
+             //       System.out.println("DINU " + p);
+             //   }
                 addPiece(p);
                 for (Coordinate c : p.freeMoves) {
                     defense[9 - c.getY()][c.getIntX()] = 4;
@@ -87,7 +120,623 @@ public class Brain {
 
             }
         }
-        Piece p = checkChess();
+
+        verifyInvalidMoves();
+        Piece KingInChess = checkChess();
+
+    }
+
+    public void verifyInvalidMoves() {
+        Piece OurKing;
+        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+            OurKing = blackKing;
+        } else {
+            OurKing = whiteKing;
+        }
+
+        invalidPieces = new ArrayList<>();
+        freeDirection = new ArrayList<>();
+        Coordinate KingCoordinate = OurKing.coordinate;
+        Piece pieceFromTable;
+        Coordinate pieceFromTableCoordinate;
+        ArrayList<Piece> queuePiece = new ArrayList<>();
+
+        //LINIE - SUS
+        int X = KingCoordinate.getIntX();
+        int Y = KingCoordinate.getY();
+        Y++;
+        int FLAG = 0;
+        while (Y <= 8) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Rook") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                forRemove = new ArrayList<>();
+                                for (Coordinate c : pawn.enPassantMoves) {
+                                    if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                                for (Coordinate c : forRemove){
+                                    pawn.enPassantMoves.remove(c);
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            Y++;
+        }
+
+        //LINIE - JOS
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        Y--;
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        while (Y >= 1) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Rook") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                forRemove = new ArrayList<>();
+                                for (Coordinate c : pawn.enPassantMoves) {
+                                    if (c.getY() != queuePiece.get(0).coordinate.getY()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                                for (Coordinate c : forRemove){
+                                    pawn.enPassantMoves.remove(c);
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            Y--;
+        }
+
+        //LINIE - DREAPTA
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X++;
+        while (X <= 8) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Rook") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                forRemove = new ArrayList<>();
+                                for (Coordinate c : pawn.enPassantMoves) {
+                                    if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                                for (Coordinate c : forRemove){
+                                    pawn.enPassantMoves.remove(c);
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X++;
+        }
+
+        //LINIE - STANGA
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X--;
+        while (X >= 1) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Rook") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                forRemove = new ArrayList<>();
+                                for (Coordinate c : pawn.enPassantMoves) {
+                                    if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                                for (Coordinate c : forRemove){
+                                    pawn.enPassantMoves.remove(c);
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X--;
+        }
+
+        //DIAGONALA = STANGA-JOS
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X--;
+        Y--;
+        while (X >= 1 && Y >= 1) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Bishop") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                        queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                        queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                if (pawn.enPassantMoves != null) {
+                                    forRemove = new ArrayList<>();
+                                    for (Coordinate c : pawn.enPassantMoves) {
+                                        if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                                queuePiece.get(0).coordinate.getY()) {
+                                            //queuePiece.get(0).captureMoves.remove(c);
+                                            forRemove.add(c);
+                                        }
+                                    }
+
+                                    for (Coordinate c : forRemove){
+                                        pawn.enPassantMoves.remove(c);
+                                    }
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X--;
+            Y--;
+        }
+
+        //DIAGONALA = DREAPTA-JOS
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X++;
+        Y--;
+        while (X <= 8 && Y >= 1) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Bishop") == 0) {
+                            System.out.println("HAHA " + queuePiece.get(0) + "-" + queuePiece.get(0).coordinate);
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            if (queuePiece.get(0).freeMoves != null) {
+                                for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                    System.out.println("MATEI" + queuePiece.get(0).freeMoves.size());
+                                    if ((c.getIntX() + c.getY()) != (queuePiece.get(0).coordinate.getIntX() +
+                                            queuePiece.get(0).coordinate.getY())) {
+                                        System.out.println("YOYO " + c);
+                                        //queuePiece.get(0).freeMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                System.out.println(c);
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            if (queuePiece.get(0).captureMoves != null) {
+                                for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                    if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
+                                            queuePiece.get(0).coordinate.getY()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                if (pawn.enPassantMoves != null) {
+                                    forRemove = new ArrayList<>();
+                                    for (Coordinate c : pawn.enPassantMoves) {
+                                        if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
+                                                queuePiece.get(0).coordinate.getY()) {
+                                            //queuePiece.get(0).captureMoves.remove(c);
+                                            forRemove.add(c);
+                                        }
+                                    }
+
+                                    for (Coordinate c : forRemove){
+                                        pawn.enPassantMoves.remove(c);
+                                    }
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X++;
+            Y--;
+        }
+
+        //DIAGONALA = DREAPTA-SUS
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X++;
+        Y++;
+        while (X <= 8 && Y <= 8) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Bishop") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).freeMoves) {
+                                if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                        queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).freeMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                        queuePiece.get(0).coordinate.getY()) {
+                                    //queuePiece.get(0).captureMoves.remove(c);
+                                    forRemove.add(c);
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                if (pawn.enPassantMoves != null) {
+                                    forRemove = new ArrayList<>();
+                                    for (Coordinate c : pawn.enPassantMoves) {
+                                        if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
+                                                queuePiece.get(0).coordinate.getY()) {
+                                            //queuePiece.get(0).captureMoves.remove(c);
+                                            forRemove.add(c);
+                                        }
+                                    }
+
+                                    for (Coordinate c : forRemove){
+                                        pawn.enPassantMoves.remove(c);
+                                    }
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X++;
+            Y++;
+        }
+
+        //DIAGONALA = STANGA-SUS
+        X = KingCoordinate.getIntX();
+        Y = KingCoordinate.getY();
+        queuePiece = new ArrayList<>();
+        FLAG = 0;
+        X--;
+        Y++;
+        while (X >= 1 && Y <= 8) {
+            pieceFromTableCoordinate = Board.getInstance().getCoordinates(X, Y);
+            pieceFromTable = Board.getInstance().getPiecebylocation(pieceFromTableCoordinate);
+
+            if (pieceFromTable != null) {
+                if (pieceFromTable.color == OurKing.color) {
+                    if (FLAG == 0) {
+                        queuePiece.add(pieceFromTable);
+                        FLAG = 1;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if (FLAG == 1) {
+                        if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Bishop") == 0) {
+
+                            ArrayList<Coordinate> forRemove = new ArrayList<>();
+                            if (queuePiece.get(0).freeMoves != null) {
+                                for (Coordinate c : queuePiece.get(0).freeMoves) {
+
+                                    if ((c.getIntX() + c.getY()) != (queuePiece.get(0).coordinate.getIntX() +
+                                            queuePiece.get(0).coordinate.getY())) {
+
+                                        //queuePiece.get(0).freeMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).freeMoves.remove(c);
+                            }
+
+                            forRemove = new ArrayList<>();
+                            if (queuePiece.get(0).captureMoves != null) {
+                                for (Coordinate c : queuePiece.get(0).captureMoves) {
+                                    if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
+                                            queuePiece.get(0).coordinate.getY()) {
+                                        //queuePiece.get(0).captureMoves.remove(c);
+                                        forRemove.add(c);
+                                    }
+                                }
+                            }
+
+                            for (Coordinate c : forRemove){
+                                queuePiece.get(0).captureMoves.remove(c);
+                            }
+
+                            if (queuePiece.get(0).getType().compareTo("Pawn") == 0) {
+                                Pawn pawn = (Pawn) queuePiece.get(0);
+                                if (pawn.enPassantMoves != null) {
+                                    forRemove = new ArrayList<>();
+                                    for (Coordinate c : pawn.enPassantMoves) {
+                                        if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
+                                                queuePiece.get(0).coordinate.getY()) {
+                                            //queuePiece.get(0).captureMoves.remove(c);
+                                            forRemove.add(c);
+                                        }
+                                    }
+
+                                    for (Coordinate c : forRemove){
+                                        pawn.enPassantMoves.remove(c);
+                                    }
+                                }
+                            }
+
+                            invalidPieces.addAll(queuePiece);
+                        }
+                    }
+                    break;
+                }
+            }
+            X--;
+            Y++;
+        }
+
     }
 
     public void addPiece(Piece p) {
@@ -121,7 +770,7 @@ public class Brain {
         } else {
             piece = Whites.getInstance().getPiece();
         }
-
+        System.out.println(piece + " VLAD - " + piece.coordinate + "-" + piece.freeMoves + "-" + piece.captureMoves);
         //Daca nu mai exista pioni cu mutari disponibile
         //atunci dam resign
         if (piece == null) {
@@ -295,3 +944,4 @@ public class Brain {
     }
 
 }
+

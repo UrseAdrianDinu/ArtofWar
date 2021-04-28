@@ -56,7 +56,7 @@ public class Blacks {
         Piece p = null;
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Pawn") == 0) {
-                piece.generateMoves();
+                //piece.generateMoves();
                 if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
                     return piece;
                 }
@@ -69,7 +69,7 @@ public class Blacks {
     public Piece getKnight() {
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Knight") == 0) {
-                piece.generateMoves();
+                //piece.generateMoves();
                 if ((piece.freeMoves.size()) != 0 || piece.captureMoves.size() != 0) {
                     return piece;
                 }
@@ -80,7 +80,7 @@ public class Blacks {
 
     public Piece getPiece() {
         for (Piece piece : blacks) {
-            piece.generateMoves();
+            //piece.generateMoves();
             if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
                 return piece;
             }
