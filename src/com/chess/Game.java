@@ -79,10 +79,15 @@ public class Game {
             if (!force) {
                 turn = enginecolor;
                 Piece chess = Brain.getInstance().checkChess();
+                System.out.println(Board.getInstance());
                 if (chess != null) {
-                    Brain.getInstance().captureChessPiece(chess);
-                    System.out.println(Board.getInstance());
+                    System.out.println("SAH");
+                    boolean protecc = Brain.getInstance().protectKing(chess);
+                    if (protecc == false) {
+                        System.out.println("resign");
+                    }
                 } else {
+                    System.out.println("DOMOVE");
                     Brain.getInstance().doMove();
                     System.out.println(Board.getInstance());
                 }

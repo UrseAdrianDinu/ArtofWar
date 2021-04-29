@@ -95,14 +95,14 @@ public class Pawn extends Piece {
                 }
             }
             //Verificam daca pionul se poate muta pe casuta din fata lui
-            if (y - 1 >= 0) {
+            if (y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x, y - 1), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, y - 1));
                 }
             }
             //Verificam daca pionul poate captura piesa din diagonala-stanga
-            if (x + 1 <= 8 && y - 1 >= 0) {
+            if (x + 1 <= 8 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
                 if (type == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x + 1, y - 1));
@@ -110,7 +110,7 @@ public class Pawn extends Piece {
             }
 
             //Verificam daca pionul poate captura piesa din diagonala-dreapta
-            if (x - 1 >= 0 && y - 1 >= 0) {
+            if (x - 1 >= 0 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
                 if (type == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x - 1, y - 1));
