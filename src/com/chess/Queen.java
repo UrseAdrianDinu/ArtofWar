@@ -37,7 +37,7 @@ public class Queen extends Piece {
             }
         }
 
-        if (X - 1 >= 8) {
+        if (X - 1 >= 1) {
             for (int i = X - 1; i >= 1; i--) {
                 int type = board.isEmpty(board.getCoordinates(i, Y), color);
                 if (type == Move.FREE) {
