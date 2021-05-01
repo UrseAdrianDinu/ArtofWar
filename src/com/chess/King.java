@@ -28,6 +28,11 @@ public class King extends Piece {
         int y = coordinate.getY();
         int type; //type arata ce tip de mutare este
 
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
+
         if (x + 1 <= 8) {
             type = board.isEmpty(board.getCoordinates(x + 1, y), color);
             //Verificam daca regele se poate muta pe casuta din dreapta
@@ -36,6 +41,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x + 1, y));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -47,6 +60,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x - 1, y));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -58,6 +79,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x, y + 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -69,6 +98,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x, y - 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -80,6 +117,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x + 1, y + 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -91,6 +136,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x + 1, y - 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
 
@@ -102,6 +155,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x - 1, y - 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
         //Verificam daca regele se poate muta pe casuta stanga-sus
@@ -112,6 +173,14 @@ public class King extends Piece {
             } else {
                 if (type != Move.BLOCK)
                     freeMoves.add(board.getCoordinates(x - 1, y + 1));
+                else {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
         }
     }

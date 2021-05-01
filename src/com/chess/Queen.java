@@ -21,6 +21,11 @@ public class Queen extends Piece {
         int Y = coordinate.getY();
         Board board = Board.getInstance();
 
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
+
         if (X + 1 <= 8) {
             for (int i = X + 1; i <= 8; i++) {
                 int type = board.isEmpty(board.getCoordinates(i, Y), color);
@@ -32,6 +37,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(i, Y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -48,6 +59,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(i, Y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -64,6 +81,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(X, i));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -80,6 +103,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(X, i));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -98,6 +127,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x++;
@@ -117,6 +152,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x--;
@@ -136,6 +177,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x++;
@@ -155,6 +202,12 @@ public class Queen extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x--;

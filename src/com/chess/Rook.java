@@ -19,6 +19,11 @@ public class Rook extends Piece {
         int y = coordinate.getY();
         Board board = Board.getInstance();
 
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
+
         for (int i = x + 1; i <= 8; i++) {
             if (i <= 8) {
                 int type = board.isEmpty(board.getCoordinates(i, y), color);
@@ -30,6 +35,12 @@ public class Rook extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(i, y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -47,6 +58,12 @@ public class Rook extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(i, y));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -63,6 +80,12 @@ public class Rook extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x, i));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }
@@ -80,6 +103,12 @@ public class Rook extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x, i));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
             }

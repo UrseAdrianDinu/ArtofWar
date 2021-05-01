@@ -34,6 +34,10 @@ public class Pawn extends Piece {
         //In functie de culoarea piesei, analizam pozitiile posibile
         //Pionii albi se pot muta vertical in sus
         //Pionii negri se pot muta vertical in jos
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
 
         if (color == TeamColor.WHITE) {
             if (y + 2 <= 8 && moves == 0) {
@@ -57,12 +61,28 @@ public class Pawn extends Piece {
                 if (typecapture == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x + 1, y + 1));
                 }
+                if (typecapture == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
             //Verificam daca pionul poate captura piesa din diagonala-stanga
             if (x - 1 >= 0 && y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
                 if (type == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x - 1, y + 1));
+                }
+                if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                 }
             }
 
@@ -107,6 +127,14 @@ public class Pawn extends Piece {
                 if (type == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x + 1, y - 1));
                 }
+                if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
+                }
             }
 
             //Verificam daca pionul poate captura piesa din diagonala-dreapta
@@ -114,6 +142,14 @@ public class Pawn extends Piece {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
                 if (type == Move.CAPTURE) {
                     captureMoves.add(board.getCoordinates(x - 1, y - 1));
+                }
+                if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                 }
             }
 

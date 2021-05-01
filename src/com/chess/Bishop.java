@@ -23,6 +23,10 @@ public class Bishop extends Piece {
 
         int x = X;
         int y = Y;
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
         while (x + 1 <= 8 && y + 1 <= 8) {
 
             int type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
@@ -34,6 +38,12 @@ public class Bishop extends Piece {
                 break;
             }
             if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y + 1));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
                 break;
             }
             x++;
@@ -53,6 +63,12 @@ public class Bishop extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y + 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x--;
@@ -72,6 +88,12 @@ public class Bishop extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x++;
@@ -91,6 +113,12 @@ public class Bishop extends Piece {
                     break;
                 }
                 if (type == Move.BLOCK) {
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y - 1));
+                    if (p.turns != Game.getInstance().gameturns) {
+                        p.turns = Game.getInstance().gameturns;
+                        p.support = 0;
+                    }
+                    p.support++;
                     break;
                 }
                 x--;

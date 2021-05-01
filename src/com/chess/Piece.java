@@ -17,6 +17,8 @@ public abstract class Piece {
     Coordinate coordinate;
     int color;
     int moves = 0;
+    int support = 0;
+    int turns = 0;
 
     public abstract void generateMoves();
 

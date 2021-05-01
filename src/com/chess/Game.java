@@ -19,6 +19,7 @@ public class Game {
     int enginecolor;
     int usercolor;
     boolean force;
+    int gameturns;
 
     //Singleton Pattern
     private static Game instance = null;
@@ -63,6 +64,8 @@ public class Game {
                 Board.getInstance().executeMove("a1d1");
             }
             Board.getInstance().executeMove(words[0]);
+            gameturns++;
+            System.out.println(gameturns);
             Brain.getInstance().generateAllMoves();
             System.out.println(Board.getInstance());
             String s = "";
@@ -89,12 +92,19 @@ public class Game {
                 s1 += "\n";
             }
             System.out.println(s1);
+
+
             if (!force) {
                 turn = enginecolor;
                 Piece chess = Brain.getInstance().checkChess();
                 System.out.println(Board.getInstance());
+                gameturns++;
                 if (chess != null) {
                     System.out.println("SAH");
+                    for (Piece p : Whites.getInstance().whites) {
+                        System.out.println(p.getType() + " " + p.coordinate + " " + p.support);
+                    }
+
                     boolean protecc = Brain.getInstance().protectKing(chess);
                     if (protecc == false) {
                         System.out.println("resign");
@@ -164,6 +174,7 @@ public class Game {
                 b.initBoard();
                 turn = TeamColor.WHITE;
                 enginecolor = TeamColor.BLACK;
+                Game.getInstance().gameturns = 0;
 
                 usercolor = TeamColor.WHITE;
                 force = false;

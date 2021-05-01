@@ -21,6 +21,11 @@ public class Knight extends Piece {
         int y = coordinate.getY();
         Board board = Board.getInstance();
 
+        if (turns != Game.getInstance().gameturns) {
+            turns = Game.getInstance().gameturns;
+            support = 0;
+        }
+
         if (x + 1 <= 8 && y + 2 <= 8) {
             int type = board.isEmpty(board.getCoordinates(x + 1, y + 2), color);
             if (type == Move.FREE) {
@@ -28,6 +33,14 @@ public class Knight extends Piece {
             }
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 1, y + 2));
+            }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y + 2));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
             }
         }
 
@@ -39,6 +52,14 @@ public class Knight extends Piece {
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 2, y + 1));
             }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x + 2, y + 1));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
+            }
         }
 
         if (x + 2 <= 8 && y - 1 >= 1) {
@@ -48,6 +69,14 @@ public class Knight extends Piece {
             }
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 2, y - 1));
+            }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x + 2, y - 1));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
             }
         }
 
@@ -59,6 +88,14 @@ public class Knight extends Piece {
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x + 1, y - 2));
             }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y - 2));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
+            }
         }
 
         if (x - 1 >= 1 && y - 2 >= 1) {
@@ -68,6 +105,14 @@ public class Knight extends Piece {
             }
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 1, y - 2));
+            }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y - 2));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
             }
         }
 
@@ -79,6 +124,14 @@ public class Knight extends Piece {
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 2, y - 1));
             }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x - 2, y - 1));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
+            }
         }
 
         if (x - 2 >= 1 && y + 1 <= 8) {
@@ -89,6 +142,14 @@ public class Knight extends Piece {
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 2, y + 1));
             }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x - 2, y + 1));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
+            }
         }
 
         if (x - 1 >= 1 && y + 2 <= 8) {
@@ -98,6 +159,14 @@ public class Knight extends Piece {
             }
             if (type == Move.CAPTURE) {
                 captureMoves.add(board.getCoordinates(x - 1, y + 2));
+            }
+            if (type == Move.BLOCK) {
+                Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y + 2));
+                if (p.turns != Game.getInstance().gameturns) {
+                    p.turns = Game.getInstance().gameturns;
+                    p.support = 0;
+                }
+                p.support++;
             }
         }
     }
