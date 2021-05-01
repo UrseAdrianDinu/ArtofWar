@@ -947,7 +947,7 @@ public class Brain {
                 defense[9 - c.getY()][c.getIntX()]--;
             }
         }
-
+        //dadad
         forRemove = new ArrayList<>();
         for (Coordinate c : OurKing.captureMoves) {
             Piece p = Board.getInstance().getPiecebylocation(c);
