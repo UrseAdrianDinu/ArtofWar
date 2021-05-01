@@ -868,6 +868,7 @@ public class Brain {
     public void doMove() {
         Game game = Game.getInstance();
         Piece piece;
+
         //Se selecteaza un pion in functie de culoarea engine-ului
         if (game.enginecolor == TeamColor.BLACK) {
             piece = Blacks.getInstance().getPiece();
@@ -1556,6 +1557,57 @@ public class Brain {
             }
         }
         return false;
+    }
+
+    String checkCastlingconditions() {
+        String s = "";
+        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+            if (blackKing.moves == 0) {
+                Piece p1 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(8, 8));
+                if (p1 != null) {
+                    if (p1.moves == 0) {
+                        if (enemyattack[1][6] == 0 && enemyattack[1][7] == 0) {
+                            System.out.println("MICABLACK");
+                            s += "mica ";
+                        }
+                    }
+                }
+
+                Piece p2 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 8));
+                Piece p3 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(2, 8));
+                if (p2 != null) {
+                    if (p2.moves == 0) {
+                        if (enemyattack[1][3] == 0 && enemyattack[1][4] == 0 && p3 == null) {
+                            System.out.println("MAREBLACK");
+                            s += " mare";
+                        }
+                    }
+                }
+            }
+        } else {
+            if (whiteKing.moves == 0) {
+                Piece p1 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(8, 1));
+                if (p1 != null) {
+                    if (p1.moves == 0) {
+                        if (enemyattack[8][6] == 0 && enemyattack[8][7] == 0) {
+                            s += "mica ";
+                        }
+                    }
+                }
+
+                Piece p2 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 1));
+                Piece p3 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 2));
+                if (p2 != null) {
+                    if (p2.moves == 0) {
+                        if (enemyattack[8][3] == 0 && enemyattack[8][4] == 0 && p3 == null) {
+                            s += "mare";
+                        }
+                    }
+                }
+
+            }
+        }
+        return s;
     }
 }
 

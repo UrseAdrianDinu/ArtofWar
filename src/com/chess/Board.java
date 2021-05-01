@@ -131,8 +131,7 @@ public class Board {
 
         Coordinate c = getCoordinates(xf - 96, yf);
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
-        System.out.println(s);
-        System.out.println(p);
+
         if (p.color == TeamColor.WHITE) {
             Whites.getInstance().lastMoved = p;
         } else {

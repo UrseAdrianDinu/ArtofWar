@@ -49,6 +49,19 @@ public class Game {
         //Verifica daca a primit o mutare de la xboard
         if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
                 Character.isDigit(words[0].charAt(3))) {
+
+            if (words[0].compareTo("e8g8") == 0) {
+                Board.getInstance().executeMove("h8f8");
+            }
+            if (words[0].compareTo("e1g1") == 0) {
+                Board.getInstance().executeMove("h1f1");
+            }
+            if (words[0].compareTo("e8c8") == 0) {
+                Board.getInstance().executeMove("a8d8");
+            }
+            if (words[0].compareTo("e1c1") == 0) {
+                Board.getInstance().executeMove("a1d1");
+            }
             Board.getInstance().executeMove(words[0]);
             Brain.getInstance().generateAllMoves();
             System.out.println(Board.getInstance());
@@ -87,6 +100,37 @@ public class Game {
                         System.out.println("resign");
                     }
                 } else {
+                    String rocada = Brain.getInstance().checkCastlingconditions();
+                    System.out.println(rocada);
+                    if (rocada.compareTo("") != 0) {
+                        String[] castlings = rocada.split(" ");
+                        System.out.println("DADADA" + castlings[0]);
+                        if (castlings[0].compareTo("mica") == 0) {
+                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+                                System.out.println("move e8g8");
+                                Board.getInstance().executeMove("e8g8");
+                                Board.getInstance().executeMove("h8f8");
+                                return;
+                            } else {
+                                System.out.println("move e1g1");
+                                Board.getInstance().executeMove("e1g1");
+                                Board.getInstance().executeMove("h1f1");
+                                return;
+                            }
+                        } else {
+                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+                                System.out.println("move e8c8");
+                                Board.getInstance().executeMove("e8c8");
+                                Board.getInstance().executeMove("a8d8");
+                                return;
+                            } else {
+                                System.out.println("move e1c1");
+                                Board.getInstance().executeMove("e1c1");
+                                Board.getInstance().executeMove("a1d1");
+                                return;
+                            }
+                        }
+                    }
                     System.out.println("DOMOVE");
                     Brain.getInstance().doMove();
                     System.out.println(Board.getInstance());
@@ -126,7 +170,7 @@ public class Game {
                 break;
 
             case "go":
-
+                Brain.getInstance().generateAllMoves();
                 force = false;
                 turn = enginecolor;
                 Brain.getInstance().doMove();
