@@ -7,12 +7,14 @@ import java.util.ArrayList;
  */
 public class Bishop extends Piece {
 
-    //Initializare coordonata si culoare
+    // Initializare coordonata si culoare
     public Bishop(Coordinate coordinate, int color) {
         this.color = color;
         this.coordinate = coordinate;
     }
 
+    // Metoda care genereaza mutarile posible pentru nebun
+    // La fiecare apel vectorii freeMoves/captureMoves se reinitializeaza
     @Override
     public void generateMoves() {
         freeMoves = new ArrayList<>();
@@ -23,10 +25,14 @@ public class Bishop extends Piece {
 
         int x = X;
         int y = Y;
+
+        // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {
             turns = Game.getInstance().gameturns;
             support = 0;
         }
+
+        // Digonala dreapta sus
         while (x + 1 <= 8 && y + 1 <= 8) {
 
             int type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
@@ -52,6 +58,7 @@ public class Bishop extends Piece {
 
         x = X;
         y = Y;
+        // Digonala stanga sus
         if (x - 1 >= 1 && y + 1 <= 8) {
             while (x - 1 >= 1 && y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
@@ -77,6 +84,8 @@ public class Bishop extends Piece {
         }
         x = X;
         y = Y;
+
+        // Digonala dreapta jos
         if (x + 1 <= 8 && y - 1 >= 1) {
             while (x + 1 <= 8 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
@@ -102,6 +111,7 @@ public class Bishop extends Piece {
         }
         x = X;
         y = Y;
+        // Digonala stanga jos
         if (x - 1 >= 1 && y - 1 >= 1) {
             while (x - 1 >= 1 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);

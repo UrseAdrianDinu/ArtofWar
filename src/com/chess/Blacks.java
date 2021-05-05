@@ -10,6 +10,7 @@ import java.util.ArrayList;
         numberofpieces: numarul de piese negre
         numberofpawns: numarul de pioni negri
         blacks: vector cu piesele negre
+        lastMoved: piesa care a fost mutata ultima runda
 
  */
 public class Blacks {
@@ -17,7 +18,8 @@ public class Blacks {
     int numberofpawns;
     ArrayList<Piece> blacks;
     Piece lastMoved;
-    //Singleton Pattern
+
+    // Singleton Pattern
     private static Blacks instance;
 
     private Blacks() {
@@ -30,7 +32,7 @@ public class Blacks {
         return instance;
     }
 
-    //Metoda ce adauga o piesa neagra in vector
+    // Metoda ce adauga o piesa neagra in vector
     public void addBlackPiece(Piece piece) {
         blacks.add(piece);
         numberofpieces++;
@@ -42,7 +44,7 @@ public class Blacks {
         instance = null;
     }
 
-    //Metoda ce elimina o piesa neagra din vector
+    // Metoda ce elimina o piesa neagra din vector
     public void removeBlackPiece(Piece piece) {
         blacks.remove(piece);
         numberofpieces--;
@@ -50,13 +52,12 @@ public class Blacks {
             numberofpawns--;
     }
 
-    //Metoda care intoarce un pion negru care
-    //are mutari posibile
+    // Metoda care intoarce un pion negru care
+    // are mutari posibile
     public Piece getPawn() {
         Piece p = null;
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Pawn") == 0) {
-                //piece.generateMoves();
                 if ((piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0)) {
                     return piece;
                 }
@@ -66,10 +67,11 @@ public class Blacks {
         return p;
     }
 
+    // Metoda care intoarce un cal negru care
+    // are mutari posibile
     public Piece getKnight() {
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Knight") == 0) {
-                //piece.generateMoves();
                 if ((piece.freeMoves.size()) != 0 || piece.captureMoves.size() != 0) {
                     return piece;
                 }
@@ -78,16 +80,25 @@ public class Blacks {
         return null;
     }
 
+    // Metoda care intoarce o piesa neagra care
+    // are mutari posibile
     public Piece getPiece() {
         for (Piece piece : blacks) {
-            //piece.generateMoves();
-            if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
-                return piece;
+            if (!piece.getType().equals("Pawn")) {
+                if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
+                    return piece;
+                }
+            } else {
+                Pawn pion = (Pawn) piece;
+                if (pion.freeMoves.size() != 0 || pion.captureMoves.size() != 0 || pion.enPassantMoves.size() != 0) {
+                    return piece;
+                }
             }
         }
         return null;
     }
 
+    // Metoda care intoarce coordonata regelui
     public Coordinate getKingLocation() {
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("King") == 0) {
@@ -97,6 +108,7 @@ public class Blacks {
         return null;
     }
 
+    // Metoda care intoarce regina
     public Piece getQueen() {
         for (Piece piece : blacks) {
             if (piece.getType().compareTo("Queen") == 0) {

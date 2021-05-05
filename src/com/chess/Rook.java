@@ -6,7 +6,8 @@ import java.util.ArrayList;
     Clasa specifica piesei "Tura"
  */
 public class Rook extends Piece {
-    //Initializare coordonata si culoare
+
+    // Initializare coordonata si culoare
     public Rook(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
@@ -19,13 +20,15 @@ public class Rook extends Piece {
         int y = coordinate.getY();
         Board board = Board.getInstance();
 
+        // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {
             turns = Game.getInstance().gameturns;
             support = 0;
         }
 
-        for (int i = x + 1; i <= 8; i++) {
-            if (i <= 8) {
+        // Dreapta
+        if (x + 1 <= 8) {
+            for (int i = x + 1; i <= 8; i++) {
                 int type = board.isEmpty(board.getCoordinates(i, y), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(i, y));
@@ -46,9 +49,9 @@ public class Rook extends Piece {
             }
         }
 
-
-        for (int i = x - 1; i >= 1; i--) {
-            if (i >= 1) {
+        // Stanga
+        if (x - 1 >= 1) {
+            for (int i = x - 1; i >= 1; i--) {
                 int type = board.isEmpty(board.getCoordinates(i, y), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(i, y));
@@ -69,8 +72,9 @@ public class Rook extends Piece {
             }
         }
 
-        for (int i = y + 1; i <= 8; i++) {
-            if (i <= 8) {
+        // Sus
+        if (y + 1 <= 8) {
+            for (int i = y + 1; i <= 8; i++) {
                 int type = board.isEmpty(board.getCoordinates(x, i), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, i));
@@ -91,9 +95,9 @@ public class Rook extends Piece {
             }
         }
 
-
-        for (int i = y - 1; i >= 1; i--) {
-            if (i >= 1) {
+        // Jos
+        if (y - 1 >= 1) {
+            for (int i = y - 1; i >= 1; i--) {
                 int type = board.isEmpty(board.getCoordinates(x, i), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, i));

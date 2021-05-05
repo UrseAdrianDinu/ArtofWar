@@ -5,11 +5,14 @@ import java.util.Random;
 
 /*
     Clasa specifica piesei "Pion"
+    Parametrii clasei:
+        enPassantMoves: vector pentru mutarile en-passant posibile
  */
+
 public class Pawn extends Piece {
     ArrayList<Coordinate> enPassantMoves;
 
-    //Initializare coordonata si culoare
+    // Initializare coordonata si culoare
     public Pawn(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
@@ -20,8 +23,9 @@ public class Pawn extends Piece {
         this.color = color;
     }
 
-    //Metoda care genereaza mutarile posible pentru pion
-    //La fiecare apel vectorii freeMoves/captureMoves se reinitializeaza
+    // Metoda care genereaza mutarile posible pentru pion
+    // La fiecare apel vectorii freeMoves/captureMoves/enPassantMoves
+    // se reinitializeaza
     public void generateMoves() {
 
         freeMoves = new ArrayList<>();
@@ -31,15 +35,19 @@ public class Pawn extends Piece {
         int y = coordinate.getY();
         Board board = Board.getInstance();
 
-        //In functie de culoarea piesei, analizam pozitiile posibile
-        //Pionii albi se pot muta vertical in sus
-        //Pionii negri se pot muta vertical in jos
+        // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {
             turns = Game.getInstance().gameturns;
             support = 0;
         }
 
+        // In functie de culoarea piesei, analizam pozitiile posibile
+        // Pionii albi se pot muta vertical in sus
+        // Pionii negri se pot muta vertical in jos
+
         if (color == TeamColor.WHITE) {
+
+            // Verificam daca pionul se poate muta pe a doua casuta din fata lui
             if (y + 2 <= 8 && moves == 0) {
                 int type1 = board.isEmpty(board.getCoordinates(x, y + 2), color);
                 int type2 = board.isEmpty(board.getCoordinates(x, y + 1), color);
@@ -47,7 +55,8 @@ public class Pawn extends Piece {
                     freeMoves.add(board.getCoordinates(x, y + 2));
                 }
             }
-            //Verificam daca pionul se poate muta pe casuta din fata lui
+
+            // Verificam daca pionul se poate muta pe casuta din fata lui
             if (y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x, y + 1), color);
 
@@ -55,7 +64,8 @@ public class Pawn extends Piece {
                     freeMoves.add(board.getCoordinates(x, y + 1));
                 }
             }
-            //Verificam daca pionul poate captura piesa din diagonala-dreapta
+
+            // Verificam daca pionul poate captura piesa din diagonala-dreapta
             if (x + 1 <= 8 && y + 1 <= 8) {
                 int typecapture = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
                 if (typecapture == Move.CAPTURE) {
@@ -70,7 +80,8 @@ public class Pawn extends Piece {
                     p.support++;
                 }
             }
-            //Verificam daca pionul poate captura piesa din diagonala-stanga
+
+            // Verificam daca pionul poate captura piesa din diagonala-stanga
             if (x - 1 >= 0 && y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
                 if (type == Move.CAPTURE) {
@@ -86,6 +97,7 @@ public class Pawn extends Piece {
                 }
             }
 
+            // Verificam daca pionul poate face o mutare en-passant
             if (y == 5) {
                 if (x + 1 <= 8) {
                     Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y));
@@ -97,7 +109,7 @@ public class Pawn extends Piece {
                     }
                 }
                 if (x - 1 >= 1) {
-                    Piece p = board.getPiecebylocation(new Coordinate(x - 1, y));
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y));
                     int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
                     if (p != null) {
                         if (p.color != this.color && Blacks.getInstance().lastMoved == p && p.moves == 1 && type == Move.FREE) {
@@ -107,6 +119,8 @@ public class Pawn extends Piece {
                 }
             }
         } else {
+
+            // Verificam daca pionul se poate muta pe a doua casuta din fata lui
             if (y - 2 <= 8 && moves == 0) {
                 int type1 = board.isEmpty(board.getCoordinates(x, y - 2), color);
                 int type2 = board.isEmpty(board.getCoordinates(x, y - 1), color);
@@ -114,14 +128,16 @@ public class Pawn extends Piece {
                     freeMoves.add(board.getCoordinates(x, y - 2));
                 }
             }
-            //Verificam daca pionul se poate muta pe casuta din fata lui
+
+            // Verificam daca pionul se poate muta pe casuta din fata lui
             if (y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x, y - 1), color);
                 if (type == Move.FREE) {
                     freeMoves.add(board.getCoordinates(x, y - 1));
                 }
             }
-            //Verificam daca pionul poate captura piesa din diagonala-stanga
+
+            // Verificam daca pionul poate captura piesa din diagonala-stanga
             if (x + 1 <= 8 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
                 if (type == Move.CAPTURE) {
@@ -137,7 +153,7 @@ public class Pawn extends Piece {
                 }
             }
 
-            //Verificam daca pionul poate captura piesa din diagonala-dreapta
+            // Verificam daca pionul poate captura piesa din diagonala-dreapta
             if (x - 1 >= 0 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
                 if (type == Move.CAPTURE) {
@@ -153,18 +169,21 @@ public class Pawn extends Piece {
                 }
             }
 
+            // Verificam daca pionul poate face o mutare en-passant
             if (y == 4) {
                 if (x + 1 <= 8) {
-                    Piece p = board.getPiecebylocation(new Coordinate(x + 1, y));
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x + 1, y));
                     int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
                     if (p != null)
                         if (p.color != this.color && Whites.getInstance().lastMoved == p && p.moves == 1 && type == Move.FREE) {
+                            System.out.println("ENPASSANT");
+                            System.out.println(p);
                             enPassantMoves.add(board.getCoordinates(x + 1, y - 1));
                         }
                 }
 
                 if (x - 1 >= 1) {
-                    Piece p = board.getPiecebylocation(new Coordinate(x - 1, y));
+                    Piece p = board.getPiecebylocation(board.getCoordinates(x - 1, y));
                     int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);
                     if (p != null) {
                         if (p.color != this.color && Whites.getInstance().lastMoved == p && p.moves == 1 && type == Move.FREE) {
@@ -178,11 +197,11 @@ public class Pawn extends Piece {
     }
 
 
-    //Metoda prin care un pion se transforma in Regina
+    // Metoda prin care un pion se transforma in Regina
     public void pawnToQueen() {
-        //Se seteaza pe pozitia pionului o noua regina
+        // Se seteaza pe pozitia pionului o noua regina
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Queen(coordinate, color);
-        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        // In functie de culoarea pionului, se elimina piesa din Whites/Blacks
         if (color == TeamColor.WHITE) {
             Whites.getInstance().removeWhitePiece(this);
             Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
@@ -193,9 +212,9 @@ public class Pawn extends Piece {
     }
 
     public void pawnToKnight() {
-        //Se seteaza pe pozitia pionului o noua regina
+        // Se seteaza pe pozitia pionului un nou cal
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Knight(coordinate, color);
-        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        // In functie de culoarea pionului, se elimina piesa din Whites/Blacks
         if (color == TeamColor.WHITE) {
             Whites.getInstance().removeWhitePiece(this);
             Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
@@ -206,9 +225,9 @@ public class Pawn extends Piece {
     }
 
     public void pawnToBishop() {
-        //Se seteaza pe pozitia pionului o noua regina
+        // Se seteaza pe pozitia pionului un nou nebun
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Bishop(coordinate, color);
-        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        // In functie de culoarea pionului, se elimina piesa din Whites/Blacks
         if (color == TeamColor.WHITE) {
             Whites.getInstance().removeWhitePiece(this);
             Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
@@ -219,9 +238,9 @@ public class Pawn extends Piece {
     }
 
     public void pawnToRook() {
-        //Se seteaza pe pozitia pionului o noua regina
+        // Se seteaza pe pozitia pionului o noua tura
         Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()] = new Rook(coordinate, color);
-        //In functie de culoarea pionului, se elimina piesa din Whites/Blacks
+        // In functie de culoarea pionului, se elimina piesa din Whites/Blacks
         if (color == TeamColor.WHITE) {
             Whites.getInstance().removeWhitePiece(this);
             Whites.getInstance().addWhitePiece(Board.getInstance().table[9 - coordinate.getY()][coordinate.getIntX()]);
@@ -231,8 +250,9 @@ public class Pawn extends Piece {
         }
     }
 
+    // Metoda ca transforma promoveaza un pion in functie de caracterul dat
+    // ca paramtru
     void pawnPromotion(char toWhat) {
-
         switch (toWhat) {
             case 'q' -> {
                 pawnToQueen();
@@ -248,7 +268,8 @@ public class Pawn extends Piece {
             }
         }
     }
-
+    // Metoda care genereaza random un caracater folosit pentru
+    // promovarea pionilor
     char promotionGeneration() {
         Random rand = new Random();
         int randomNum = rand.nextInt((4)) + 1;

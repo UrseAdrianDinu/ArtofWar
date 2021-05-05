@@ -8,6 +8,9 @@ import java.util.ArrayList;
         captureMoves: vector pentru mutarile de capturare posibile
         coordinate: coordonata piesei
         color: culoarea piesei
+        moves: numarul de miscari realizate de piesa curenta
+        support: numarul de piese care apara piesa curenta
+        turns: numarul rundei
  */
 
 public abstract class Piece {
@@ -26,13 +29,13 @@ public abstract class Piece {
 
     public abstract String toString();
 
-    //Metoda pentru mutarea unei piese
+    // Metoda pentru mutarea unei piese
     public void movePiece(Coordinate destination) {
         Board b = Board.getInstance();
         Piece p = b.getPiecebylocation(destination);
-        //Verificam daca exita o piesa la coordonata destination
-        //In functie de culoarea piesei, eliminam piesa din
-        //Blacks sau Whites
+        // Verificam daca exista o piesa la coordonata destination
+        // In functie de culoarea piesei, eliminam piesa din
+        // Blacks sau Whites
         if (p != null) {
             if (p.color == TeamColor.WHITE) {
                 Whites.getInstance().removeWhitePiece(p);
@@ -40,10 +43,10 @@ public abstract class Piece {
                 Blacks.getInstance().removeBlackPiece(p);
             }
         }
-        //Updatam tabla de joc
+        // Updatam tabla de joc
         b.table[9 - destination.getY()][destination.getIntX()] = this;
         b.table[9 - coordinate.getY()][coordinate.getIntX()] = null;
-        //Updatam coordonata piesei
+        // Updatam coordonata piesei
         coordinate = destination;
         moves++;
     }

@@ -21,10 +21,12 @@ public class Knight extends Piece {
         int y = coordinate.getY();
         Board board = Board.getInstance();
 
+        // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {
             turns = Game.getInstance().gameturns;
             support = 0;
         }
+
 
         if (x + 1 <= 8 && y + 2 <= 8) {
             int type = board.isEmpty(board.getCoordinates(x + 1, y + 2), color);

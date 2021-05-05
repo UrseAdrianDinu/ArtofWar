@@ -1,5 +1,6 @@
 package com.chess;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -51,6 +52,7 @@ public class Game {
         if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
                 Character.isDigit(words[0].charAt(3))) {
 
+            // Verificam daca utilizatorul a facaut o rocada
             if (words[0].compareTo("e8g8") == 0) {
                 Board.getInstance().executeMove("h8f8");
             }
@@ -66,6 +68,7 @@ public class Game {
             Board.getInstance().executeMove(words[0]);
             gameturns++;
             System.out.println(gameturns);
+            // Generam toate miscarile pentru ambele culori
             Brain.getInstance().generateAllMoves();
             System.out.println(Board.getInstance());
             String s = "";
@@ -93,28 +96,24 @@ public class Game {
             }
             System.out.println(s1);
 
-
             if (!force) {
                 turn = enginecolor;
-                Piece chess = Brain.getInstance().checkChess();
+                ArrayList<Piece> chess = Brain.getInstance().checkChess();
                 System.out.println(Board.getInstance());
                 gameturns++;
-                if (chess != null) {
-                    System.out.println("SAH");
-                    for (Piece p : Whites.getInstance().whites) {
-                        System.out.println(p.getType() + " " + p.coordinate + " " + p.support);
-                    }
-
+                // Verificam daca am primit sah
+                if (chess.size() > 0) {
+                    // In acast caz apelam protectKing pentru a scoate regele din sah
                     boolean protecc = Brain.getInstance().protectKing(chess);
-                    if (protecc == false) {
+                    if (!protecc) {
                         System.out.println("resign");
                     }
                 } else {
+                    // Am verificat daca putem sa facem rocada
                     String rocada = Brain.getInstance().checkCastlingconditions();
-                    System.out.println(rocada);
                     if (rocada.compareTo("") != 0) {
+                        // In functie de culoarea engine-ului se executa rocada mica/mare
                         String[] castlings = rocada.split(" ");
-                        System.out.println("DADADA" + castlings[0]);
                         if (castlings[0].compareTo("mica") == 0) {
                             if (Game.getInstance().enginecolor == TeamColor.BLACK) {
                                 System.out.println("move e8g8");
@@ -141,7 +140,6 @@ public class Game {
                             }
                         }
                     }
-                    System.out.println("DOMOVE");
                     Brain.getInstance().doMove();
                     System.out.println(Board.getInstance());
                 }
@@ -184,7 +182,53 @@ public class Game {
                 Brain.getInstance().generateAllMoves();
                 force = false;
                 turn = enginecolor;
-                Brain.getInstance().doMove();
+                ArrayList<Piece> chess = Brain.getInstance().checkChess();
+                System.out.println(Board.getInstance());
+                gameturns++;
+                // Verificam daca am primit sah
+                if (chess.size() > 0) {
+                    // In acast caz apelam protectKing pentru a scoate regele din sah
+                    boolean protecc = Brain.getInstance().protectKing(chess);
+                    if (!protecc) {
+                        System.out.println("resign");
+                    }
+                } else {
+                    // Am verificat daca putem sa facem rocada
+                    String rocada = Brain.getInstance().checkCastlingconditions();
+                    System.out.println(rocada);
+                    if (rocada.compareTo("") != 0) {
+                        // In functie de culoarea engine-ului se executa rocada mica/mare
+                        String[] castlings = rocada.split(" ");
+                        System.out.println("DADADA" + castlings[0]);
+                        if (castlings[0].compareTo("mica") == 0) {
+                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+                                System.out.println("move e8g8");
+                                Board.getInstance().executeMove("e8g8");
+                                Board.getInstance().executeMove("h8f8");
+                                return;
+                            } else {
+                                System.out.println("move e1g1");
+                                Board.getInstance().executeMove("e1g1");
+                                Board.getInstance().executeMove("h1f1");
+                                return;
+                            }
+                        } else {
+                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+                                System.out.println("move e8c8");
+                                Board.getInstance().executeMove("e8c8");
+                                Board.getInstance().executeMove("a8d8");
+                                return;
+                            } else {
+                                System.out.println("move e1c1");
+                                Board.getInstance().executeMove("e1c1");
+                                Board.getInstance().executeMove("a1d1");
+                                return;
+                            }
+                        }
+                    }
+                    Brain.getInstance().doMove();
+                    System.out.println(Board.getInstance());
+                }
                 turn = usercolor;
                 break;
 

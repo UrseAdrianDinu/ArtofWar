@@ -21,11 +21,13 @@ public class Queen extends Piece {
         int Y = coordinate.getY();
         Board board = Board.getInstance();
 
+        // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {
             turns = Game.getInstance().gameturns;
             support = 0;
         }
 
+        // Linie dreapta
         if (X + 1 <= 8) {
             for (int i = X + 1; i <= 8; i++) {
                 int type = board.isEmpty(board.getCoordinates(i, Y), color);
@@ -48,6 +50,7 @@ public class Queen extends Piece {
             }
         }
 
+        // Linie stanga
         if (X - 1 >= 1) {
             for (int i = X - 1; i >= 1; i--) {
                 int type = board.isEmpty(board.getCoordinates(i, Y), color);
@@ -70,6 +73,7 @@ public class Queen extends Piece {
             }
         }
 
+        // Sus
         if (Y + 1 <= 8) {
             for (int i = Y + 1; i <= 8; i++) {
                 int type = board.isEmpty(board.getCoordinates(X, i), color);
@@ -92,6 +96,7 @@ public class Queen extends Piece {
             }
         }
 
+        // Jos
         if (Y - 1 >= 1) {
             for (int i = Y - 1; i >= 1; i--) {
                 int type = board.isEmpty(board.getCoordinates(X, i), color);
@@ -116,6 +121,8 @@ public class Queen extends Piece {
 
         int x = X;
         int y = Y;
+
+        // Diagonala dreapta sus
         if (x + 1 <= 8 && y + 1 <= 8) {
             while (x + 1 <= 8 && y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x + 1, y + 1), color);
@@ -139,8 +146,10 @@ public class Queen extends Piece {
                 y++;
             }
         }
+
         x = X;
         y = Y;
+        // Diagonala stanga sus
         if (x - 1 >= 1 && y + 1 <= 8) {
             while (x - 1 >= 1 && y + 1 <= 8) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y + 1), color);
@@ -164,8 +173,10 @@ public class Queen extends Piece {
                 y++;
             }
         }
+
         x = X;
         y = Y;
+        // Diagonala dreapta jos
         if (x + 1 <= 8 && y - 1 >= 1) {
             while (x + 1 <= 8 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
@@ -189,8 +200,11 @@ public class Queen extends Piece {
                 y--;
             }
         }
+
         x = X;
         y = Y;
+
+        // Diagonala stanga jos
         if (x - 1 >= 1 && y - 1 >= 1) {
             while (x - 1 >= 1 && y - 1 >= 1) {
                 int type = board.isEmpty(board.getCoordinates(x - 1, y - 1), color);

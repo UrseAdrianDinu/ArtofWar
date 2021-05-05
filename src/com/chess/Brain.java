@@ -6,17 +6,26 @@ import java.util.Random;
 /*
     Clasa care implementeaza gandirea engine-ului.
     Pentru moment, ea decide mutarile pionilor.
+    Parametrii clasei:
+        enemyattack - matrice care retine unde poate sa atace inamicul
+                      si pozitiile pieselor
+        defense - matrice care retine unde se poate apara engine-ul
+                     si pozitiile pieselor
+        invalidPieces - vector de piese ale caror miscari sunt
+                    sunt invalide
+        blackKing - regele negru
+        whiteKing - regele alb
  */
 public class Brain {
 
-    //Singleton Pattern
-    private static Brain instance = null;
     int[][] enemyattack;
     int[][] defense;
     ArrayList<Piece> invalidPieces = new ArrayList<>();
-    ArrayList<Integer> freeDirection = new ArrayList<>();
     Piece blackKing;
     Piece whiteKing;
+
+    // Singleton Pattern
+    private static Brain instance = null;
 
     private Brain() {
 
@@ -28,26 +37,18 @@ public class Brain {
         return instance;
     }
 
+    // Metoda care genereaza toate miscarile posibile
+    // pentru ambele culori si updateaza matricele defense si enemyattack
     void generateAllMoves() {
         defense = new int[9][9];
         enemyattack = new int[9][9];
 
-
-        int i = 0;
-        if (invalidPieces.size() != 0) {
-            System.out.println("MIMI" + invalidPieces + invalidPieces.get(0).coordinate);
-        }
-        System.out.println();
-
+        // Generare mutari pentru culoarea alba
+        // Updatam matricea enemyattack
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
             for (Piece p : Whites.getInstance().whites) {
-                // if (!invalidPieces.contains(p)) {
+
                 p.generateMoves();
-                //     System.out.println("OOOO " + p.coordinate);
-                // } else {
-                //     System.out.println("DINU " + p);
-                // }
-                //System.out.println("" + p + p.freeMoves + p.captureMoves + "MUTARI");
                 addPiece(p);
                 if (p.getType().compareTo("Pawn") != 0) {
                     for (Coordinate c : p.freeMoves) {
@@ -82,13 +83,10 @@ public class Brain {
                 }
             }
 
+            // Generare mutari pentru culoarea neagra
+            // Updatam matricea defense
             for (Piece p : Blacks.getInstance().blacks) {
-                // if (!invalidPieces.contains(p)) {
                 p.generateMoves();
-                //     System.out.println("OOOO " + p.coordinate);
-                //  } else {
-                //      System.out.println("DINU " + p + " - " + p.coordinate + "-" + p.freeMoves + " " + p.captureMoves);
-                //  }
                 addPiece(p);
                 for (Coordinate c : p.freeMoves) {
                     if (defense[9 - c.getY()][c.getIntX()] == 0)
@@ -101,13 +99,10 @@ public class Brain {
 
             }
         } else {
+            // Generare mutari pentru culoarea neagra
+            // Updatam matricea enemyattack
             for (Piece p : Blacks.getInstance().blacks) {
-                //   if (!invalidPieces.contains(p)) {
                 p.generateMoves();
-                //       System.out.println("OOOO " + p.coordinate);
-                //    } else {
-                //        System.out.println("DINU " + p);
-                //    }
                 addPiece(p);
                 if (p.getType().compareTo("Pawn") != 0) {
                     for (Coordinate c : p.freeMoves) {
@@ -141,14 +136,10 @@ public class Brain {
                     }
                 }
             }
-
+            // Generare mutari pentru culoarea alba
+            // Updatam matricea defense
             for (Piece p : Whites.getInstance().whites) {
-                //   if (!invalidPieces.contains(p)) {
                 p.generateMoves();
-                //       System.out.println("OOOO " + p.coordinate);
-                //   } else {
-                //       System.out.println("DINU " + p);
-                //   }
                 addPiece(p);
                 for (Coordinate c : p.freeMoves) {
                     if (defense[9 - c.getY()][c.getIntX()] == 0)
@@ -161,14 +152,12 @@ public class Brain {
 
             }
         }
-        System.out.println("BEFORE " + blackKing.captureMoves);
-        verifyInvalidMoves();
-        System.out.println("AFTER " + blackKing.captureMoves);
-        System.out.println(invalidPieces);
-        Piece KingInChess = checkChess();
 
+        // Eliminare miscari invalide
+        verifyInvalidMoves();
     }
 
+    // Metoda care elimina miscarile invalide
     public void verifyInvalidMoves() {
         Piece OurKing;
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
@@ -177,19 +166,14 @@ public class Brain {
             OurKing = whiteKing;
         }
 
-
         invalidPieces = new ArrayList<>();
-        freeDirection = new ArrayList<>();
         Coordinate KingCoordinate = OurKing.coordinate;
         Piece pieceFromTable;
         Coordinate pieceFromTableCoordinate;
         ArrayList<Piece> queuePiece = new ArrayList<>();
-
-        //Don't let our king to Move in Chees.
         ArrayList<Coordinate> forRemove = new ArrayList<>();
 
-
-        //LINIE - SUS
+        // LINIE - SUS
         int X = KingCoordinate.getIntX();
         int Y = KingCoordinate.getY();
         Y++;
@@ -213,7 +197,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -231,7 +214,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -251,7 +233,6 @@ public class Brain {
                                 forRemove = new ArrayList<>();
                                 for (Coordinate c : pawn.enPassantMoves) {
                                     if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -275,7 +256,7 @@ public class Brain {
             Y++;
         }
 
-        //LINIE - JOS
+        // LINIE - JOS
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         Y--;
@@ -300,7 +281,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -318,7 +298,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -338,7 +317,6 @@ public class Brain {
                                 forRemove = new ArrayList<>();
                                 for (Coordinate c : pawn.enPassantMoves) {
                                     if (c.getIntX() != queuePiece.get(0).coordinate.getIntX()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -362,7 +340,7 @@ public class Brain {
             Y--;
         }
 
-        //LINIE - DREAPTA
+        // LINIE - DREAPTA
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -387,7 +365,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -405,7 +382,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -425,7 +401,6 @@ public class Brain {
                                 forRemove = new ArrayList<>();
                                 for (Coordinate c : pawn.enPassantMoves) {
                                     if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -449,7 +424,7 @@ public class Brain {
             X++;
         }
 
-        //LINIE - STANGA
+        // LINIE - STANGA
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -474,7 +449,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -493,7 +467,6 @@ public class Brain {
                             forRemove = new ArrayList<>();
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -513,7 +486,6 @@ public class Brain {
                                 forRemove = new ArrayList<>();
                                 for (Coordinate c : pawn.enPassantMoves) {
                                     if (c.getY() != queuePiece.get(0).coordinate.getY()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -537,7 +509,7 @@ public class Brain {
             X--;
         }
 
-        //DIAGONALA = STANGA-JOS
+        // DIAGONALA = STANGA-JOS
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -564,7 +536,6 @@ public class Brain {
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                         queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -583,7 +554,6 @@ public class Brain {
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                         queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -605,7 +575,6 @@ public class Brain {
                                     for (Coordinate c : pawn.enPassantMoves) {
                                         if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                                 queuePiece.get(0).coordinate.getY()) {
-                                            //queuePiece.get(0).captureMoves.remove(c);
                                             forRemove.add(c);
                                         }
                                     }
@@ -632,7 +601,7 @@ public class Brain {
             Y--;
         }
 
-        //DIAGONALA = DREAPTA-JOS
+        // DIAGONALA = DREAPTA-JOS
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -654,22 +623,17 @@ public class Brain {
                 } else {
                     if (FLAG == 1) {
                         if (pieceFromTable.getType().compareTo("Queen") == 0 || pieceFromTable.getType().compareTo("Bishop") == 0) {
-                            System.out.println("HAHA " + queuePiece.get(0) + "-" + queuePiece.get(0).coordinate);
                             forRemove = new ArrayList<>();
                             if (queuePiece.get(0).freeMoves != null) {
                                 for (Coordinate c : queuePiece.get(0).freeMoves) {
-                                    System.out.println("MATEI" + queuePiece.get(0).freeMoves.size());
                                     if ((c.getIntX() + c.getY()) != (queuePiece.get(0).coordinate.getIntX() +
                                             queuePiece.get(0).coordinate.getY())) {
-                                        System.out.println("YOYO " + c);
-                                        //queuePiece.get(0).freeMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
                             }
 
                             for (Coordinate c : forRemove) {
-                                System.out.println(c);
                                 queuePiece.get(0).freeMoves.remove(c);
                                 if (defense[9 - c.getY()][c.getIntX()] == 4) {
                                     defense[9 - c.getY()][c.getIntX()] = 0;
@@ -684,7 +648,6 @@ public class Brain {
                                 for (Coordinate c : queuePiece.get(0).captureMoves) {
                                     if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
                                             queuePiece.get(0).coordinate.getY()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -707,7 +670,6 @@ public class Brain {
                                     for (Coordinate c : pawn.enPassantMoves) {
                                         if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
                                                 queuePiece.get(0).coordinate.getY()) {
-                                            //queuePiece.get(0).captureMoves.remove(c);
                                             forRemove.add(c);
                                         }
                                     }
@@ -734,7 +696,7 @@ public class Brain {
             Y--;
         }
 
-        //DIAGONALA = DREAPTA-SUS
+        // DIAGONALA = DREAPTA-SUS
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -761,7 +723,6 @@ public class Brain {
                             for (Coordinate c : queuePiece.get(0).freeMoves) {
                                 if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                         queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).freeMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -780,7 +741,6 @@ public class Brain {
                             for (Coordinate c : queuePiece.get(0).captureMoves) {
                                 if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                         queuePiece.get(0).coordinate.getY()) {
-                                    //queuePiece.get(0).captureMoves.remove(c);
                                     forRemove.add(c);
                                 }
                             }
@@ -802,7 +762,6 @@ public class Brain {
                                     for (Coordinate c : pawn.enPassantMoves) {
                                         if (c.getIntX() - c.getY() != queuePiece.get(0).coordinate.getIntX() -
                                                 queuePiece.get(0).coordinate.getY()) {
-                                            //queuePiece.get(0).captureMoves.remove(c);
                                             forRemove.add(c);
                                         }
                                     }
@@ -829,7 +788,7 @@ public class Brain {
             Y++;
         }
 
-        //DIAGONALA = STANGA-SUS
+        // DIAGONALA = STANGA-SUS
         X = KingCoordinate.getIntX();
         Y = KingCoordinate.getY();
         queuePiece = new ArrayList<>();
@@ -858,8 +817,6 @@ public class Brain {
 
                                     if ((c.getIntX() + c.getY()) != (queuePiece.get(0).coordinate.getIntX() +
                                             queuePiece.get(0).coordinate.getY())) {
-
-                                        //queuePiece.get(0).freeMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -880,7 +837,6 @@ public class Brain {
                                 for (Coordinate c : queuePiece.get(0).captureMoves) {
                                     if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
                                             queuePiece.get(0).coordinate.getY()) {
-                                        //queuePiece.get(0).captureMoves.remove(c);
                                         forRemove.add(c);
                                     }
                                 }
@@ -903,7 +859,6 @@ public class Brain {
                                     for (Coordinate c : pawn.enPassantMoves) {
                                         if (c.getIntX() + c.getY() != queuePiece.get(0).coordinate.getIntX() +
                                                 queuePiece.get(0).coordinate.getY()) {
-                                            //queuePiece.get(0).captureMoves.remove(c);
                                             forRemove.add(c);
                                         }
                                     }
@@ -930,6 +885,7 @@ public class Brain {
             Y++;
         }
 
+        // Eliminare miscari libere invalide pentru rege
         for (Coordinate c : OurKing.freeMoves) {
             System.out.println((enemyattack[9 - c.getY()][c.getIntX()]));
             if (enemyattack[9 - c.getY()][c.getIntX()] >= 4) {
@@ -947,7 +903,8 @@ public class Brain {
                 defense[9 - c.getY()][c.getIntX()]--;
             }
         }
-        //dadad
+
+        // Eliminare miscari de capturare invalide pentru rege
         forRemove = new ArrayList<>();
         for (Coordinate c : OurKing.captureMoves) {
             Piece p = Board.getInstance().getPiecebylocation(c);
@@ -961,6 +918,7 @@ public class Brain {
 
     }
 
+    // Metoda care adauga o piesa p pe matricele defense/enemyattack
     public void addPiece(Piece p) {
         if (p.color == Game.getInstance().enginecolor) {
             defense[9 - p.coordinate.getY()][p.coordinate.getIntX()] = 1;
@@ -979,39 +937,43 @@ public class Brain {
         }
     }
 
-    //Metoda care trimite xboard-ului o mutare a unui pion
-    //in functie de culoarea piesei.
-    //In cazul in care nu mai este nicio mutare posibila
-    //vom da resign.
+    // Metoda care trimite xboard-ului o mutare a unei piese
+    // in functie de culoarea sa.
+    // In cazul in care nu mai este nicio mutare posibila
+    // vom da resign.
     public void doMove() {
         Game game = Game.getInstance();
         Piece piece;
 
-        //Se selecteaza un pion in functie de culoarea engine-ului
+        // Se selecteaza o piesa in functie de culoarea engine-ului
         if (game.enginecolor == TeamColor.BLACK) {
             piece = Blacks.getInstance().getPiece();
         } else {
             piece = Whites.getInstance().getPiece();
         }
-        System.out.println(piece + " VLAD - " + piece.coordinate + "-" + piece.freeMoves + "-" + piece.captureMoves);
-        //Daca nu mai exista pioni cu mutari disponibile
-        //atunci dam resign
+
+        // Daca nu mai exista piese cu mutari disponibile
+        // atunci dam resign
         if (piece == null) {
             System.out.println("resign");
             System.out.flush();
             return;
         }
 
-        //Se genereaza mutarile posibile
+        // Am verificat daca piesa selectata este pion
+        // In acest caz am prioritizat miscarile en-passant
+
         if (piece.getType() == "Pawn") {
             Pawn pion = (Pawn) piece;
             if (pion.enPassantMoves.size() != 0) {
                 Coordinate c = pion.enPassantMoves.get(0);
-                //Se scrie la standard output comanda "move + mutarea gasita"
+
+                // Se scrie la standard output comanda "move + mutarea gasita"
                 System.out.println("move " + pion.coordinate.getCharX() + pion.coordinate.getY() +
                         c.getCharX() + c.getY());
                 System.out.flush();
-                //Se updateaza tabla de joc
+
+                // Se updateaza tabla de joc
                 if (pion.color == TeamColor.BLACK) {
                     Whites.getInstance().removeWhitePiece(Board.getInstance().getPiecebylocation(new Coordinate(c.getIntX(), c.getY() + 1)));
                     Board.getInstance().table[9 - c.getY() - 1][c.getIntX()] = null;
@@ -1025,14 +987,17 @@ public class Brain {
             }
         }
 
-        //Am prioritizat mutarile de capturare
+        // Am prioritizat mutarile de capturare
         if (piece.captureMoves.size() != 0) {
             Coordinate c = piece.captureMoves.get(0);
-            //Se scrie la standard output comanda "move + mutarea gasita"
+            // Am verificat daca piesa selectata este pion
+            // si daca prin mutarea gasita ajunge pe ultima linie
+            // In acest caz, am facut promovorea lui
             if (piece.getType().compareTo("Pawn") == 0) {
                 if (piece.color == TeamColor.WHITE && c.getY() == 8) {
                     Pawn pion = (Pawn) piece;
                     char gen = pion.promotionGeneration();
+                    // Se scrie la standard output comanda "move + mutarea gasita"
                     System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                             c.getCharX() + c.getY() + gen);
                     System.out.flush();
@@ -1044,6 +1009,7 @@ public class Brain {
                 if (piece.color == TeamColor.BLACK && c.getY() == 1) {
                     Pawn pion = (Pawn) piece;
                     char gen = pion.promotionGeneration();
+                    // Se scrie la standard output comanda "move + mutarea gasita"
                     System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                             c.getCharX() + c.getY() + gen);
                     System.out.flush();
@@ -1053,6 +1019,8 @@ public class Brain {
                     return;
                 }
             }
+            // Cazul in care piesa selectata nu e pion
+            // Se scrie la standard output comanda "move + mutarea gasita"
             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                     c.getCharX() + c.getY());
             System.out.flush();
@@ -1065,11 +1033,14 @@ public class Brain {
         //Mutari libere
         if (piece.freeMoves.size() != 0) {
             Coordinate c = piece.freeMoves.get(0);
-            //Se scrie la standard output comanda "move + mutarea gasita"
+            // Am verificat daca piesa selectata este pion
+            // si daca prin mutarea gasita ajunge pe ultima linie
+            // In acest caz, am facut promovorea lui
             if (piece.getType().compareTo("Pawn") == 0) {
                 if (piece.color == TeamColor.WHITE && c.getY() == 8) {
                     Pawn pion = (Pawn) piece;
                     char gen = pion.promotionGeneration();
+                    // Se scrie la standard output comanda "move + mutarea gasita"
                     System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                             c.getCharX() + c.getY() + gen);
                     System.out.flush();
@@ -1091,6 +1062,8 @@ public class Brain {
                 }
 
             }
+            // Cazul in care piesa selectata nu e pion
+            // Se scrie la standard output comanda "move + mutarea gasita"
             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                     c.getCharX() + c.getY());
             System.out.flush();
@@ -1099,37 +1072,40 @@ public class Brain {
                     c.getCharX() + c.getY());
             return;
         }
-
         System.out.println("resign");
         System.out.flush();
     }
 
-    Piece checkChess() {
+    // Metoda care intoarce o lista de piese care dau sah engine-ului
+    ArrayList<Piece> checkChess() {
         Board b = Board.getInstance();
         Game game = Game.getInstance();
+        ArrayList<Piece> pieces = new ArrayList<>();
         if (game.enginecolor == TeamColor.BLACK) {
             for (Piece p : Whites.getInstance().whites) {
                 if (p.captureMoves.contains(Blacks.getInstance().getKingLocation())) {
-                    return p;
+                    pieces.add(p);
                 }
             }
         } else {
             for (Piece p : Blacks.getInstance().blacks) {
                 if (p.captureMoves.contains(Whites.getInstance().getKingLocation())) {
-                    return p;
+                    pieces.add(p);
                 }
             }
         }
-        return null;
+        return pieces;
     }
 
+    // Metoda care incearca sa capture piesa p care da sah engine-ului
+    // In acest caz returnand true, altfel false
     boolean captureChessPiece(Piece p) {
-        System.out.println(blackKing.captureMoves);
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
             for (Piece piece : Blacks.getInstance().blacks) {
                 if (piece.captureMoves.contains(p.coordinate)) {
                     if (piece.getType().compareTo("King") != 0) {
                         if (piece.getType().compareTo("Pawn") != 0) {
+                            // Se scrie la standard output comanda "move + mutarea gasita"
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1141,6 +1117,7 @@ public class Brain {
                             if (p.coordinate.getY() == 1) {
                                 Pawn pion = (Pawn) piece;
                                 char gen = pion.promotionGeneration();
+                                // Se scrie la standard output comanda "move + mutarea gasita"
                                 System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                         p.coordinate.getCharX() + p.coordinate.getY() + gen);
                                 System.out.flush();
@@ -1149,6 +1126,7 @@ public class Brain {
                                         p.coordinate.getCharX() + p.coordinate.getY() + gen);
                                 return true;
                             }
+                            // Se scrie la standard output comanda "move + mutarea gasita"
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1158,10 +1136,8 @@ public class Brain {
                             return true;
                         }
                     } else {
-                        System.out.println("supppp " + p.support);
-                        System.out.println(p);
                         if (p.support == 0) {
-                            System.out.println("KINGGGG");
+                            // Se scrie la standard output comanda "move + mutarea gasita"
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1179,6 +1155,7 @@ public class Brain {
                 if (piece.captureMoves.contains(p.coordinate)) {
                     if (piece.getType().compareTo("King") != 0) {
                         if (piece.getType().compareTo("Pawn") != 0) {
+                            // Se scrie la standard output comanda "move + mutarea gasita"
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1190,6 +1167,7 @@ public class Brain {
                             if (p.coordinate.getY() == 8) {
                                 Pawn pion = (Pawn) piece;
                                 char gen = pion.promotionGeneration();
+                                // Se scrie la standard output comanda "move + mutarea gasita"
                                 System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                         p.coordinate.getCharX() + p.coordinate.getY() + gen);
                                 System.out.flush();
@@ -1198,6 +1176,7 @@ public class Brain {
                                         p.coordinate.getCharX() + p.coordinate.getY() + gen);
                                 return true;
                             }
+                            // Se scrie la standard output comanda "move + mutarea gasita"
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1207,9 +1186,7 @@ public class Brain {
                             return true;
                         }
                     } else {
-                        System.out.println(p.support);
                         if (p.support == 0) {
-                            System.out.println("KINGGGG");
                             System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                     p.coordinate.getCharX() + p.coordinate.getY());
                             System.out.flush();
@@ -1226,134 +1203,83 @@ public class Brain {
         return false;
     }
 
-    boolean protectKing(Piece p) {
-        System.out.println("PROTEC");
-        if (p.color == TeamColor.BLACK) {
-            Coordinate kingloc = Whites.getInstance().getKingLocation();
-            if (p.getType().equals("Bishop")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
-                                    Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
-                                if (kingloc.getY() > p.coordinate.getY()) {
-                                    if (c.getY() > p.coordinate.getY()) {
-                                        for (Piece piece : Whites.getInstance().whites) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
+    // Metoda care incearca sa protejeze regele aflat in sah
+    // Returneaza true, in cazul in care a gasit o mutare
+    // Returneaza false, in cazul in care am primit sah-mat
+    boolean protectKing(ArrayList<Piece> pieces) {
+        // Cazul in care primim sah de la o singura piesa
+        if (pieces.size() == 1) {
+            Piece p = pieces.get(0);
+            if (p.color == TeamColor.BLACK) {
+                Coordinate kingloc = Whites.getInstance().getKingLocation();
+                if (p.getType().equals("Bishop")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
+                                        Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
+                                    if (kingloc.getY() > p.coordinate.getY()) {
+                                        if (c.getY() > p.coordinate.getY()) {
+                                            for (Piece piece : Whites.getInstance().whites) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                } else {
-                                    if (c.getY() < p.coordinate.getY()) {
-                                        for (Piece piece : Whites.getInstance().whites) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
+                                    } else {
+                                        if (c.getY() < p.coordinate.getY()) {
+                                            for (Piece piece : Whites.getInstance().whites) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
                         }
-                    } else {
-                        return true;
                     }
                 }
-            }
-            if (p.getType().equals("Queen")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() == kingloc.getIntX()) {
-                                if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
-                                        || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
-                                    for (Piece piece : Whites.getInstance().whites) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (c.getY() == kingloc.getY()) {
-                                if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
-                                        || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
-                                    for (Piece piece : Whites.getInstance().whites) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
-                                    Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
-                                if (kingloc.getY() > p.coordinate.getY()) {
-                                    if (c.getY() > p.coordinate.getY()) {
+                if (p.getType().equals("Queen")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() == kingloc.getIntX()) {
+                                    if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
+                                            || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
                                         for (Piece piece : Whites.getInstance().whites) {
-                                            if (piece.getType().compareTo("King") != 0) {
+                                            if (!piece.getType().equals("King")) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (c.getY() < p.coordinate.getY()) {
-                                        for (Piece piece : Whites.getInstance().whites) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
                                                     System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY());
                                                     System.out.flush();
@@ -1365,334 +1291,457 @@ public class Brain {
                                         }
                                     }
                                 }
-                            }
-                        }
-                    } else {
-                        return true;
-                    }
-                }
-            }
-
-            if (p.getType().equals("Knight")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        System.out.println("resign");
-                    } else {
-                        return true;
-                    }
-                }
-            }
-
-            if (p.getType().equals("Rook")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() == kingloc.getIntX()) {
-                                if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
-                                        || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
-                                    for (Piece piece : Whites.getInstance().whites) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
+                                if (c.getY() == kingloc.getY()) {
+                                    if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
+                                            || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
+                                        for (Piece piece : Whites.getInstance().whites) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
+                                        Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
+                                    if (kingloc.getY() > p.coordinate.getY()) {
+                                        if (c.getY() > p.coordinate.getY()) {
+                                            for (Piece piece : Whites.getInstance().whites) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (c.getY() < p.coordinate.getY()) {
+                                            for (Piece piece : Whites.getInstance().whites) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                            if (c.getY() == kingloc.getY()) {
-                                if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
-                                        || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
-                                    for (Piece piece : Whites.getInstance().whites) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+                if (p.getType().equals("Knight")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            System.out.println("resign");
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+                if (p.getType().equals("Rook")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() == kingloc.getIntX()) {
+                                    if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
+                                            || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
+                                        for (Piece piece : Whites.getInstance().whites) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (c.getY() == kingloc.getY()) {
+                                    if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
+                                            || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
+                                        for (Piece piece : Whites.getInstance().whites) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
                         }
-                    } else {
-                        return true;
                     }
                 }
-            }
 
-            if (p.getType().equals("Pawn")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        System.out.println("resign");
-                    } else {
+                if (p.getType().equals("Pawn")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
                         return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            System.out.println("resign");
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
                     }
                 }
+
+
+            } else {
+                Coordinate kingloc = Blacks.getInstance().getKingLocation();
+                System.out.println("King location" + kingloc);
+                if (p.getType().equals("Bishop")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
+                                        Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
+                                    if (kingloc.getY() > p.coordinate.getY()) {
+                                        if (c.getY() > p.coordinate.getY()) {
+                                            for (Piece piece : Blacks.getInstance().blacks) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (c.getY() < p.coordinate.getY()) {
+                                            for (Piece piece : Blacks.getInstance().blacks) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+                if (p.getType().equals("Queen")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() == kingloc.getIntX()) {
+                                    if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
+                                            || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
+                                        for (Piece piece : Blacks.getInstance().blacks) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (c.getY() == kingloc.getY()) {
+                                    if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
+                                            || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
+                                        for (Piece piece : Blacks.getInstance().blacks) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
+                                        Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
+                                    if (kingloc.getY() > p.coordinate.getY()) {
+                                        if (c.getY() > p.coordinate.getY()) {
+                                            for (Piece piece : Blacks.getInstance().blacks) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (c.getY() < p.coordinate.getY()) {
+                                            for (Piece piece : Blacks.getInstance().blacks) {
+                                                if (piece.getType().compareTo("King") != 0) {
+                                                    if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                        System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        System.out.flush();
+                                                        Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                                c.getCharX() + c.getY());
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+
+                if (p.getType().equals("Knight")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            System.out.println("resign");
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+                if (p.getType().equals("Rook")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            for (Coordinate c : p.freeMoves) {
+                                if (c.getIntX() == kingloc.getIntX()) {
+                                    if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
+                                            || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
+                                        for (Piece piece : Blacks.getInstance().blacks) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (c.getY() == kingloc.getY()) {
+                                    if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
+                                            || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
+                                        for (Piece piece : Blacks.getInstance().blacks) {
+                                            if (!piece.getType().equals("King")) {
+                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
+                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    System.out.flush();
+                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                            c.getCharX() + c.getY());
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
+                if (p.getType().equals("Pawn")) {
+                    boolean capture = captureChessPiece(p);
+                    if (capture) {
+                        return true;
+                    } else {
+                        ArrayList<Coordinate> moveKing = moveKing(p);
+                        if (moveKing.size() == 0) {
+                            System.out.println("resign");
+                        } else {
+                            Coordinate c = moveKing.get(0);
+                            System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            System.out.flush();
+                            Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                                    c.getCharX() + c.getY());
+                            return true;
+                        }
+                    }
+                }
+
             }
-
-
         } else {
-            Coordinate kingloc = Blacks.getInstance().getKingLocation();
-            System.out.println("King location" + kingloc);
-            if (p.getType().equals("Bishop")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
-                                    Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
-                                if (kingloc.getY() > p.coordinate.getY()) {
-                                    if (c.getY() > p.coordinate.getY()) {
-                                        for (Piece piece : Blacks.getInstance().blacks) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (c.getY() < p.coordinate.getY()) {
-                                        for (Piece piece : Blacks.getInstance().blacks) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        return true;
-                    }
+
+            // Cazul in care primim sah de la doua piese
+            ArrayList<Coordinate> moves1 = moveKing(pieces.get(0));
+            ArrayList<Coordinate> moves2 = moveKing(pieces.get(1));
+            ArrayList<Coordinate> intersection = new ArrayList<>();
+            for (Coordinate c : moves1) {
+                if (moves2.contains(c)) {
+                    intersection.add(c);
                 }
             }
-
-            if (p.getType().equals("Queen")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
+            if (intersection.size() == 0) {
+                System.out.println("resign");
+            } else {
+                Coordinate kingloc;
+                if (pieces.get(0).color == TeamColor.BLACK) {
+                    kingloc = Whites.getInstance().getKingLocation();
                 } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() == kingloc.getIntX()) {
-                                if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
-                                        || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
-                                    for (Piece piece : Blacks.getInstance().blacks) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (c.getY() == kingloc.getY()) {
-                                if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
-                                        || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
-                                    for (Piece piece : Blacks.getInstance().blacks) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
-                                    Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
-                                if (kingloc.getY() > p.coordinate.getY()) {
-                                    if (c.getY() > p.coordinate.getY()) {
-                                        for (Piece piece : Blacks.getInstance().blacks) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (c.getY() < p.coordinate.getY()) {
-                                        for (Piece piece : Blacks.getInstance().blacks) {
-                                            if (piece.getType().compareTo("King") != 0) {
-                                                if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    System.out.println("dadadadadada");
-                                                    System.out.println(piece + " " + piece.coordinate);
-                                                    System.out.println(piece.freeMoves + " " + piece.captureMoves);
-                                                    System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    System.out.flush();
-                                                    Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                            c.getCharX() + c.getY());
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        return true;
-                    }
+                    kingloc = Blacks.getInstance().getKingLocation();
                 }
+                Coordinate c = intersection.get(0);
+                System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
+                        c.getCharX() + c.getY());
+                System.out.flush();
+                Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
+                        c.getCharX() + c.getY());
+                return true;
             }
-
-
-            if (p.getType().equals("Knight")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        System.out.println("resign");
-                    } else {
-                        return true;
-                    }
-                }
-            }
-
-            if (p.getType().equals("Rook")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        for (Coordinate c : p.freeMoves) {
-                            if (c.getIntX() == kingloc.getIntX()) {
-                                if ((c.getY() > p.coordinate.getY() && p.coordinate.getY() < kingloc.getY())
-                                        || (c.getY() < p.coordinate.getY() && p.coordinate.getY() > kingloc.getY())) {
-                                    for (Piece piece : Blacks.getInstance().blacks) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (c.getY() == kingloc.getY()) {
-                                if ((c.getIntX() > p.coordinate.getIntX() && p.coordinate.getIntX() < kingloc.getIntX())
-                                        || (c.getIntX() < p.coordinate.getIntX() && p.coordinate.getIntX() > kingloc.getIntX())) {
-                                    for (Piece piece : Blacks.getInstance().blacks) {
-                                        if (!piece.getType().equals("King")) {
-                                            if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                System.out.flush();
-                                                Board.getInstance().executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                                        c.getCharX() + c.getY());
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        return true;
-                    }
-                }
-            }
-
-            if (p.getType().equals("Pawn")) {
-                boolean capture = captureChessPiece(p);
-                if (capture) {
-                    return true;
-                } else {
-                    boolean moveKing = moveKing(p);
-                    if (!moveKing) {
-                        System.out.println("resign");
-                    } else {
-                        return true;
-                    }
-                }
-            }
-
         }
         return false;
     }
-
-    boolean moveKing(Piece attackingPiece) {
+    // Metoda care intoarce un vector de coordonate
+    // pe care regele aflat in sah se poate muta
+    ArrayList<Coordinate> moveKing(Piece attackingPiece) {
         Coordinate kingloc;
+        Piece ourking;
         if (attackingPiece.color == TeamColor.WHITE) {
             kingloc = blackKing.coordinate;
+            ourking = blackKing;
         } else {
             kingloc = whiteKing.coordinate;
+            ourking = whiteKing;
         }
-
-        System.out.println(kingloc);
+        ArrayList<Coordinate> coord = new ArrayList<>();
         //DE VERIFICAT TURA/REGINA.
         //DREAPTA
         if (kingloc.getIntX() + 1 <= 8) {
-            System.out.println("x:" + (9 - kingloc.getY()) + " x: " + (kingloc.getIntX() + 1));
             if (enemyattack[9 - kingloc.getY()][kingloc.getIntX() + 1] == 0) {
                 System.out.println("x:" + (9 - kingloc.getY()) + " x: " + (kingloc.getIntX() + 1));
                 if (attackingPiece.getType().compareTo("Queen") == 0 || attackingPiece.getType().compareTo("Rook") == 0) {
@@ -1700,23 +1749,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY()));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1729,23 +1776,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY()));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1758,23 +1803,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() + 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1788,23 +1831,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() - 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1817,23 +1858,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1846,23 +1885,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1875,23 +1912,21 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
@@ -1904,38 +1939,37 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
-                        System.out.println(c);
-                        System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        System.out.flush();
-                        Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                                c.getCharX() + c.getY());
-                        return true;
+                        coord.add(c);
                     }
                 } else {
                     Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
-                    System.out.println(c);
-                    System.out.println("move " + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    System.out.flush();
-                    Board.getInstance().executeMove("" + kingloc.getCharX() + kingloc.getY() +
-                            c.getCharX() + c.getY());
-                    return true;
+                    coord.add(c);
+                }
+            } else {
+                Piece p = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1));
+                if (p != null) {
+                    if (p.color != ourking.color) {
+                        if (p.support == 0) {
+                            Coordinate c = Board.getInstance().getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
+                            coord.add(c);
+                        }
+                    }
                 }
             }
         }
-        return false;
+        return coord;
     }
 
+    // Metoda care intoarce un string format din
+    // rocadele care se pot efectua
     String checkCastlingconditions() {
         String s = "";
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
             if (blackKing.moves == 0) {
                 Piece p1 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(8, 8));
                 if (p1 != null) {
-                    if (p1.moves == 0) {
+                    if (p1.moves == 0 && p1.color == TeamColor.BLACK) {
                         if (enemyattack[1][6] == 0 && enemyattack[1][7] == 0) {
-                            System.out.println("MICABLACK");
                             s += "mica ";
                         }
                     }
@@ -1944,9 +1978,8 @@ public class Brain {
                 Piece p2 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 8));
                 Piece p3 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(2, 8));
                 if (p2 != null) {
-                    if (p2.moves == 0) {
+                    if (p2.moves == 0 && p2.color == TeamColor.BLACK) {
                         if (enemyattack[1][3] == 0 && enemyattack[1][4] == 0 && p3 == null) {
-                            System.out.println("MAREBLACK");
                             s += " mare";
                         }
                     }
@@ -1956,7 +1989,7 @@ public class Brain {
             if (whiteKing.moves == 0) {
                 Piece p1 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(8, 1));
                 if (p1 != null) {
-                    if (p1.moves == 0) {
+                    if (p1.moves == 0 && p1.color == TeamColor.WHITE) {
                         if (enemyattack[8][6] == 0 && enemyattack[8][7] == 0) {
                             s += "mica ";
                         }
@@ -1966,7 +1999,7 @@ public class Brain {
                 Piece p2 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 1));
                 Piece p3 = Board.getInstance().getPiecebylocation(Board.getInstance().getCoordinates(1, 2));
                 if (p2 != null) {
-                    if (p2.moves == 0) {
+                    if (p2.moves == 0 && p2.color == TeamColor.WHITE) {
                         if (enemyattack[8][3] == 0 && enemyattack[8][4] == 0 && p3 == null) {
                             s += "mare";
                         }
