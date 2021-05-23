@@ -4,24 +4,49 @@ import java.util.ArrayList;
 
 /*
     Clasa specifica piesei "Nebun"
- */
+*/
 public class Bishop extends Piece {
 
     // Initializare coordonata si culoare
     public Bishop(Coordinate coordinate, int color) {
         this.color = color;
         this.coordinate = coordinate;
+        this.value = 3;
+    }
+
+    public Bishop(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
+                  ArrayList<Coordinate> capturemoves, int value, int moves, int support, int turns) {
+        this.color = color;
+        this.value = value;
+        this.moves = moves;
+        this.support = support;
+        this.turns = turns;
+
+        this.coordinate = new Coordinate(coordinate.getIntX(), coordinate.getY());
+
+        this.captureMoves = new ArrayList<>();
+        for (Coordinate c : capturemoves) {
+            this.captureMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+
+        this.freeMoves = new ArrayList<>();
+        for (Coordinate c : freemoves) {
+            this.freeMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+    }
+
+    public Bishop(Bishop bishop) {
+        this(bishop.coordinate, bishop.color, bishop.freeMoves, bishop.captureMoves, bishop.value, bishop.moves, bishop.support, bishop.turns);
     }
 
     // Metoda care genereaza mutarile posible pentru nebun
     // La fiecare apel vectorii freeMoves/captureMoves se reinitializeaza
     @Override
-    public void generateMoves() {
+    public void generateMoves(Board board) {
         freeMoves = new ArrayList<>();
         captureMoves = new ArrayList<>();
         int X = coordinate.getIntX();
         int Y = coordinate.getY();
-        Board board = Board.getInstance();
 
         int x = X;
         int y = Y;

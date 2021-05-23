@@ -67,6 +67,7 @@ public class Whites {
         }
         return p;
     }
+
     // Metoda care intoarce un cal alb care
     // are mutari posibile
     public Piece getKnight() {
@@ -80,6 +81,7 @@ public class Whites {
         }
         return null;
     }
+
     // Metoda care intoarce o regina alba care
     // are mutari posibile
     public Piece getQueen() {
@@ -103,6 +105,7 @@ public class Whites {
 
     // Metoda care intoarce o piesa alba care
     // are mutari posibile
+
     public Piece getPiece() {
         for (Piece piece : whites) {
             //piece.generateMoves();

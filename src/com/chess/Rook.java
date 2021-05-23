@@ -11,14 +11,40 @@ public class Rook extends Piece {
     public Rook(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
+        this.value = 5;
     }
 
-    public void generateMoves() {
+    public Rook(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
+                 ArrayList<Coordinate> capturemoves, int value, int moves, int support, int turns) {
+
+        this.color = color;
+        this.value = value;
+        this.moves = moves;
+        this.support = support;
+        this.turns = turns;
+
+        this.coordinate = new Coordinate(coordinate.getIntX(), coordinate.getY());
+
+        this.captureMoves = new ArrayList<>();
+        for (Coordinate c : capturemoves) {
+            this.captureMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+
+        this.freeMoves = new ArrayList<>();
+        for (Coordinate c : freemoves) {
+            this.freeMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+    }
+
+    public Rook(Rook rook) {
+        this(rook.coordinate,rook.color, rook.freeMoves, rook.captureMoves, rook.value, rook.moves, rook.support, rook.turns);
+    }
+
+    public void generateMoves(Board board) {
         freeMoves = new ArrayList<>();
         captureMoves = new ArrayList<>();
         int x = coordinate.getIntX();
         int y = coordinate.getY();
-        Board board = Board.getInstance();
 
         // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {

@@ -13,34 +13,39 @@ import java.util.ArrayList;
         turns: numarul rundei
  */
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
 
     ArrayList<Coordinate> freeMoves;
     ArrayList<Coordinate> captureMoves;
     Coordinate coordinate;
     int color;
+    int value;
     int moves = 0;
     int support = 0;
     int turns = 0;
 
-    public abstract void generateMoves();
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public abstract void generateMoves(Board booard);
 
     public abstract String getType();
 
     public abstract String toString();
 
     // Metoda pentru mutarea unei piese
-    public void movePiece(Coordinate destination) {
-        Board b = Board.getInstance();
+    public void movePiece(Coordinate destination, Board b) {
         Piece p = b.getPiecebylocation(destination);
         // Verificam daca exista o piesa la coordonata destination
         // In functie de culoarea piesei, eliminam piesa din
         // Blacks sau Whites
         if (p != null) {
             if (p.color == TeamColor.WHITE) {
-                Whites.getInstance().removeWhitePiece(p);
+                b.whites.remove(p);
             } else {
-                Blacks.getInstance().removeBlackPiece(p);
+                b.blacks.remove(p);
             }
         }
         // Updatam tabla de joc

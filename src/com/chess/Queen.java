@@ -11,15 +11,41 @@ public class Queen extends Piece {
     public Queen(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;
+        this.value = 9;
+    }
+
+    public Queen(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
+                  ArrayList<Coordinate> capturemoves, int value, int moves, int support, int turns) {
+
+        this.color = color;
+        this.value = value;
+        this.moves = moves;
+        this.support = support;
+        this.turns = turns;
+
+        this.coordinate = new Coordinate(coordinate.getIntX(), coordinate.getY());
+
+        this.captureMoves = new ArrayList<>();
+        for (Coordinate c : capturemoves) {
+            this.captureMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+
+        this.freeMoves = new ArrayList<>();
+        for (Coordinate c : freemoves) {
+            this.freeMoves.add(new Coordinate(c.getIntX(), c.getY()));
+        }
+    }
+
+    public Queen(Queen queen) {
+        this(queen.coordinate,queen.color, queen.freeMoves, queen.captureMoves, queen.value, queen.moves, queen.support, queen.turns);
     }
 
     @Override
-    public void generateMoves() {
+    public void generateMoves(Board board) {
         freeMoves = new ArrayList<>();
         captureMoves = new ArrayList<>();
         int X = coordinate.getIntX();
         int Y = coordinate.getY();
-        Board board = Board.getInstance();
 
         // Updatam runda piesei
         if (turns != Game.getInstance().gameturns) {

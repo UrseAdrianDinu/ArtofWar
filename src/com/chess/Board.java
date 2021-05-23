@@ -1,5 +1,7 @@
 package com.chess;
 
+import java.util.ArrayList;
+
 /*
     Clasa pentru reprezentarea tablei de joc
     Parametrii clasei:
@@ -7,26 +9,87 @@ package com.chess;
         table: tabla de joc
  */
 public class Board {
-    private static Board instance;
+
     Coordinate[][] coordinates;
     Piece[][] table;
 
+    int numberofwhitepieces = 0;
+    int numberofwhitepawns = 0;
+    ArrayList<Piece> whites;
+    Piece WhitelastMoved;
+
+    int numberofblackpieces = 0;
+    int numberofblackpawns = 0;
+    ArrayList<Piece> blacks;
+    Piece BlacklastMoved;
+
+
     // Singleton Pattern
-    private Board() {
+    public Board() {
         table = new Piece[9][9];
+        whites = new ArrayList<>();
+        blacks = new ArrayList<>();
     }
 
-    public static synchronized Board getInstance() {
-        if (instance == null)
-            instance = new Board();
-        return instance;
+
+    Board copie() throws CloneNotSupportedException {
+        Board b = new Board();
+        b.whites = new ArrayList<>();
+        b.blacks = new ArrayList<>();
+
+        b.table = new Piece[9][9];
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                if (table[i][j] != null) {
+                    b.table[i][j] = createPiece(table[i][j]);
+                    if (b.table[i][j].color == TeamColor.WHITE) {
+                        b.whites.add(b.table[i][j]);
+                    } else {
+                        b.blacks.add(b.table[i][j]);
+                    }
+                } else {
+                    b.table[i][j] = null;
+                }
+            }
+        }
+
+        b.numberofwhitepawns = numberofwhitepawns;
+        b.numberofwhitepieces = numberofwhitepieces;
+        b.numberofblackpawns = numberofblackpawns;
+        b.numberofblackpieces = numberofblackpieces;
+
+
+        return b;
     }
 
+    Piece createPiece(Piece p) {
+        String s = p.getType();
+
+        switch (s) {
+            case "King":
+                return new King((King) p);
+
+            case "Pawn":
+                return new Pawn((Pawn) p);
+
+            case "Queen":
+                return new Queen((Queen) p);
+
+            case "Rook":
+                return new Rook((Rook) p);
+
+            case "Bishop":
+                return new Bishop((Bishop) p);
+
+            case "Knight":
+                return new Knight((Knight) p);
+
+            default:
+                return null;
+        }
+    }
     // Metoda care reinitializeaza tabla de joc
-    public static synchronized Board newGame() {
-        instance = null;
-        return getInstance();
-    }
+
 
     // Metoda care intoarce o noua coordonata din x si y
     // Am facut aceasta metoda pentru a reduce numarul multiplu
@@ -63,8 +126,8 @@ public class Board {
             table[2][i] = new Pawn(new Coordinate(i, 7), TeamColor.BLACK);
             table[7][i] = new Pawn(new Coordinate(i, 2), TeamColor.WHITE);
             // Adaugarea lor in clasele Black/Whites
-            Blacks.getInstance().addBlackPiece(table[2][i]);
-            Whites.getInstance().addWhitePiece(table[7][i]);
+            blacks.add(table[2][i]);
+            whites.add(table[7][i]);
         }
 
         // Punerea cailor pe tabla
@@ -72,44 +135,49 @@ public class Board {
         table[1][7] = new Knight(new Coordinate(7, 8), TeamColor.BLACK);
         table[8][2] = new Knight(new Coordinate(2, 1), TeamColor.WHITE);
         table[8][7] = new Knight(new Coordinate(7, 1), TeamColor.WHITE);
-        Blacks.getInstance().addBlackPiece(table[1][2]);
-        Blacks.getInstance().addBlackPiece(table[1][7]);
-        Whites.getInstance().addWhitePiece(table[8][2]);
-        Whites.getInstance().addWhitePiece(table[8][7]);
+        blacks.add(table[1][2]);
+        blacks.add(table[1][7]);
+        whites.add(table[8][2]);
+        whites.add(table[8][7]);
+
 
         // Punerea nebunilor pe tabla
         table[1][3] = new Bishop(new Coordinate(3, 8), TeamColor.BLACK);
         table[1][6] = new Bishop(new Coordinate(6, 8), TeamColor.BLACK);
         table[8][3] = new Bishop(new Coordinate(3, 1), TeamColor.WHITE);
         table[8][6] = new Bishop(new Coordinate(6, 1), TeamColor.WHITE);
-        Blacks.getInstance().addBlackPiece(table[1][3]);
-        Blacks.getInstance().addBlackPiece(table[1][6]);
-        Whites.getInstance().addWhitePiece(table[8][3]);
-        Whites.getInstance().addWhitePiece(table[8][6]);
+        blacks.add(table[1][3]);
+        blacks.add(table[1][6]);
+        whites.add(table[8][3]);
+        whites.add(table[8][6]);
 
         // Punerea turelor pe tabla
         table[1][1] = new Rook(new Coordinate(1, 8), TeamColor.BLACK);
         table[1][8] = new Rook(new Coordinate(8, 8), TeamColor.BLACK);
         table[8][1] = new Rook(new Coordinate(1, 1), TeamColor.WHITE);
         table[8][8] = new Rook(new Coordinate(8, 1), TeamColor.WHITE);
-        Blacks.getInstance().addBlackPiece(table[1][1]);
-        Blacks.getInstance().addBlackPiece(table[1][8]);
-        Whites.getInstance().addWhitePiece(table[8][1]);
-        Whites.getInstance().addWhitePiece(table[8][8]);
+        blacks.add(table[1][1]);
+        blacks.add(table[1][8]);
+        whites.add(table[8][1]);
+        whites.add(table[8][8]);
 
         // Punerea reginelor pe tabla
         table[1][4] = new Queen(new Coordinate(4, 8), TeamColor.BLACK);
         table[8][4] = new Queen(new Coordinate(4, 1), TeamColor.WHITE);
-        Blacks.getInstance().addBlackPiece(table[1][4]);
-        Whites.getInstance().addWhitePiece(table[8][4]);
+        blacks.add(table[1][4]);
+        whites.add(table[8][4]);
 
         // Punerea regilor pe tabla
         table[1][5] = new King(new Coordinate(5, 8), TeamColor.BLACK);
         table[8][5] = new King(new Coordinate(5, 1), TeamColor.WHITE);
         Brain.getInstance().blackKing = table[1][5];
         Brain.getInstance().whiteKing = table[8][5];
-        Blacks.getInstance().addBlackPiece(table[1][5]);
-        Whites.getInstance().addWhitePiece(table[8][5]);
+        blacks.add(table[1][5]);
+        whites.add(table[8][5]);
+        numberofwhitepieces = 16;
+        numberofwhitepawns = 8;
+        numberofblackpieces = 16;
+        numberofblackpawns = 8;
 
     }
 
@@ -133,41 +201,128 @@ public class Board {
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
 
         if (p.color == TeamColor.WHITE) {
-            Whites.getInstance().lastMoved = p;
+            WhitelastMoved = p;
         } else {
-            Blacks.getInstance().lastMoved = p;
+            BlacklastMoved = p;
         }
 
         // Cazul in care se executa o miscare en-passant
         if (p.color == Game.getInstance().usercolor) {
             if (p.getType().compareTo("Pawn") == 0) {
                 Pawn pion = (Pawn) p;
-                pion.generateMoves();
+                pion.generateMoves(this);
                 if (pion.enPassantMoves.contains(c)) {
                     if (pion.color == TeamColor.BLACK) {
-                        Whites.getInstance().removeWhitePiece(Board.getInstance().getPiecebylocation(new Coordinate(c.getIntX(), c.getY() + 1)));
-                        Board.getInstance().table[9 - c.getY() - 1][c.getIntX()] = null;
+                        whites.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() + 1)));
+                        numberofwhitepieces--;
+                        numberofwhitepawns--;
+                        table[9 - c.getY() - 1][c.getIntX()] = null;
                     } else {
-                        Blacks.getInstance().removeBlackPiece(Board.getInstance().getPiecebylocation(new Coordinate(c.getIntX(), c.getY() - 1)));
-                        Board.getInstance().table[9 - c.getY() + 1][c.getIntX()] = null;
+                        blacks.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() - 1)));
+                        numberofblackpieces--;
+                        numberofblackpawns--;
+                        table[9 - c.getY() + 1][c.getIntX()] = null;
                     }
                 }
             }
         }
 
-        // Mutarea piesei de pe coordonata de inceput la coordonata de final
-        p.movePiece(c);
+        p.movePiece(c, this);
+        System.out.println("Am schimbat");
+        System.out.println(p.coordinate);
 
         // Cazul in care se executa o promovare a pionilor
         if (s.length() > 4) {
             char promote = s.charAt(4);
             if (p.color == TeamColor.WHITE) {
-                ((Pawn) p).pawnPromotion(promote);
+                ((Pawn) p).pawnPromotion(promote, this);
             }
             if (p.color == TeamColor.BLACK) {
-                ((Pawn) p).pawnPromotion(promote);
+                ((Pawn) p).pawnPromotion(promote, this);
             }
         }
+    }
+
+    Piece[][] createCopy() {
+        Piece[][] copy = new Piece[9][9];
+        for (int i = 1; i <= 8; i++) {
+            System.arraycopy(table[i], 1, copy[i], 1, 8);
+        }
+        return copy;
+    }
+
+    public Piece getBlackPiece() {
+        for (Piece piece : blacks) {
+            if (!piece.getType().equals("Pawn")) {
+                if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
+                    return piece;
+                }
+            } else {
+                Pawn pion = (Pawn) piece;
+                if (pion.freeMoves.size() != 0 || pion.captureMoves.size() != 0 || pion.enPassantMoves.size() != 0) {
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Metoda care intoarce coordonata regelui
+    public Coordinate getBlackKingLocation() {
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece.coordinate;
+            }
+        }
+        return null;
+    }
+
+    public Coordinate getWhiteKingLocation() {
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece.coordinate;
+            }
+        }
+        return null;
+    }
+
+    public Piece getWhiteKing() {
+        for (Piece piece : whites) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public Piece getBlackKing() {
+        for (Piece piece : blacks) {
+            if (piece.getType().compareTo("King") == 0) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+
+    // Metoda care intoarce o piesa alba care
+    // are mutari posibile
+
+    public Piece getWhitePiece() {
+        for (Piece piece : whites) {
+            //piece.generateMoves();
+            if (!piece.getType().equals("Pawn")) {
+                if (piece.freeMoves.size() != 0 || piece.captureMoves.size() != 0) {
+                    return piece;
+                }
+            } else {
+                Pawn pion = (Pawn) piece;
+                if (pion.freeMoves.size() != 0 || pion.captureMoves.size() != 0 || pion.enPassantMoves.size() != 0) {
+                    return piece;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -184,5 +339,24 @@ public class Board {
             s += "\n";
         }
         return s;
+    }
+
+    int evaluateBoard() {
+//        int s1 = 0;
+//        int s2 = 0;
+//        for (Piece p : whites) {
+//            s1 += p.value;
+//        }
+//
+//        for (Piece p : blacks) {
+//            s2 += p.value;
+//        }
+//
+//        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+//            return s2 - s1;
+//        } else {
+//            return s1 - s2;
+//        }
+        return 10;
     }
 }
