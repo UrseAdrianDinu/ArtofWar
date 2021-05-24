@@ -116,7 +116,7 @@ public class Game {
 
             if (!force) {
                 Brain.getInstance().generateAllMoves(board);
-               Pair p = Brain.getInstance().alphabeta(board,null,3,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
+               Pair p = Brain.getInstance().alphabeta(board,null,8,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
                 System.out.println("ALPHABETA " + p);
                 turn = enginecolor;
                 ArrayList<Piece> chess = Brain.getInstance().checkChess(board);

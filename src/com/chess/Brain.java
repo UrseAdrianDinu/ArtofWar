@@ -1096,52 +1096,65 @@ public class Brain {
 
     // Metoda care incearca sa capture piesa p care da sah engine-ului
     // In acest caz returnand true, altfel false
-    boolean captureChessPiece(Piece p, Board board) {
+    ArrayList<String> captureChessPiece(Piece p, Board board) {
+        ArrayList<String> moves = new ArrayList<>();
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
             for (Piece piece : board.blacks) {
                 if (piece.captureMoves.contains(p.coordinate)) {
                     if (piece.getType().compareTo("King") != 0) {
                         if (piece.getType().compareTo("Pawn") != 0) {
                             // Se scrie la standard output comanda "move + mutarea gasita"
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
+                            //System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            //       p.coordinate.getCharX() + p.coordinate.getY());
+                            //System.out.flush();
                             //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+                            //board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                            //        p.coordinate.getCharX() + p.coordinate.getY());
+                            //return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         } else {
                             if (p.coordinate.getY() == 1) {
                                 Pawn pion = (Pawn) piece;
                                 char gen = pion.promotionGeneration();
                                 // Se scrie la standard output comanda "move + mutarea gasita"
-                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
-                                System.out.flush();
-                                //Se updateaza tabla de joc
-                                board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
-                                return true;
+//                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+//                                System.out.flush();
+//                                //Se updateaza tabla de joc
+//                                board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+                                //return true;
+                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen;
+                                moves.add(s);
                             }
                             // Se scrie la standard output comanda "move + mutarea gasita"
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
-                            //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+//                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            System.out.flush();
+//                            //Se updateaza tabla de joc
+//                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         }
                     } else {
                         if (p.support == 0) {
                             // Se scrie la standard output comanda "move + mutarea gasita"
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
-                            //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+//                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            System.out.flush();
+//                            //Se updateaza tabla de joc
+//                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         }
 
                     }
@@ -1153,51 +1166,63 @@ public class Brain {
                     if (piece.getType().compareTo("King") != 0) {
                         if (piece.getType().compareTo("Pawn") != 0) {
                             // Se scrie la standard output comanda "move + mutarea gasita"
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
-                            //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+//                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            System.out.flush();
+//                            //Se updateaza tabla de joc
+//                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         } else {
                             if (p.coordinate.getY() == 8) {
                                 Pawn pion = (Pawn) piece;
                                 char gen = pion.promotionGeneration();
                                 // Se scrie la standard output comanda "move + mutarea gasita"
-                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
-                                System.out.flush();
-                                //Se updateaza tabla de joc
-                                board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
-                                return true;
+//                                System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+//                                System.out.flush();
+//                                //Se updateaza tabla de joc
+//                                board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                        p.coordinate.getCharX() + p.coordinate.getY() + gen);
+//                                return true;
+                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                        p.coordinate.getCharX() + p.coordinate.getY() + gen;
+                                moves.add(s);
                             }
                             // Se scrie la standard output comanda "move + mutarea gasita"
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
-                            //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+//                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            System.out.flush();
+//                            //Se updateaza tabla de joc
+//                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         }
                     } else {
                         if (p.support == 0) {
-                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            System.out.flush();
-                            //Se updateaza tabla de joc
-                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
-                                    p.coordinate.getCharX() + p.coordinate.getY());
-                            return true;
+//                            System.out.println("move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            System.out.flush();
+//                            //Se updateaza tabla de joc
+//                            board.executeMove("" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+//                                    p.coordinate.getCharX() + p.coordinate.getY());
+//                            return true;
+                            String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                    p.coordinate.getCharX() + p.coordinate.getY();
+                            moves.add(s);
                         }
 
                     }
                 }
             }
         }
-        return false;
+        return moves;
     }
 
     // Metoda care incearca sa protejeze regele aflat in sah
@@ -1217,6 +1242,7 @@ public class Brain {
                         ArrayList<Coordinate> moveKing = moveKing(p, board);
                         if (moveKing.size() == 0) {
                             for (Coordinate c : p.freeMoves) {
+                                e
                                 if (c.getIntX() + c.getY() == kingloc.getIntX() + kingloc.getY() ||
                                         Math.abs(c.getIntX() - kingloc.getIntX()) == Math.abs(c.getY() - kingloc.getY())) {
                                     if (kingloc.getY() > p.coordinate.getY()) {
@@ -1726,7 +1752,7 @@ public class Brain {
 
     // Metoda care intoarce un vector de coordonate
     // pe care regele aflat in sah se poate muta
-    ArrayList<Coordinate> moveKing(Piece attackingPiece, Board board) {
+    ArrayList<String> moveKing(Piece attackingPiece, Board board) {
         Coordinate kingloc;
         Piece ourking;
         if (attackingPiece.color == TeamColor.WHITE) {
@@ -1736,7 +1762,7 @@ public class Brain {
             kingloc = whiteKing.coordinate;
             ourking = whiteKing;
         }
-        ArrayList<Coordinate> coord = new ArrayList<>();
+        ArrayList<String> moves = new ArrayList<>();
         //DE VERIFICAT TURA/REGINA.
         //DREAPTA
         if (kingloc.getIntX() + 1 <= 8) {
@@ -1746,11 +1772,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY()));
@@ -1758,7 +1786,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY());
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1773,11 +1802,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY()));
@@ -1785,7 +1816,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY());
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1800,11 +1832,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX(), kingloc.getY() + 1));
@@ -1812,7 +1846,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() + 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1828,11 +1863,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX(), kingloc.getY() - 1));
@@ -1840,7 +1877,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX(), kingloc.getY() - 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1855,11 +1893,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);;
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1));
@@ -1867,7 +1907,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() + 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1882,11 +1923,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1));
@@ -1894,7 +1937,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() + 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1909,11 +1953,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1));
@@ -1921,7 +1967,8 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() + 1, kingloc.getY() - 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
@@ -1936,11 +1983,13 @@ public class Brain {
                         //nu face nimic.
                     } else {
                         Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
-                        coord.add(c);
+                        String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                        moves.add(s);
                     }
                 } else {
                     Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
-                    coord.add(c);
+                    String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                    moves.add(s);
                 }
             } else {
                 Piece p = board.getPiecebylocation(board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1));
@@ -1948,13 +1997,14 @@ public class Brain {
                     if (p.color != ourking.color) {
                         if (p.support == 0) {
                             Coordinate c = board.getCoordinates(kingloc.getIntX() - 1, kingloc.getY() - 1);
-                            coord.add(c);
+                            String s = "" + kingloc.getCharX() + kingloc.getY() + c.getCharX() + c.getY();
+                            moves.add(s);
                         }
                     }
                 }
             }
         }
-        return coord;
+        return moves;
     }
 
     // Metoda care intoarce un string format din
@@ -2009,13 +2059,13 @@ public class Brain {
     }
 
     ArrayList<String> stari(Board board, int color) throws CloneNotSupportedException {
-        System.out.println("STARI");
-        System.out.println(board);
+//        System.out.println("STARI");
+//        System.out.println(board);
         ArrayList<String> stari = new ArrayList<>();
         if (checkChess(board).size() > 0) {
 
         } else {
-            System.out.println("COLOR " + color);
+//            System.out.println("COLOR " + color);
             if (color == TeamColor.BLACK) {
                 for (Piece p : board.blacks) {
 
@@ -2080,17 +2130,17 @@ public class Brain {
             }
         }
 
-        for (int i = 0; i < stari.size(); i++) {
-            System.out.println("-------------------------");
-            System.out.println(i);
-            System.out.println(stari.get(i));
-        }
+//        for (int i = 0; i < stari.size(); i++) {
+//            System.out.println("-------------------------");
+//            System.out.println(i);
+//            System.out.println(stari.get(i));
+//        }
         return stari;
     }
 
 
     public Pair alphabeta(Board board, String lastmove, int depth, int alpha, int beta, boolean MaximizingPlayer) throws CloneNotSupportedException {
-        System.out.println(board);
+        //System.out.println(board);
         if (depth == 0) {
             return new Pair(lastmove, board.evaluateBoard());
         }
@@ -2104,15 +2154,16 @@ public class Brain {
             for (String s : stari) {
 
                 Board copy = board.copie();
-                System.out.println("Am trimis " + s);
+//                System.out.println("Am trimis " + s);
                 copy.executeMove(s);
-                Brain.getInstance().generateAllMoves(copy);
-                for (int i = 1; i <= 8; i++) {
-                    for (int j = 1; j <= 8; j++) {
-                        if (copy.table[i][j] != null)
-                            System.out.println(copy.table[i][j].coordinate);
-                    }
-                }
+
+//                Brain.getInstance().generateAllMoves(copy);
+//                for (int i = 1; i <= 8; i++) {
+//                    for (int j = 1; j <= 8; j++) {
+//                        if (copy.table[i][j] != null)
+//                            System.out.println(copy.table[i][j].coordinate);
+//                    }
+//                }
 //                System.out.println("BLACKS");
 //                for (Piece piece : copy.blacks) {
 //                    System.out.println(piece.coordinate);
@@ -2123,8 +2174,8 @@ public class Brain {
 //                    System.out.println(piece.coordinate);
 //                }
 
-                System.out.println("----------------------------");
-                System.out.println(copy);
+//                System.out.println("----------------------------");
+//                System.out.println(copy);
                 p = alphabeta(copy, s, depth - 1, alpha, beta, false);
                 if (p.scor >= beta) {
                     return new Pair(maxmove.c, beta);
@@ -2143,16 +2194,16 @@ public class Brain {
             Pair p = null;
             for (String s : stari) {
                 Board copy = board.copie();
-                System.out.println("Am trimis " + s);
+//                System.out.println("Am trimis " + s);
                 copy.executeMove(s);
-                Brain.getInstance().generateAllMoves(copy);
-
-                for (int i = 1; i <= 8; i++) {
-                    for (int j = 1; j <= 8; j++) {
-                        if (copy.table[i][j] != null)
-                            System.out.println(copy.table[i][j].coordinate);
-                    }
-                }
+//                Brain.getInstance().generateAllMoves(copy);
+//
+//                for (int i = 1; i <= 8; i++) {
+//                    for (int j = 1; j <= 8; j++) {
+//                        if (copy.table[i][j] != null)
+//                            System.out.println(copy.table[i][j].coordinate);
+//                    }
+//                }
 //                System.out.println("BLACKS");
 //                for (Piece piece : copy.blacks) {
 //                    System.out.println(piece.coordinate);
@@ -2161,8 +2212,8 @@ public class Brain {
 //                for (Piece piece : copy.whites) {
 //                    System.out.println(piece.coordinate);
 //                }
-                System.out.println("----------------------------");
-                System.out.println(copy);
+//                System.out.println("----------------------------");
+//                System.out.println(copy);
                 p = alphabeta(copy, s, depth - 1, alpha, beta, true);
                 if (p.scor <= alpha) {
                     return new Pair(minmove.c, alpha);

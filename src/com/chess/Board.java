@@ -228,8 +228,8 @@ public class Board {
         }
 
         p.movePiece(c, this);
-        System.out.println("Am schimbat");
-        System.out.println(p.coordinate);
+//        System.out.println("Am schimbat");
+//        System.out.println(p.coordinate);
 
         // Cazul in care se executa o promovare a pionilor
         if (s.length() > 4) {
