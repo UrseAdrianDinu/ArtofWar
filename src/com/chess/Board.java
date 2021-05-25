@@ -170,8 +170,8 @@ public class Board {
         // Punerea regilor pe tabla
         table[1][5] = new King(new Coordinate(5, 8), TeamColor.BLACK);
         table[8][5] = new King(new Coordinate(5, 1), TeamColor.WHITE);
-        Brain.getInstance().blackKing = table[1][5];
-        Brain.getInstance().whiteKing = table[8][5];
+        //Brain.getInstance().blackKing = table[1][5];
+        //Brain.getInstance().whiteKing = table[8][5];
         blacks.add(table[1][5]);
         whites.add(table[8][5]);
         numberofwhitepieces = 16;
@@ -199,12 +199,54 @@ public class Board {
         System.out.println("AHAHAH: " + s);
         Coordinate c = getCoordinates(xf - 96, yf);
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
-        System.out.println("CULOARE: "+ s + p + (xi - 96) + yi);
+        System.out.println("CULOARE: " + s + p + (xi - 96) + yi);
         System.out.println(this);
         if (p.color == TeamColor.WHITE) {
             WhitelastMoved = p;
         } else {
             BlacklastMoved = p;
+        }
+
+        if (p.getType().compareTo("King") == 0) {
+            if (p.color == TeamColor.BLACK) {
+                if (s.compareTo("e8g8") == 0) {
+                    System.out.println("REGE: " + p.freeMoves);
+                    System.out.println("TABLAREGE" + this);
+                    p.movePiece(c, this);
+                    Piece rook = getPiecebylocation(getCoordinates(8, 8));
+                    Coordinate cRook = getCoordinates(6, 8);
+                    rook.movePiece(cRook, this);
+                    return;
+                }
+                if (s.compareTo("e8c8") == 0) {
+                    System.out.println("REGE: " + p.freeMoves);
+                    System.out.println("TABLAREGE" + this);
+                    p.movePiece(c, this);
+                    Piece rook = getPiecebylocation(getCoordinates(1, 8));
+                    Coordinate cRook = getCoordinates(4, 8);
+                    rook.movePiece(cRook, this);
+                    return;
+                }
+            } else {
+                if (s.compareTo("e1g1") == 0) {
+                    System.out.println("REGE: " + p.freeMoves);
+                    System.out.println("TABLAREGE" + this);
+                    p.movePiece(c, this);
+                    Piece rook = getPiecebylocation(getCoordinates(8, 1));
+                    Coordinate cRook = getCoordinates(6, 1);
+                    rook.movePiece(cRook, this);
+                    return;
+                }
+                if (s.compareTo("e1c1") == 0) {
+                    System.out.println("REGE: " + p.freeMoves);
+                    System.out.println("TABLAREGE" + this);
+                    p.movePiece(c, this);
+                    Piece rook = getPiecebylocation(getCoordinates(1, 1));
+                    Coordinate cRook = getCoordinates(4, 1);
+                    rook.movePiece(cRook, this);
+                    return;
+                }
+            }
         }
 
         // Cazul in care se executa o miscare en-passant
@@ -242,6 +284,7 @@ public class Board {
                 ((Pawn) p).pawnPromotion(promote, this);
             }
         }
+
     }
 
     Piece[][] createCopy() {

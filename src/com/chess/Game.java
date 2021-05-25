@@ -116,8 +116,8 @@ public class Game {
 
             if (!force) {
                 Brain.getInstance().generateAllMoves(board);
-                //Pair p = Brain.getInstance().alphabeta(board, null, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-                //System.out.println("ALPHABETA " + p);
+                Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                System.out.println("ALPHABETA " + p);
                 turn = enginecolor;
                 ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
                 gameturns++;
@@ -127,8 +127,10 @@ public class Game {
                     ArrayList<String> movesProtect = Brain.getInstance().protectKing(chess, board);
                     if (movesProtect.size() == 0) {
                         System.out.println("resign");
+                        return;
                     }
                     board.executeMove(movesProtect.get(0));
+                    System.out.println("MISCARI:" + movesProtect);
                     System.out.println("move " + movesProtect.get(0));
                 } else {
 /*                    // Am verificat daca putem sa facem rocada
@@ -165,29 +167,33 @@ public class Game {
 
                     if (enginecolor == TeamColor.BLACK) {
                         System.out.println(board.getBlackKing().freeMoves);
-                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(7, 8))) {
+                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(7, 8))
+                        && board.getBlackKing().moves == 0) {
                             System.out.println("move e8g8");
                             board.executeMove("e8g8");
-                            board.executeMove("h8f8");
+                            //board.executeMove("h8f8");
                             return;
                         }
-                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(3, 8))) {
+                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(3, 8))
+                                && board.getBlackKing().moves == 0) {
                             System.out.println("move e8c8");
                             board.executeMove("e8c8");
-                            board.executeMove("a8d8");
+                            //board.executeMove("a8d8");
                             return;
                         }
                     } else {
-                        if (board.getWhiteKing().freeMoves.contains(board.getCoordinates(7, 1))) {
+                        if (board.getWhiteKing().freeMoves.contains(board.getCoordinates(7, 1))
+                                && board.getWhiteKing().moves == 0) {
                             System.out.println("move e1g1");
                             board.executeMove("e1g1");
-                            board.executeMove("h1f8");
+                            //board.executeMove("h1f1");
                             return;
                         }
-                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(3, 1))) {
+                        if (board.getWhiteKing().freeMoves.contains(board.getCoordinates(3, 1))
+                                && board.getWhiteKing().moves == 0) {
                             System.out.println("move e1c1");
                             board.executeMove("e1c1");
-                            board.executeMove("a1d1");
+                            //board.executeMove("a1d1");
                             return;
                         }
                     }

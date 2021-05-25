@@ -20,8 +20,6 @@ public class Brain {
     int[][] enemyattack;
     int[][] defense;
     ArrayList<Piece> invalidPieces = new ArrayList<>();
-    Piece blackKing;
-    Piece whiteKing;
 
     // Singleton Pattern
     private static Brain instance = null;
@@ -159,9 +157,9 @@ public class Brain {
     public void verifyInvalidMoves(Board board) {
         Piece OurKing;
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-            OurKing = blackKing;
+            OurKing = board.getBlackKing();
         } else {
-            OurKing = whiteKing;
+            OurKing = board.getWhiteKing();
         }
 
         invalidPieces = new ArrayList<>();
@@ -1567,11 +1565,11 @@ public class Brain {
         Coordinate kingloc;
         Piece ourking;
         if (attackingPiece.color == TeamColor.WHITE) {
-            kingloc = blackKing.coordinate;
-            ourking = blackKing;
+            kingloc = board.getBlackKingLocation();
+            ourking = board.getBlackKing();
         } else {
-            kingloc = whiteKing.coordinate;
-            ourking = whiteKing;
+            kingloc = board.getWhiteKingLocation();
+            ourking = board.getWhiteKing();
         }
         ArrayList<String> moves = new ArrayList<>();
         //DE VERIFICAT TURA/REGINA.
@@ -1824,7 +1822,7 @@ public class Brain {
     String checkCastlingconditions(Board board) {
         String s = "";
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-            if (blackKing.moves == 0) {
+            if (board.getBlackKing().moves == 0) {
                 Piece p1 = board.getPiecebylocation(board.getCoordinates(8, 8));
                 if (p1 != null) {
                     if (p1.moves == 0 && p1.color == TeamColor.BLACK) {
@@ -1845,7 +1843,7 @@ public class Brain {
                 }
             }
         } else {
-            if (whiteKing.moves == 0) {
+            if (board.getWhiteKing().moves == 0) {
                 Piece p1 = board.getPiecebylocation(board.getCoordinates(8, 1));
                 if (p1 != null) {
                     if (p1.moves == 0 && p1.color == TeamColor.WHITE) {
@@ -2010,7 +2008,7 @@ public class Brain {
                 Board copy = board.copie();
 //                System.out.println("Am trimis " + s);
                 copy.executeMove(s);
-//                Brain.getInstance().generateAllMoves(copy);
+                Brain.getInstance().generateAllMoves(copy);
 //
 //                for (int i = 1; i <= 8; i++) {
 //                    for (int j = 1; j <= 8; j++) {
