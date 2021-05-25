@@ -11,8 +11,8 @@ import java.util.ArrayList;
         numberofpawns: numarul de pioni negri
         blacks: vector cu piesele negre
         lastMoved: piesa care a fost mutata ultima runda
-
  */
+
 public class Blacks {
     int numberofpieces;
     int numberofpawns;

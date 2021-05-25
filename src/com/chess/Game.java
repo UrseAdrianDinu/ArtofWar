@@ -116,7 +116,7 @@ public class Game {
 
             if (!force) {
                 Brain.getInstance().generateAllMoves(board);
-               Pair p = Brain.getInstance().alphabeta(board,null,8,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
+                Pair p = Brain.getInstance().alphabeta(board, null, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
                 System.out.println("ALPHABETA " + p);
                 turn = enginecolor;
                 ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
@@ -124,12 +124,14 @@ public class Game {
                 // Verificam daca am primit sah
                 if (chess.size() > 0) {
                     // In acast caz apelam protectKing pentru a scoate regele din sah
-                    boolean protecc = Brain.getInstance().protectKing(chess, board);
-                    if (!protecc) {
+                    ArrayList<String> movesProtect = Brain.getInstance().protectKing(chess, board);
+                    if (movesProtect.size() == 0) {
                         System.out.println("resign");
                     }
+                    board.executeMove(movesProtect.get(0));
+                    System.out.println("move " + movesProtect.get(0));
                 } else {
-                    // Am verificat daca putem sa facem rocada
+/*                    // Am verificat daca putem sa facem rocada
 //                    String rocada = Brain.getInstance().checkCastlingconditions(board);
 //                    if (rocada.compareTo("") != 0) {
 //                        // In functie de culoarea engine-ului se executa rocada mica/mare
@@ -159,7 +161,7 @@ public class Game {
 //                                return;
 //                            }
 //                        }
-//                    }
+//                    }*/
 
                     if (enginecolor == TeamColor.BLACK) {
                         System.out.println(board.getBlackKing().freeMoves);
@@ -237,8 +239,8 @@ public class Game {
                 // Verificam daca am primit sah
                 if (chess.size() > 0) {
                     // In acast caz apelam protectKing pentru a scoate regele din sah
-                    boolean protecc = Brain.getInstance().protectKing(chess, board);
-                    if (!protecc) {
+                    ArrayList<String> movesProtect = Brain.getInstance().protectKing(chess, board);
+                    if (movesProtect.size() == 0) {
                         System.out.println("resign");
                     }
                 } else {
