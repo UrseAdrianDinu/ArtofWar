@@ -1,11 +1,6 @@
 package com.chess;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.*;
 
 /*
     Clasa care implementeaza gandirea engine-ului.
@@ -1249,7 +1244,7 @@ public class Brain {
                                         for (Piece piece : board.whites) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1261,7 +1256,7 @@ public class Brain {
                                         for (Piece piece : board.whites) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1287,7 +1282,7 @@ public class Brain {
                                     for (Piece piece : board.whites) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1301,7 +1296,7 @@ public class Brain {
                                     for (Piece piece : board.whites) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1316,7 +1311,7 @@ public class Brain {
                                         for (Piece piece : board.whites) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1328,7 +1323,7 @@ public class Brain {
                                         for (Piece piece : board.whites) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1359,7 +1354,7 @@ public class Brain {
                                     for (Piece piece : board.whites) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1373,7 +1368,7 @@ public class Brain {
                                     for (Piece piece : board.whites) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1406,7 +1401,7 @@ public class Brain {
                                         for (Piece piece : board.blacks) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1418,7 +1413,7 @@ public class Brain {
                                         for (Piece piece : board.blacks) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1443,7 +1438,7 @@ public class Brain {
                                     for (Piece piece : board.blacks) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1457,7 +1452,7 @@ public class Brain {
                                     for (Piece piece : board.blacks) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1472,7 +1467,7 @@ public class Brain {
                                         for (Piece piece : board.blacks) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1484,7 +1479,7 @@ public class Brain {
                                         for (Piece piece : board.blacks) {
                                             if (piece.getType().compareTo("King") != 0) {
                                                 if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                    String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                    String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                             c.getCharX() + c.getY();
                                                     moves.add(s);
                                                 }
@@ -1517,7 +1512,7 @@ public class Brain {
                                     for (Piece piece : board.blacks) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1531,7 +1526,7 @@ public class Brain {
                                     for (Piece piece : board.blacks) {
                                         if (!piece.getType().equals("King")) {
                                             if (piece.freeMoves.contains(c) || piece.captureMoves.contains(c)) {
-                                                String s = "move " + piece.coordinate.getCharX() + piece.coordinate.getY() +
+                                                String s = "" + piece.coordinate.getCharX() + piece.coordinate.getY() +
                                                         c.getCharX() + c.getY();
                                                 moves.add(s);
                                             }
@@ -1973,10 +1968,11 @@ public class Brain {
 
                 Board copy = board.copie();
 //                System.out.println("Am trimis " + s);
+                System.out.println("MAMA" + board.toString());
                 copy.executeMove(s);
 
                 Brain.getInstance().generateAllMoves(copy);
-                for (int i = 1; i <= 8; i++) {
+                /*for (int i = 1; i <= 8; i++) {
                     for (int j = 1; j <= 8; j++) {
                         if (copy.table[i][j] != null)
                             System.out.println(copy.table[i][j].coordinate);
@@ -1993,7 +1989,7 @@ public class Brain {
                 }
 
                 System.out.println("----------------------------");
-                System.out.println(copy);
+                System.out.println(copy);*/
                 p = alphabeta(copy, s, depth - 1, alpha, beta, false);
                 if (p.scor >= beta) {
                     return new Pair(maxmove.c, beta);

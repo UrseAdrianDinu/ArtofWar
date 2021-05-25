@@ -196,10 +196,11 @@ public class Board {
         int yi = s.charAt(1) - 48;
         char xf = s.charAt(2);
         int yf = s.charAt(3) - 48;
-
+        System.out.println("AHAHAH: " + s);
         Coordinate c = getCoordinates(xf - 96, yf);
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
-
+        System.out.println("CULOARE: "+ s + p + (xi - 96) + yi);
+        System.out.println(this);
         if (p.color == TeamColor.WHITE) {
             WhitelastMoved = p;
         } else {
