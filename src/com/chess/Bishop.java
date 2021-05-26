@@ -11,7 +11,7 @@ public class Bishop extends Piece {
     public Bishop(Coordinate coordinate, int color) {
         this.color = color;
         this.coordinate = coordinate;
-        this.value = 3;
+        this.value = 30;
     }
 
     public Bishop(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
@@ -167,6 +167,10 @@ public class Bishop extends Piece {
     @Override
     public String getType() {
         return "Bishop";
+    }
+
+    public int getTypeint(){
+        return Scores.BISHOP;
     }
 
     @Override

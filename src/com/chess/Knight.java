@@ -12,7 +12,7 @@ public class Knight extends Piece {
     public Knight(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
-        this.value=3;
+        this.value=30;
     }
 
     public Knight(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
@@ -202,6 +202,9 @@ public class Knight extends Piece {
     @Override
     public String getType() {
         return "Knight";
+    }
+    public int getTypeint(){
+        return Scores.KNIGHT;
     }
 
 

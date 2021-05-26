@@ -191,16 +191,17 @@ public class Board {
     // Metoda care executa o mutare pe baza unui string
     // trimis de xboard (Ex. a2a3)
     public void executeMove(String s) {
+        //System.out.println("EXECUTE MOVE " + s);
         // Identificarea coordonatelor de inceput si final
         char xi = s.charAt(0);
         int yi = s.charAt(1) - 48;
         char xf = s.charAt(2);
         int yf = s.charAt(3) - 48;
-        System.out.println("AHAHAH: " + s);
+        //System.out.println("AHAHAH: " + s);
         Coordinate c = getCoordinates(xf - 96, yf);
         Piece p = getPiecebylocation(getCoordinates(xi - 96, yi));
-        System.out.println("CULOARE: " + s + p + (xi - 96) + yi);
-        System.out.println(this);
+        //System.out.println("CULOARE: " + s + p + (xi - 96) + yi);
+        //System.out.println(this);
         if (p.color == TeamColor.WHITE) {
             WhitelastMoved = p;
         } else {
@@ -210,8 +211,7 @@ public class Board {
         if (p.getType().compareTo("King") == 0) {
             if (p.color == TeamColor.BLACK) {
                 if (s.compareTo("e8g8") == 0) {
-                    System.out.println("REGE: " + p.freeMoves);
-                    System.out.println("TABLAREGE" + this);
+//                    System.out.println("REGE: " + p.freeMoves);
                     p.movePiece(c, this);
                     Piece rook = getPiecebylocation(getCoordinates(8, 8));
                     Coordinate cRook = getCoordinates(6, 8);
@@ -219,8 +219,8 @@ public class Board {
                     return;
                 }
                 if (s.compareTo("e8c8") == 0) {
-                    System.out.println("REGE: " + p.freeMoves);
-                    System.out.println("TABLAREGE" + this);
+//                    System.out.println("REGE: " + p.freeMoves);
+//                    System.out.println("TABLAREGE" + this);
                     p.movePiece(c, this);
                     Piece rook = getPiecebylocation(getCoordinates(1, 8));
                     Coordinate cRook = getCoordinates(4, 8);
@@ -229,17 +229,20 @@ public class Board {
                 }
             } else {
                 if (s.compareTo("e1g1") == 0) {
-                    System.out.println("REGE: " + p.freeMoves);
-                    System.out.println("TABLAREGE" + this);
+//                    System.out.println("REGE: " + p.freeMoves);
+//                    System.out.println("TABLAREGE" + this);
+//                    System.out.println("BEFORE");
+//                    System.out.println(this);
                     p.movePiece(c, this);
+//                    System.out.println("AFTER");
                     Piece rook = getPiecebylocation(getCoordinates(8, 1));
                     Coordinate cRook = getCoordinates(6, 1);
                     rook.movePiece(cRook, this);
                     return;
                 }
                 if (s.compareTo("e1c1") == 0) {
-                    System.out.println("REGE: " + p.freeMoves);
-                    System.out.println("TABLAREGE" + this);
+//                    System.out.println("REGE: " + p.freeMoves);
+//                    System.out.println("TABLAREGE" + this);
                     p.movePiece(c, this);
                     Piece rook = getPiecebylocation(getCoordinates(1, 1));
                     Coordinate cRook = getCoordinates(4, 1);
@@ -250,25 +253,43 @@ public class Board {
         }
 
         // Cazul in care se executa o miscare en-passant
-        if (p.color == Game.getInstance().usercolor) {
-            if (p.getType().compareTo("Pawn") == 0) {
-                Pawn pion = (Pawn) p;
-                pion.generateMoves(this);
-                if (pion.enPassantMoves.contains(c)) {
-                    if (pion.color == TeamColor.BLACK) {
-                        whites.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() + 1)));
-                        numberofwhitepieces--;
-                        numberofwhitepawns--;
-                        table[9 - c.getY() - 1][c.getIntX()] = null;
-                    } else {
-                        blacks.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() - 1)));
-                        numberofblackpieces--;
-                        numberofblackpawns--;
-                        table[9 - c.getY() + 1][c.getIntX()] = null;
+        if (p.getType().compareTo("Pawn") == 0) {
+            Pawn pion = (Pawn) p;
+            pion.generateMoves(this);
+            if (pion.enPassantMoves.contains(c)) {
+                if (pion.color == TeamColor.BLACK) {
+                    p.movePiece(c, this);
+                    whites.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() + 1)));
+                    numberofwhitepieces--;
+                    numberofwhitepawns--;
+                    table[9 - c.getY() - 1][c.getIntX()] = null;
+                    return;
+                } else {
+                    p.movePiece(c, this);
+                    blacks.remove(getPiecebylocation(new Coordinate(c.getIntX(), c.getY() - 1)));
+                    numberofblackpieces--;
+                    numberofblackpawns--;
+                    table[9 - c.getY() + 1][c.getIntX()] = null;
+                    return;
+                }
+            }
+
+            if (p.color == Game.getInstance().enginecolor) {
+                if (p.color == TeamColor.BLACK && c.getY() == 1) {
+                    //System.out.println("PROMOTION");
+                    p.movePiece(c, this);
+                    ((Pawn) p).pawnToQueen(this);
+                    return;
+                } else {
+                    if (p.color == TeamColor.WHITE && c.getY() == 8) {
+                        p.movePiece(c, this);
+                        ((Pawn) p).pawnToQueen(this);
+                        return;
                     }
                 }
             }
         }
+
 
         p.movePiece(c, this);
 //        System.out.println("Am schimbat");
@@ -386,21 +407,28 @@ public class Board {
     }
 
     int evaluateBoard() {
-//        int s1 = 0;
-//        int s2 = 0;
-//        for (Piece p : whites) {
-//            s1 += p.value;
-//        }
-//
-//        for (Piece p : blacks) {
-//            s2 += p.value;
-//        }
-//
-//        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-//            return s2 - s1;
-//        } else {
-//            return s1 - s2;
-//        }
-        return 10;
+        int s1 = 0;
+        int s2 = 0;
+        for (Piece p : whites) {
+            s1 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
+            if (p.captureMoves.contains(getBlackKingLocation())) {
+                System.out.println("DADADAD");
+                s1 += 100000;
+            }
+        }
+
+        for (Piece p : blacks) {
+            s2 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
+            if (p.captureMoves.contains(getWhiteKingLocation())) {
+                System.out.println("DADADAD");
+                s2 += 100000;
+            }
+        }
+
+        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+            return s2 - s1;
+        } else {
+            return s1 - s2;
+        }
     }
 }

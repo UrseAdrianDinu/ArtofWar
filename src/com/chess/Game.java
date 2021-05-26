@@ -22,6 +22,7 @@ public class Game {
     boolean force;
     int gameturns;
     Board board;
+    boolean ruy_lopez = false;
 
     //Singleton Pattern
     private static Game instance = null;
@@ -61,25 +62,12 @@ public class Game {
         if (words[0].length() > 3 && Character.isDigit(words[0].charAt(1)) &&
                 Character.isDigit(words[0].charAt(3))) {
 
-            // Verificam daca utilizatorul a facaut o rocada
-            if (words[0].compareTo("e8g8") == 0) {
-                board.executeMove("h8f8");
-            }
-            if (words[0].compareTo("e1g1") == 0) {
-                board.executeMove("h1f1");
-            }
-            if (words[0].compareTo("e8c8") == 0) {
-                board.executeMove("a8d8");
-            }
-            if (words[0].compareTo("e1c1") == 0) {
-                board.executeMove("a1d1");
-            }
 
             board.executeMove(words[0]);
-            System.out.println("BLACKS " + board.numberofblackpieces);
-            System.out.println("WHITES " + board.numberofwhitepieces);
-            System.out.println("EXECUTE");
-            System.out.println(board);
+//            System.out.println("BLACKS " + board.numberofblackpieces);
+//            System.out.println("WHITES " + board.numberofwhitepieces);
+//            System.out.println("After player's move");
+//            System.out.println(board);
             changeTurn();
             gameturns++;
 
@@ -115,95 +103,33 @@ public class Game {
 //            System.out.println(s1);
 
             if (!force) {
-                Brain.getInstance().generateAllMoves(board);
-                Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-                System.out.println("ALPHABETA " + p);
-                turn = enginecolor;
-                ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
-                gameturns++;
-                // Verificam daca am primit sah
-                if (chess.size() > 0) {
-                    // In acast caz apelam protectKing pentru a scoate regele din sah
-                    ArrayList<String> movesProtect = Brain.getInstance().protectKing(chess, board);
-                    if (movesProtect.size() == 0) {
-                        System.out.println("resign");
-                        return;
+                if (gameturns == 1) {
+                    if (words[0].compareTo("e2e4") == 0) {
+                        System.out.println("move c7c5");
+                        board.executeMove("c7c5");
+                        gameturns++;
+                        changeTurn();
                     }
-                    board.executeMove(movesProtect.get(0));
-                    System.out.println("MISCARI:" + movesProtect);
-                    System.out.println("move " + movesProtect.get(0));
                 } else {
-/*                    // Am verificat daca putem sa facem rocada
-//                    String rocada = Brain.getInstance().checkCastlingconditions(board);
-//                    if (rocada.compareTo("") != 0) {
-//                        // In functie de culoarea engine-ului se executa rocada mica/mare
-//                        String[] castlings = rocada.split(" ");
-//                        if (castlings[0].compareTo("mica") == 0) {
-//                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-//                                System.out.println("move e8g8");
-//                                board.executeMove("e8g8");
-//                                board.executeMove("h8f8");
-//                                return;
-//                            } else {
-//                                System.out.println("move e1g1");
-//                                board.executeMove("e1g1");
-//                                board.executeMove("h1f1");
-//                                return;
-//                            }
-//                        } else {
-//                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-//                                System.out.println("move e8c8");
-//                                board.executeMove("e8c8");
-//                                board.executeMove("a8d8");
-//                                return;
-//                            } else {
-//                                System.out.println("move e1c1");
-//                                board.executeMove("e1c1");
-//                                board.executeMove("a1d1");
-//                                return;
-//                            }
-//                        }
-//                    }*/
-
-                    if (enginecolor == TeamColor.BLACK) {
-                        System.out.println(board.getBlackKing().freeMoves);
-                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(7, 8))
-                        && board.getBlackKing().moves == 0) {
-                            System.out.println("move e8g8");
-                            board.executeMove("e8g8");
-                            //board.executeMove("h8f8");
-                            return;
-                        }
-                        if (board.getBlackKing().freeMoves.contains(board.getCoordinates(3, 8))
-                                && board.getBlackKing().moves == 0) {
-                            System.out.println("move e8c8");
-                            board.executeMove("e8c8");
-                            //board.executeMove("a8d8");
-                            return;
-                        }
+                    Brain.getInstance().generateAllMoves(board);
+                    Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    System.out.println("ALPHABETA " + p);
+                    turn = enginecolor;
+                    System.out.println();
+                    //ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
+                    gameturns++;
+                    if (p != null) {
+                        System.out.println("move " + p.c);
+                        System.out.flush();
+                        //Se updateaza tabla de joc
+                        board.executeMove(p.c);
+                        changeTurn();
+//                    System.out.println("After engine move");
+//                    System.out.println(board);
                     } else {
-                        if (board.getWhiteKing().freeMoves.contains(board.getCoordinates(7, 1))
-                                && board.getWhiteKing().moves == 0) {
-                            System.out.println("move e1g1");
-                            board.executeMove("e1g1");
-                            //board.executeMove("h1f1");
-                            return;
-                        }
-                        if (board.getWhiteKing().freeMoves.contains(board.getCoordinates(3, 1))
-                                && board.getWhiteKing().moves == 0) {
-                            System.out.println("move e1c1");
-                            board.executeMove("e1c1");
-                            //board.executeMove("a1d1");
-                            return;
-                        }
+                        System.out.println("resign");
                     }
-
-                    Brain.getInstance().doMove(board);
-
                 }
-                changeTurn();
-                System.out.println("After engine move");
-                System.out.println(board);
             }
         }
 
@@ -236,55 +162,30 @@ public class Game {
                 break;
 
             case "go":
-                Brain.getInstance().generateAllMoves(board);
-                force = false;
-                turn = enginecolor;
-                ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
-                System.out.println(board);
-                gameturns++;
-                // Verificam daca am primit sah
-                if (chess.size() > 0) {
-                    // In acast caz apelam protectKing pentru a scoate regele din sah
-                    ArrayList<String> movesProtect = Brain.getInstance().protectKing(chess, board);
-                    if (movesProtect.size() == 0) {
+                if (gameturns == 0) {
+                    System.out.println("move e2e4");
+                    board.executeMove("e2e4");
+                    ruy_lopez = true;
+                    gameturns++;
+                    force = false;
+                    turn = usercolor;
+                    return;
+                } else {
+                    Brain.getInstance().generateAllMoves(board);
+                    force = false;
+                    turn = enginecolor;
+                    Pair p = Brain.getInstance().alphabeta(board, null, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    System.out.println("ALPHABETA " + p);
+                    turn = usercolor;
+                    System.out.println();
+                    gameturns++;
+                    if (p != null) {
+                        System.out.println("move " + p.c);
+                        System.out.flush();
+                        board.executeMove(p.c);
+                    } else {
                         System.out.println("resign");
                     }
-                } else {
-                    // Am verificat daca putem sa facem rocada
-                    String rocada = Brain.getInstance().checkCastlingconditions(board);
-                    System.out.println(rocada);
-                    if (rocada.compareTo("") != 0) {
-                        // In functie de culoarea engine-ului se executa rocada mica/mare
-                        String[] castlings = rocada.split(" ");
-                        System.out.println("DADADA" + castlings[0]);
-                        if (castlings[0].compareTo("mica") == 0) {
-                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-                                System.out.println("move e8g8");
-                                board.executeMove("e8g8");
-                                board.executeMove("h8f8");
-                                return;
-                            } else {
-                                System.out.println("move e1g1");
-                                board.executeMove("e1g1");
-                                board.executeMove("h1f1");
-                                return;
-                            }
-                        } else {
-                            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-                                System.out.println("move e8c8");
-                                board.executeMove("e8c8");
-                                board.executeMove("a8d8");
-                                return;
-                            } else {
-                                System.out.println("move e1c1");
-                                board.executeMove("e1c1");
-                                board.executeMove("a1d1");
-                                return;
-                            }
-                        }
-                    }
-                    Brain.getInstance().doMove(board);
-                    System.out.println(board);
                 }
                 changeTurn();
                 break;

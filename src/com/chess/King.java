@@ -12,7 +12,7 @@ public class King extends Piece {
     public King(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;
-        this.value=20;
+        this.value=200;
     }
 
     public King(int x, int y, int teamColor) {
@@ -62,7 +62,7 @@ public class King extends Piece {
             support = 0;
         }
 
-        String rocada = Brain.getInstance().checkCastlingconditions(board);
+        String rocada = Brain.getInstance().checkCastlingconditions(board, color);
         if (rocada.compareTo("") != 0) {
             // In functie de culoarea engine-ului se executa rocada mica/mare
             String[] castlings = rocada.split(" ");
@@ -75,7 +75,7 @@ public class King extends Piece {
                     freeMoves.add(board.getCoordinates(7, 1));
                     //board.executeMove("e1g1");
                     //board.executeMove("h1f1");
-                    return;
+                    //return;
                 }
             } else {
                 if (color == TeamColor.BLACK) {
@@ -252,6 +252,9 @@ public class King extends Piece {
         return "King";
     }
 
+    public int getTypeint(){
+        return Scores.KING;
+    }
     @Override
     public String toString() {
         if (color == 0)

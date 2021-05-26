@@ -33,6 +33,8 @@ public abstract class Piece implements Cloneable {
 
     public abstract String getType();
 
+    public abstract int getTypeint();
+
     public abstract String toString();
 
     // Metoda pentru mutarea unei piese

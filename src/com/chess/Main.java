@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws CloneNotSupportedException {
-        Game.getInstance().readInput();
+            Game.getInstance().readInput();
 //        ArrayList<Coordinate> capturemoves = new ArrayList<>();
 //        ArrayList<Coordinate> freemoves = new ArrayList<>();
 //        capturemoves.add(new Coordinate(1, 2));
@@ -14,5 +14,10 @@ public class Main {
 //        Bishop b2 = new Bishop(b1);
 //
 //        System.out.println(b1.captureMoves == b2.captureMoves);
+//        System.out.println(Scores.getScore(0, 1, 7, 1, 30));
+//        System.out.println(Scores.getScore(0, 8, 2, 0, 30));
+//
+//        System.out.println(Scores.getScore(0, 1, 7, 1, 10));
+//        System.out.println(Scores.getScore(0, 8, 2, 0, 10));
     }
 }

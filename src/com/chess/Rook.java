@@ -11,7 +11,7 @@ public class Rook extends Piece {
     public Rook(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
-        this.value = 5;
+        this.value = 50;
     }
 
     public Rook(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
@@ -148,6 +148,10 @@ public class Rook extends Piece {
     @Override
     public String getType() {
         return "Rook";
+    }
+
+    public int getTypeint(){
+        return Scores.ROOK;
     }
 
     public String toString() {

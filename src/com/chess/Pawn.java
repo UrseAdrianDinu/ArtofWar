@@ -17,13 +17,13 @@ public class Pawn extends Piece {
     public Pawn(Coordinate coordinate, int color) {
         this.coordinate = coordinate;
         this.color = color;
-        this.value = 1;
+        this.value = 10;
     }
 
     public Pawn(int x, int y, int color) {
         coordinate = new Coordinate(x, y);
         this.color = color;
-        this.value = 1;
+        this.value = 10;
     }
 
     public Pawn(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
@@ -210,8 +210,8 @@ public class Pawn extends Piece {
                     int type = board.isEmpty(board.getCoordinates(x + 1, y - 1), color);
                     if (p != null)
                         if (p.color != this.color && board.WhitelastMoved == p && p.moves == 1 && type == Move.FREE) {
-                            System.out.println("ENPASSANT");
-                            System.out.println(p);
+                            //System.out.println("ENPASSANT");
+                            //System.out.println(p);
                             enPassantMoves.add(board.getCoordinates(x + 1, y - 1));
                         }
                 }
@@ -243,6 +243,8 @@ public class Pawn extends Piece {
             board.blacks.remove(this);
             board.blacks.add(board.table[9 - coordinate.getY()][coordinate.getIntX()]);
         }
+        System.out.println("REGINAAAAAAAAAAA");
+        System.out.println(board);
     }
 
     public void pawnToKnight(Board board) {
@@ -323,6 +325,10 @@ public class Pawn extends Piece {
     @Override
     public String getType() {
         return "Pawn";
+    }
+
+    public int getTypeint(){
+        return Scores.PAWN;
     }
 
     public String toString() {

@@ -937,10 +937,10 @@ public class Brain {
         // Se selecteaza o piesa in functie de culoarea engine-ului
         if (game.enginecolor == TeamColor.BLACK) {
             piece = board.getBlackPiece();
-            System.out.println(piece + " " + piece.coordinate);
+            //System.out.println(piece + " " + piece.coordinate);
         } else {
             piece = board.getWhitePiece();
-            System.out.println(piece + " " + piece.coordinate);
+            //System.out.println(piece + " " + piece.coordinate);
         }
 
         // Daca nu mai exista piese cu mutari disponibile
@@ -1385,7 +1385,7 @@ public class Brain {
                 }
             } else {
                 Coordinate kingloc = board.getBlackKingLocation();
-                System.out.println("King location" + kingloc);
+               // System.out.println("King location" + kingloc);
                 if (p.getType().equals("Bishop")) {
                     moves.addAll(captureChessPiece(p, board));
                     ArrayList<String> moveKing = moveKing(p, board);
@@ -1819,9 +1819,9 @@ public class Brain {
 
     // Metoda care intoarce un string format din
     // rocadele care se pot efectua
-    String checkCastlingconditions(Board board) {
+    String checkCastlingconditions(Board board, int color) {
         String s = "";
-        if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+        if (color == TeamColor.BLACK) {
             if (board.getBlackKing().moves == 0) {
                 Piece p1 = board.getPiecebylocation(board.getCoordinates(8, 8));
                 if (p1 != null) {
@@ -1870,7 +1870,7 @@ public class Brain {
 
     ArrayList<String> stari(Board board, int color) throws CloneNotSupportedException {
 //        System.out.println("STARI");
-//        System.out.println(board);
+       // System.out.println(board);
         ArrayList<String> stari = new ArrayList<>();
         ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
         if (chess.size() > 0) {
@@ -1953,89 +1953,64 @@ public class Brain {
     public Pair alphabeta(Board board, String lastmove, int depth, int alpha, int beta, boolean MaximizingPlayer) throws CloneNotSupportedException {
         //System.out.println(board);
         if (depth == 0) {
-            return new Pair(lastmove, board.evaluateBoard());
+            Pair pa = new Pair(lastmove, board.evaluateBoard());
+            //System.out.println("ZERO" + pa);
+            return pa;
         }
 
+        Brain.getInstance().generateAllMoves(board);
         if (MaximizingPlayer) {
-
+            //System.out.println("MAXI");
             Pair maxmove = new Pair("", Integer.MIN_VALUE);
             Pair p = null;
-            Brain.getInstance().generateAllMoves(board);
             ArrayList<String> stari = stari(board, Game.getInstance().enginecolor);
+
+            if (stari.size() == 0) {
+                return new Pair(lastmove, -5000);
+            }
+
             for (String s : stari) {
-
                 Board copy = board.copie();
-//                System.out.println("Am trimis " + s);
-                System.out.println("MAMA" + board.toString());
                 copy.executeMove(s);
-
-                Brain.getInstance().generateAllMoves(copy);
-                /*for (int i = 1; i <= 8; i++) {
-                    for (int j = 1; j <= 8; j++) {
-                        if (copy.table[i][j] != null)
-                            System.out.println(copy.table[i][j].coordinate);
-                    }
-                }
-                System.out.println("BLACKS");
-                for (Piece piece : copy.blacks) {
-                    System.out.println(piece.coordinate);
-                }
-
-                System.out.println("WHITES");
-                for (Piece piece : copy.whites) {
-                    System.out.println(piece.coordinate);
-                }
-
-                System.out.println("----------------------------");
-                System.out.println(copy);*/
                 p = alphabeta(copy, s, depth - 1, alpha, beta, false);
-                if (p.scor >= beta) {
-                    return new Pair(maxmove.c, beta);
-                }
 
-                if (p.scor >= alpha) {
-                    alpha = p.scor;
+                if (p.scor > maxmove.scor) {
+                    maxmove.scor = p.scor;
                     maxmove.c = s;
                 }
+
+                alpha = Math.max(alpha, p.scor);
+
+
+                //System.out.println("MAXMOVE" + maxmove);
+                if (beta <= alpha)
+                    break;
             }
-            return new Pair(maxmove.c, alpha);
+            return maxmove;
         } else {
+            //System.out.println("MINI");
             Pair minmove = new Pair("", Integer.MAX_VALUE);
-            Brain.getInstance().generateAllMoves(board);
             ArrayList<String> stari = stari(board, Game.getInstance().usercolor);
+            if (stari.size() == 0) {
+                return new Pair(lastmove, 5000);
+            }
             Pair p = null;
             for (String s : stari) {
                 Board copy = board.copie();
-//                System.out.println("Am trimis " + s);
                 copy.executeMove(s);
-                Brain.getInstance().generateAllMoves(copy);
-//
-//                for (int i = 1; i <= 8; i++) {
-//                    for (int j = 1; j <= 8; j++) {
-//                        if (copy.table[i][j] != null)
-//                            System.out.println(copy.table[i][j].coordinate);
-//                    }
-//                }
-//                System.out.println("BLACKS");
-//                for (Piece piece : copy.blacks) {
-//                    System.out.println(piece.coordinate);
-//                }
-//                System.out.println("WHITES");
-//                for (Piece piece : copy.whites) {
-//                    System.out.println(piece.coordinate);
-//                }
-//                System.out.println("----------------------------");
-//                System.out.println(copy);
                 p = alphabeta(copy, s, depth - 1, alpha, beta, true);
-                if (p.scor <= alpha) {
-                    return new Pair(minmove.c, alpha);
-                }
-                if (p.scor < beta) {
-                    beta = p.scor;
+
+                if (p.scor < minmove.scor) {
                     minmove.c = s;
+                    minmove.scor = p.scor;
                 }
+
+                beta = Math.min(beta, p.scor);
+                if (beta <= alpha)
+                    break;
             }
-            return new Pair(minmove.c, beta);
+
+            return minmove;
         }
 
     }

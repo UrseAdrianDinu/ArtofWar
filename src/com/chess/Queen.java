@@ -11,7 +11,7 @@ public class Queen extends Piece {
     public Queen(Coordinate coordinate, int teamColor) {
         this.coordinate = coordinate;
         color = teamColor;
-        this.value = 9;
+        this.value = 90;
     }
 
     public Queen(Coordinate coordinate, int color, ArrayList<Coordinate> freemoves,
@@ -259,6 +259,10 @@ public class Queen extends Piece {
     @Override
     public String getType() {
         return "Queen";
+    }
+
+    public int getTypeint(){
+        return Scores.QUEEN;
     }
 
     @Override
