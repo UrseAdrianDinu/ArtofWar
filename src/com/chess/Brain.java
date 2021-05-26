@@ -20,6 +20,8 @@ public class Brain {
     int[][] enemyattack;
     int[][] defense;
     ArrayList<Piece> invalidPieces = new ArrayList<>();
+    int engineChessNumber = 0;
+    int enemyChessNumber = 0;
 
     // Singleton Pattern
     private static Brain instance = null;
@@ -1072,18 +1074,46 @@ public class Brain {
         Game game = Game.getInstance();
         ArrayList<Piece> pieces = new ArrayList<>();
         if (game.enginecolor == TeamColor.BLACK) {
+            //  System.out.println("nunununun");
             for (Piece p : b.whites) {
                 if (p.captureMoves.contains(b.getBlackKingLocation())) {
                     pieces.add(p);
                 }
             }
         } else {
+            //  System.out.println("dadadadad");
             for (Piece p : b.blacks) {
                 if (p.captureMoves.contains(b.getWhiteKingLocation())) {
                     pieces.add(p);
                 }
             }
         }
+        return pieces;
+    }
+
+    ArrayList<Piece> checkChessEvaluation(Board b, int color) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        if (color == TeamColor.BLACK) {
+            //System.out.println("nunununun");
+            for (Piece p : b.whites) {
+                if ( p.getType().compareTo("Queen") == 0){
+              //      System.out.println("QUEEN:" + p.coordinate);
+                }
+                //System.out.println("kingBlack: " + b.getBlackKingLocation());
+                if (p.captureMoves.contains(b.getBlackKingLocation())) {
+                    pieces.add(p);
+                }
+            }
+        } else {
+         //   System.out.println("dadadadad");
+            for (Piece p : b.blacks) {
+                //System.out.println("kingWhite: " + b.getWhiteKingLocation());
+                if (p.captureMoves.contains(b.getWhiteKingLocation())) {
+                    pieces.add(p);
+                }
+            }
+        }
+        //System.out.println();
         return pieces;
     }
 
@@ -1385,7 +1415,7 @@ public class Brain {
                 }
             } else {
                 Coordinate kingloc = board.getBlackKingLocation();
-               // System.out.println("King location" + kingloc);
+                // System.out.println("King location" + kingloc);
                 if (p.getType().equals("Bishop")) {
                     moves.addAll(captureChessPiece(p, board));
                     ArrayList<String> moveKing = moveKing(p, board);
@@ -1870,7 +1900,7 @@ public class Brain {
 
     ArrayList<String> stari(Board board, int color) throws CloneNotSupportedException {
 //        System.out.println("STARI");
-       // System.out.println(board);
+        // System.out.println(board);
         ArrayList<String> stari = new ArrayList<>();
         ArrayList<Piece> chess = Brain.getInstance().checkChess(board);
         if (chess.size() > 0) {
@@ -1952,13 +1982,13 @@ public class Brain {
 
     public Pair alphabeta(Board board, String lastmove, int depth, int alpha, int beta, boolean MaximizingPlayer) throws CloneNotSupportedException {
         //System.out.println(board);
+        Brain.getInstance().generateAllMoves(board);
         if (depth == 0) {
-            Pair pa = new Pair(lastmove, board.evaluateBoard());
+            Pair pa = new Pair(lastmove, board.evaluateBoard(MaximizingPlayer));
             //System.out.println("ZERO" + pa);
+            System.out.println(pa.c + " " + pa.scor + "\n" + board);
             return pa;
         }
-
-        Brain.getInstance().generateAllMoves(board);
         if (MaximizingPlayer) {
             //System.out.println("MAXI");
             Pair maxmove = new Pair("", Integer.MIN_VALUE);
@@ -1966,12 +1996,13 @@ public class Brain {
             ArrayList<String> stari = stari(board, Game.getInstance().enginecolor);
 
             if (stari.size() == 0) {
-                return new Pair(lastmove, -5000);
+                return new Pair(lastmove, -100000);
             }
 
             for (String s : stari) {
                 Board copy = board.copie();
                 copy.executeMove(s);
+                System.out.println("DUPA execute MAX: " + copy.evaluateBoard(MaximizingPlayer));
                 p = alphabeta(copy, s, depth - 1, alpha, beta, false);
 
                 if (p.scor > maxmove.scor) {
@@ -1992,13 +2023,15 @@ public class Brain {
             Pair minmove = new Pair("", Integer.MAX_VALUE);
             ArrayList<String> stari = stari(board, Game.getInstance().usercolor);
             if (stari.size() == 0) {
-                return new Pair(lastmove, 5000);
+                return new Pair(lastmove, -100000);
             }
             Pair p = null;
             for (String s : stari) {
                 Board copy = board.copie();
                 copy.executeMove(s);
+                System.out.println("DUPA execute MIN: " + copy.evaluateBoard(MaximizingPlayer));
                 p = alphabeta(copy, s, depth - 1, alpha, beta, true);
+                //System.out.println("MINMOVE" + p.c + " " + p.scor);
 
                 if (p.scor < minmove.scor) {
                     minmove.c = s;
@@ -2006,6 +2039,8 @@ public class Brain {
                 }
 
                 beta = Math.min(beta, p.scor);
+
+                //System.out.println("MINMOVE" + minmove);
                 if (beta <= alpha)
                     break;
             }

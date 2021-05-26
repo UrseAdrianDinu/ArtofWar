@@ -109,10 +109,15 @@ public class Game {
                         board.executeMove("c7c5");
                         gameturns++;
                         changeTurn();
+                    } else {
+                        System.out.println("move c7c5");
+                        board.executeMove("c7c5");
+                        gameturns++;
+                        changeTurn();
                     }
                 } else {
                     Brain.getInstance().generateAllMoves(board);
-                    Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    Pair p = Brain.getInstance().alphabeta(board, null, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
                     System.out.println("ALPHABETA " + p);
                     turn = enginecolor;
                     System.out.println();
@@ -174,7 +179,7 @@ public class Game {
                     Brain.getInstance().generateAllMoves(board);
                     force = false;
                     turn = enginecolor;
-                    Pair p = Brain.getInstance().alphabeta(board, null, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    Pair p = Brain.getInstance().alphabeta(board, null, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
                     System.out.println("ALPHABETA " + p);
                     turn = usercolor;
                     System.out.println();

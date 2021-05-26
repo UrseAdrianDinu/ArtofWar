@@ -22,6 +22,8 @@ public class Board {
     int numberofblackpawns = 0;
     ArrayList<Piece> blacks;
     Piece BlacklastMoved;
+    int engineChessNumber = 0;
+    int enemyChessNumber = 0;
 
 
     // Singleton Pattern
@@ -57,7 +59,8 @@ public class Board {
         b.numberofwhitepieces = numberofwhitepieces;
         b.numberofblackpawns = numberofblackpawns;
         b.numberofblackpieces = numberofblackpieces;
-
+        b.enemyChessNumber = enemyChessNumber;
+        b.engineChessNumber = engineChessNumber;
 
         return b;
     }
@@ -406,29 +409,44 @@ public class Board {
         return s;
     }
 
-    int evaluateBoard() {
+    int evaluateBoard(boolean MaximizingPlayer) {
         int s1 = 0;
         int s2 = 0;
+
+        // SAH EVALUARE
         for (Piece p : whites) {
             s1 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
-            if (p.captureMoves.contains(getBlackKingLocation())) {
-                System.out.println("DADADAD");
-                s1 += 100000;
-            }
         }
 
         for (Piece p : blacks) {
             s2 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
-            if (p.captureMoves.contains(getWhiteKingLocation())) {
-                System.out.println("DADADAD");
-                s2 += 100000;
+        }
+
+        if (Brain.getInstance().checkChessEvaluation(this, TeamColor.WHITE).size() != 0) {
+            if (Game.getInstance().enginecolor == TeamColor.BLACK) {
+                s2 += 200;
+                engineChessNumber++;
+            } else {
+                s2 += 100;
+                enemyChessNumber++;
             }
+            //System.out.println("mama");
+        }
+        if (Brain.getInstance().checkChessEvaluation(this, TeamColor.BLACK).size() != 0) {
+            if (Game.getInstance().enginecolor == TeamColor.WHITE) {
+                s1 += 200;
+                engineChessNumber++;
+            } else {
+                s1 += 100;
+                enemyChessNumber++;
+            }
+            //System.out.println("tata");
         }
 
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-            return s2 - s1;
+            return s2 - s1 ;
         } else {
-            return s1 - s2;
+            return s1 - s2 ;
         }
     }
 }
