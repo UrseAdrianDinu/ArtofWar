@@ -9,7 +9,7 @@ public class Scores {
     static final int KING = 5;
 
     static final int[] midgame = new int[]{89, 308, 319, 488, 888, 20001};
-    static final int[] endgame = new int[]{96, 319, 331, 497, 853, 19998};
+    static final int[] endgame = new int[]{96, 319, 331, 497, 833, 19998};
 
     static final int[][] black_pawn_midgame = new int[][]{
             {0, 0, 0, 0, 0, 0, 0, 0},

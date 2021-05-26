@@ -22,6 +22,8 @@ public class Game {
     boolean force;
     int gameturns;
     Board board;
+    int nrsaheng = 0;
+    int nrsahadv = 0;
     boolean ruy_lopez = false;
 
     //Singleton Pattern
@@ -70,13 +72,17 @@ public class Game {
 //            System.out.println(board);
             changeTurn();
             gameturns++;
+            Brain.getInstance().generateAllMoves(board);
+            if (Brain.getInstance().checkChessEvaluation(board, enginecolor).size() > 0) {
+                nrsahadv++;
+            }
 
             // Generam toate miscarile pentru ambele culori
 
 
             // Afisarea matricelor codificate enemyattack si defense
 
-//            System.out.println(Board.getInstance());
+            //System.out.println(Board.getInstance());
 //            String s = "";
 //            for (int i = 1; i <= 8; i++) {
 //                for (int j = 1; j <= 8; j++) {
@@ -101,23 +107,47 @@ public class Game {
 //                s1 += "\n";
 //            }
 //            System.out.println(s1);
+//
+//            String s2 = "";
+//            for (int i = 1; i <= 8; i++) {
+//                for (int j = 1; j <= 8; j++) {
+//                    if (Brain.getInstance().engineattack[i][j] == 0) {
+//                        s2 += " 0 ";
+//                    } else {
+//                        s2 += " " + Brain.getInstance().engineattack[i][j] + " ";
+//                    }
+//                }
+//                s2 += "\n";
+//            }
+//            System.out.println(s2);
+//            System.out.println(Brain.getInstance().enemysquares);
+//            System.out.println(Brain.getInstance().enginesquares);
 
             if (!force) {
+
                 if (gameturns == 1) {
                     if (words[0].compareTo("e2e4") == 0) {
-                        System.out.println("move c7c5");
-                        board.executeMove("c7c5");
+                        System.out.println("move e7e5");
+                        board.executeMove("e7e5");
                         gameturns++;
                         changeTurn();
                     } else {
-                        System.out.println("move c7c5");
-                        board.executeMove("c7c5");
-                        gameturns++;
-                        changeTurn();
+                        if (words[0].compareTo("d2d4") == 0) {
+                            System.out.println("move d7d5");
+                            board.executeMove("d7d5");
+                            gameturns++;
+                            changeTurn();
+                        } else {
+                            System.out.println("move e7e5");
+                            board.executeMove("e7e5");
+                            gameturns++;
+                            changeTurn();
+                        }
                     }
                 } else {
-                    Brain.getInstance().generateAllMoves(board);
-                    Pair p = Brain.getInstance().alphabeta(board, null, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true, nrsaheng, nrsahadv);
+                    System.out.println(board.enemyChessNumber);
+                    System.out.println(board.engineChessNumber);
                     System.out.println("ALPHABETA " + p);
                     turn = enginecolor;
                     System.out.println();
@@ -128,6 +158,10 @@ public class Game {
                         System.out.flush();
                         //Se updateaza tabla de joc
                         board.executeMove(p.c);
+                        Brain.getInstance().generateAllMoves(board);
+                        if (Brain.getInstance().checkChessEvaluation(board, usercolor).size() > 0) {
+                            nrsaheng++;
+                        }
                         changeTurn();
 //                    System.out.println("After engine move");
 //                    System.out.println(board);
@@ -179,7 +213,7 @@ public class Game {
                     Brain.getInstance().generateAllMoves(board);
                     force = false;
                     turn = enginecolor;
-                    Pair p = Brain.getInstance().alphabeta(board, null, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                    Pair p = Brain.getInstance().alphabeta(board, null, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true, nrsaheng, nrsahadv);
                     System.out.println("ALPHABETA " + p);
                     turn = usercolor;
                     System.out.println();

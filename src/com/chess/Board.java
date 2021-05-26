@@ -124,14 +124,23 @@ public class Board {
     // Metoda care initializeaza tabla de joc
     void initBoard() {
         int i;
-        for (i = 1; i <= 8; i++) {
-            // Punerea pionilor pe tabla
-            table[2][i] = new Pawn(new Coordinate(i, 7), TeamColor.BLACK);
-            table[7][i] = new Pawn(new Coordinate(i, 2), TeamColor.WHITE);
-            // Adaugarea lor in clasele Black/Whites
-            blacks.add(table[2][i]);
-            whites.add(table[7][i]);
-        }
+
+        // Punerea nebunilor pe tabla
+        table[1][3] = new Bishop(new Coordinate(3, 8), TeamColor.BLACK);
+        table[1][6] = new Bishop(new Coordinate(6, 8), TeamColor.BLACK);
+        table[8][3] = new Bishop(new Coordinate(3, 1), TeamColor.WHITE);
+        table[8][6] = new Bishop(new Coordinate(6, 1), TeamColor.WHITE);
+        blacks.add(table[1][3]);
+        blacks.add(table[1][6]);
+        whites.add(table[8][3]);
+        whites.add(table[8][6]);
+
+        // Punerea reginelor pe tabla
+        table[1][4] = new Queen(new Coordinate(4, 8), TeamColor.BLACK);
+        table[8][4] = new Queen(new Coordinate(4, 1), TeamColor.WHITE);
+        blacks.add(table[1][4]);
+        whites.add(table[8][4]);
+
 
         // Punerea cailor pe tabla
         table[1][2] = new Knight(new Coordinate(2, 8), TeamColor.BLACK);
@@ -144,16 +153,6 @@ public class Board {
         whites.add(table[8][7]);
 
 
-        // Punerea nebunilor pe tabla
-        table[1][3] = new Bishop(new Coordinate(3, 8), TeamColor.BLACK);
-        table[1][6] = new Bishop(new Coordinate(6, 8), TeamColor.BLACK);
-        table[8][3] = new Bishop(new Coordinate(3, 1), TeamColor.WHITE);
-        table[8][6] = new Bishop(new Coordinate(6, 1), TeamColor.WHITE);
-        blacks.add(table[1][3]);
-        blacks.add(table[1][6]);
-        whites.add(table[8][3]);
-        whites.add(table[8][6]);
-
         // Punerea turelor pe tabla
         table[1][1] = new Rook(new Coordinate(1, 8), TeamColor.BLACK);
         table[1][8] = new Rook(new Coordinate(8, 8), TeamColor.BLACK);
@@ -164,11 +163,15 @@ public class Board {
         whites.add(table[8][1]);
         whites.add(table[8][8]);
 
-        // Punerea reginelor pe tabla
-        table[1][4] = new Queen(new Coordinate(4, 8), TeamColor.BLACK);
-        table[8][4] = new Queen(new Coordinate(4, 1), TeamColor.WHITE);
-        blacks.add(table[1][4]);
-        whites.add(table[8][4]);
+
+        for (i = 1; i <= 8; i++) {
+            // Punerea pionilor pe tabla
+            table[2][i] = new Pawn(new Coordinate(i, 7), TeamColor.BLACK);
+            table[7][i] = new Pawn(new Coordinate(i, 2), TeamColor.WHITE);
+            // Adaugarea lor in clasele Black/Whites
+            blacks.add(table[2][i]);
+            whites.add(table[7][i]);
+        }
 
         // Punerea regilor pe tabla
         table[1][5] = new King(new Coordinate(5, 8), TeamColor.BLACK);
@@ -409,6 +412,60 @@ public class Board {
         return s;
     }
 
+    int kingSafety(int color) {
+        int scor = 0;
+        if (color == TeamColor.BLACK) {
+            King ourking = (King) getBlackKing();
+            if (ourking == null) {
+                return 0;
+            }
+
+            //System.out.println(ourking.coordinate + " " + ourking.color);
+            Piece p1 = null, p2 = null, p3 = null;
+            if (ourking.coordinate.getY() - 1 >= 1) {
+                if (ourking.coordinate.getIntX() + 1 <= 8)
+                    p1 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX() + 1, ourking.coordinate.getY() - 1));
+                if (ourking.coordinate.getIntX() - 1 >= 1)
+                    p2 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX() - 1, ourking.coordinate.getY() - 1));
+
+                p3 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX(), ourking.coordinate.getY() - 1));
+            }
+            if (p1 != null) {
+                scor += 2;
+            }
+            if (p2 != null) {
+                scor += 2;
+            }
+            if (p3 != null) {
+                scor += 1;
+            }
+        } else {
+            King ourking = (King) getWhiteKing();
+            if (ourking == null) {
+                return 0;
+            }
+            //System.out.println(ourking.coordinate + " " + ourking.color);
+            Piece p1 = null, p2 = null, p3 = null;
+            if (ourking.coordinate.getY() + 1 <= 8) {
+                if (ourking.coordinate.getIntX() + 1 <= 8)
+                    p1 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX() + 1, ourking.coordinate.getY() + 1));
+                if (ourking.coordinate.getIntX() - 1 >= 1)
+                    p2 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX() - 1, ourking.coordinate.getY() + 1));
+                p3 = getPiecebylocation(new Coordinate(ourking.coordinate.getIntX(), ourking.coordinate.getY() + 1));
+            }
+            if (p1 != null) {
+                scor += 2;
+            }
+            if (p2 != null) {
+                scor += 2;
+            }
+            if (p3 != null) {
+                scor += 2;
+            }
+        }
+        return scor;
+    }
+
     int evaluateBoard(boolean MaximizingPlayer) {
         int s1 = 0;
         int s2 = 0;
@@ -416,37 +473,56 @@ public class Board {
         // SAH EVALUARE
         for (Piece p : whites) {
             s1 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
+            s1 += p.support * 2;
+            if (p.getType().equals("Pawn") && p.support == 0) {
+                s1 -= 2;
+            }
+            if (p.getType().equals("Pawn") && p.captureMoves.size() == 0 && p.freeMoves.size() == 0) {
+                s1 -= 2;
+            }
         }
 
         for (Piece p : blacks) {
             s2 += Scores.getScore(p.getTypeint(), p.coordinate.getIntX(), p.coordinate.getY(), p.color, numberofblackpieces + numberofwhitepieces);
+            if (p.getType().equals("Pawn") && p.support == 0) {
+                s2 -= 2;
+            }
+            if (p.getType().equals("Pawn") && p.captureMoves.size() == 0 && p.freeMoves.size() == 0) {
+                s2 -= 2;
+            }
+
+            s2 += p.support * 2;
         }
 
         if (Brain.getInstance().checkChessEvaluation(this, TeamColor.WHITE).size() != 0) {
             if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-                s2 += 200;
+                //s1 -= 100;
                 engineChessNumber++;
             } else {
-                s2 += 100;
+                //s2 -= 100;
                 enemyChessNumber++;
             }
             //System.out.println("mama");
         }
+
         if (Brain.getInstance().checkChessEvaluation(this, TeamColor.BLACK).size() != 0) {
             if (Game.getInstance().enginecolor == TeamColor.WHITE) {
-                s1 += 200;
+                //s1 += 200;
                 engineChessNumber++;
             } else {
-                s1 += 100;
+                //s1 += 100;
                 enemyChessNumber++;
             }
             //System.out.println("tata");
         }
-
+        int engine = Brain.getInstance().enginesquares;
+        int adv = Brain.getInstance().enemysquares;
+        int k1 = kingSafety(TeamColor.BLACK);
+        int k2 = kingSafety(TeamColor.WHITE);
         if (Game.getInstance().enginecolor == TeamColor.BLACK) {
-            return s2 - s1 ;
+            return s2 - s1 + 200 * (engineChessNumber - enemyChessNumber) + 3 * (engine - adv);
         } else {
-            return s1 - s2 ;
+            return s1 - s2 + 200 * (engineChessNumber - enemyChessNumber) + 3 * (engine - adv);
         }
     }
 }
